@@ -1,0 +1,121 @@
+{
+  "sections": [
+    {
+      "id": "product-header",
+      "type": "section",
+      "settings": {
+        "background": "#ffffff",
+        "padding": "40px 20px"
+      },
+      "columns": [
+        {
+          "id": "header-column",
+          "width": "100%",
+          "widgets": [
+            {
+              "id": "product-title",
+              "type": "heading",
+              "settings": {
+                "text": "Advanced PCB Controller",
+                "tag": "h1",
+                "align": "left"
+              }
+            },
+            {
+              "id": "product-description",
+              "type": "text",
+              "settings": {
+                "content": "<p>High-performance embedded system controller with AI-powered optimization</p>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "product-content",
+      "type": "section",
+      "settings": {
+        "background": "#f9f9f9",
+        "padding": "60px 20px"
+      },
+      "columns": [
+        {
+          "id": "product-images",
+          "width": "50%",
+          "widgets": [
+            {
+              "id": "main-image",
+              "type": "image",
+              "settings": {
+                "size": "large",
+                "align": "center"
+              }
+            }
+          ]
+        },
+        {
+          "id": "product-specs",
+          "width": "50%",
+          "widgets": [
+            {
+              "id": "specs-table",
+              "type": "specifications",
+              "settings": {
+                "specifications": [
+                  {"label": "Operating Voltage", "value": "3.3V - 5V DC"},
+                  {"label": "Processing Speed", "value": "200 MHz"},
+                  {"label": "Memory", "value": "512KB Flash, 128KB RAM"},
+                  {"label": "I/O Pins", "value": "32 GPIO, 12 ADC"},
+                  {"label": "Communication", "value": "UART, SPI, I2C, CAN"},
+                  {"label": "Temperature Range", "value": "-40°C to +85°C"},
+                  {"label": "Certifications", "value": "CE, FCC, RoHS"}
+                ]
+              }
+            },
+            {
+              "id": "download-datasheet",
+              "type": "datasheet",
+              "settings": {
+                "title": "Download Full Datasheet (PDF)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "technical-docs",
+      "type": "section",
+      "settings": {
+        "background": "#ffffff",
+        "padding": "60px 20px"
+      },
+      "columns": [
+        {
+          "id": "docs-column",
+          "width": "100%",
+          "widgets": [
+            {
+              "id": "docs-heading",
+              "type": "heading",
+              "settings": {
+                "text": "Technical Documentation",
+                "tag": "h2",
+                "align": "left"
+              }
+            },
+            {
+              "id": "code-example",
+              "type": "code",
+              "settings": {
+                "language": "c",
+                "code": "#include <stdio.h>\n\nvoid setup() {\n    pinMode(LED_PIN, OUTPUT);\n    Serial.begin(9600);\n}\n\nvoid loop() {\n    digitalWrite(LED_PIN, HIGH);\n    delay(1000);\n    digitalWrite(LED_PIN, LOW);\n    delay(1000);\n}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

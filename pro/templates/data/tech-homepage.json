@@ -1,0 +1,174 @@
+{
+  "sections": [
+    {
+      "id": "hero-section",
+      "type": "section",
+      "settings": {
+        "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        "padding": "80px 20px"
+      },
+      "columns": [
+        {
+          "id": "hero-column",
+          "width": "100%",
+          "widgets": [
+            {
+              "id": "hero-heading",
+              "type": "heading",
+              "settings": {
+                "text": "Technical Excellence Meets Innovation",
+                "tag": "h1",
+                "align": "center",
+                "color": "#ffffff"
+              }
+            },
+            {
+              "id": "hero-text",
+              "type": "text",
+              "settings": {
+                "content": "<p style='text-align: center; color: #ffffff; font-size: 18px;'>Cutting-edge solutions for electrical, AI/ML, and embedded systems</p>",
+                "align": "center"
+              }
+            },
+            {
+              "id": "hero-button",
+              "type": "button",
+              "settings": {
+                "text": "Explore Products",
+                "url": "/products",
+                "style": "primary",
+                "size": "large",
+                "align": "center"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "features-section",
+      "type": "section",
+      "settings": {
+        "background": "#ffffff",
+        "padding": "60px 20px"
+      },
+      "columns": [
+        {
+          "id": "feature-1",
+          "width": "33.33%",
+          "widgets": [
+            {
+              "id": "feature-1-icon",
+              "type": "icon-box",
+              "settings": {
+                "icon": "dashicons-admin-tools",
+                "title": "Advanced Engineering",
+                "description": "State-of-the-art electrical and embedded systems solutions"
+              }
+            }
+          ]
+        },
+        {
+          "id": "feature-2",
+          "width": "33.33%",
+          "widgets": [
+            {
+              "id": "feature-2-icon",
+              "type": "icon-box",
+              "settings": {
+                "icon": "dashicons-chart-line",
+                "title": "AI & Machine Learning",
+                "description": "Intelligent algorithms for predictive maintenance and optimization"
+              }
+            }
+          ]
+        },
+        {
+          "id": "feature-3",
+          "width": "33.33%",
+          "widgets": [
+            {
+              "id": "feature-3-icon",
+              "type": "icon-box",
+              "settings": {
+                "icon": "dashicons-shield",
+                "title": "Quality Assurance",
+                "description": "Rigorous testing and certification for all products"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stats-section",
+      "type": "section",
+      "settings": {
+        "background": "#f9f9f9",
+        "padding": "60px 20px"
+      },
+      "columns": [
+        {
+          "id": "stat-1",
+          "width": "25%",
+          "widgets": [
+            {
+              "id": "counter-1",
+              "type": "counter",
+              "settings": {
+                "number": "500",
+                "suffix": "+",
+                "title": "Projects Completed"
+              }
+            }
+          ]
+        },
+        {
+          "id": "stat-2",
+          "width": "25%",
+          "widgets": [
+            {
+              "id": "counter-2",
+              "type": "counter",
+              "settings": {
+                "number": "200",
+                "suffix": "+",
+                "title": "Active Clients"
+              }
+            }
+          ]
+        },
+        {
+          "id": "stat-3",
+          "width": "25%",
+          "widgets": [
+            {
+              "id": "counter-3",
+              "type": "counter",
+              "settings": {
+                "number": "50",
+                "suffix": "+",
+                "title": "Team Members"
+              }
+            }
+          ]
+        },
+        {
+          "id": "stat-4",
+          "width": "25%",
+          "widgets": [
+            {
+              "id": "counter-4",
+              "type": "counter",
+              "settings": {
+                "number": "15",
+                "suffix": " Years",
+                "title": "Experience"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

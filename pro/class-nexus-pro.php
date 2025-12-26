@@ -55,12 +55,27 @@ class Nexus_Pro {
 		define( 'NEXUS_PRO_VERSION', $this->version );
 		define( 'NEXUS_PRO_DIR', NEXUS_DIR . '/pro' );
 		define( 'NEXUS_PRO_URI', NEXUS_URI . '/pro' );
+		define( 'NEXUS_PRO_PATH', NEXUS_PRO_DIR . '/' );
+		define( 'NEXUS_PRO_URL', NEXUS_PRO_URI . '/' );
 	}
 
 	/**
 	 * Include Files
 	 */
 	private function includes() {
+		// Activation handler
+		require_once NEXUS_PRO_DIR . '/class-pro-activation.php';
+
+		// Phase 3: Theme Builder (Advanced)
+		if ( file_exists( NEXUS_PRO_DIR . '/theme-builder/class-theme-builder.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/theme-builder/class-theme-builder.php';
+		}
+
+		// Phase 3: Advanced Controls
+		if ( file_exists( NEXUS_PRO_DIR . '/controls/class-controls-manager.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/controls/class-controls-manager.php';
+		}
+
 		// Header/Footer Builder
 		require_once NEXUS_PRO_DIR . '/builder/class-header-builder.php';
 		require_once NEXUS_PRO_DIR . '/builder/class-footer-builder.php';
