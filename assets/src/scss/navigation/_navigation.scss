@@ -1,0 +1,115 @@
+/*--------------------------------------------------------------
+# Navigation
+--------------------------------------------------------------*/
+
+.main-navigation {
+  .menu-toggle {
+    @include button-reset;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: $primary-color;
+    color: #ffffff;
+    @include border-radius($border-radius-sm);
+    @include transition();
+
+    &:hover {
+      background: darken($primary-color, 10%);
+    }
+
+    @include respond-to(lg) {
+      display: none;
+    }
+  }
+
+  .menu-toggle-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: currentColor;
+      @include transition();
+    }
+  }
+
+  .primary-menu {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @include respond-to(lg) {
+      display: flex;
+      gap: $spacing-md;
+    }
+  }
+
+  &.toggled {
+    .primary-menu {
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      @include box-shadow($shadow-lg);
+      padding: $spacing-sm;
+      z-index: $z-index-dropdown;
+    }
+  }
+
+  .menu-item {
+    position: relative;
+
+    a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: $dark-color;
+      @include transition();
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+
+    &.current-menu-item > a,
+    &.current-menu-ancestor > a {
+      color: $primary-color;
+      font-weight: 600;
+    }
+  }
+
+  .menu-item-has-children {
+    > .submenu-toggle {
+      @include button-reset;
+      padding: 0.5rem;
+      margin-left: 0.25rem;
+    }
+
+    .sub-menu {
+      display: none;
+      list-style: none;
+      padding: 0;
+
+      @include respond-to(lg) {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 200px;
+        background: #ffffff;
+        @include box-shadow($shadow-md);
+        @include border-radius($border-radius-sm);
+      }
+    }
+
+    &.toggled > .sub-menu,
+    &:hover > .sub-menu {
+      display: block;
+    }
+  }
+}

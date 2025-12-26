@@ -1,0 +1,75 @@
+/*--------------------------------------------------------------
+# Grid System
+--------------------------------------------------------------*/
+
+.nexus-container {
+  @include container;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-lg;
+
+  @include respond-to(md) {
+    &.sidebar-left {
+      grid-template-columns: 300px 1fr;
+      
+      .site-main {
+        order: 2;
+      }
+      
+      .widget-area {
+        order: 1;
+      }
+    }
+
+    &.sidebar-right {
+      grid-template-columns: 1fr 300px;
+    }
+  }
+
+  &.no-sidebar {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.col {
+  flex: 1;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+// Grid columns
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 percentage($i / 12);
+    max-width: percentage($i / 12);
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+// Responsive columns
+@include respond-to(md) {
+  @for $i from 1 through 12 {
+    .col-md-#{$i} {
+      flex: 0 0 percentage($i / 12);
+      max-width: percentage($i / 12);
+    }
+  }
+}
+
+@include respond-to(lg) {
+  @for $i from 1 through 12 {
+    .col-lg-#{$i} {
+      flex: 0 0 percentage($i / 12);
+      max-width: percentage($i / 12);
+    }
+  }
+}

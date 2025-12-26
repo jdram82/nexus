@@ -1,0 +1,56 @@
+/*--------------------------------------------------------------
+# Typography
+--------------------------------------------------------------*/
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading-font;
+  font-weight: 700;
+  line-height: 1.2;
+  color: $dark-color;
+}
+
+h1 {
+  font-size: $font-size-h1;
+}
+
+h2 {
+  font-size: $font-size-h2;
+}
+
+h3 {
+  font-size: $font-size-h3;
+}
+
+h4 {
+  font-size: $font-size-h4;
+}
+
+h5 {
+  font-size: $font-size-h5;
+}
+
+h6 {
+  font-size: $font-size-h6;
+}
+
+p {
+  font-family: $body-font;
+  line-height: 1.6;
+}
+
+code {
+  font-family: $code-font;
+  font-size: 0.9em;
+  background: $light-color;
+  padding: 2px 6px;
+  border-radius: $border-radius-sm;
+}
+
+pre {
+  font-family: $code-font;
+  font-size: 0.9em;
+  background: $light-color;
+  padding: $spacing-sm;
+  border-radius: $border-radius-sm;
+  overflow-x: auto;
+}

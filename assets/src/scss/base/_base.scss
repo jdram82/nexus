@@ -1,0 +1,53 @@
+/*--------------------------------------------------------------
+# Base
+--------------------------------------------------------------*/
+
+body {
+  font-family: $body-font;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: $dark-color;
+  background-color: #ffffff;
+}
+
+.site {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+}
+
+.container {
+  @include container;
+}
+
+.screen-reader-text {
+  @include screen-reader-text;
+
+  &:focus {
+    background-color: $light-color;
+    border-radius: $border-radius-sm;
+    box-shadow: $shadow-sm;
+    clip: auto !important;
+    clip-path: none;
+    color: $dark-color;
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+  }
+}
+
+.skip-link {
+  @extend .screen-reader-text;
+}

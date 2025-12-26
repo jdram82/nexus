@@ -1,0 +1,402 @@
+/**
+ * Form Styles
+ * Nexus Pro - Frontend Form Rendering
+ */
+
+/* Form Container */
+.nexus-form {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid var(--nexus-border-color, #e9ecef);
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.nexus-form.style-minimal {
+    border: none;
+    padding: 0;
+    background: transparent;
+}
+
+.nexus-form.style-bordered {
+    border: 2px solid var(--nexus-primary-color, #007bff);
+    box-shadow: 0 4px 12px rgba(0,123,255,0.1);
+}
+
+/* Form Title */
+.nexus-form .form-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--nexus-text-color, #212529);
+}
+
+.nexus-form .form-description {
+    color: var(--nexus-text-muted, #6c757d);
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Form Fields */
+.form-field {
+    margin-bottom: 25px;
+}
+
+.form-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--nexus-text-color, #212529);
+    font-size: 0.9375rem;
+}
+
+.form-field label .required {
+    color: var(--nexus-danger-color, #dc3545);
+    margin-left: 3px;
+}
+
+.form-field .field-description {
+    font-size: 0.8125rem;
+    color: var(--nexus-text-muted, #6c757d);
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Input Fields */
+.form-field input[type="text"],
+.form-field input[type="email"],
+.form-field input[type="tel"],
+.form-field input[type="url"],
+.form-field input[type="number"],
+.form-field input[type="date"],
+.form-field textarea,
+.form-field select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--nexus-border-color, #dee2e6);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    background: #ffffff;
+}
+
+.form-field input[type="text"]:focus,
+.form-field input[type="email"]:focus,
+.form-field input[type="tel"]:focus,
+.form-field input[type="url"]:focus,
+.form-field input[type="number"]:focus,
+.form-field input[type="date"]:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+    outline: none;
+    border-color: var(--nexus-primary-color, #007bff);
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.form-field input[type="text"]::placeholder,
+.form-field input[type="email"]::placeholder,
+.form-field input[type="tel"]::placeholder,
+.form-field input[type="url"]::placeholder,
+.form-field textarea::placeholder {
+    color: var(--nexus-text-muted, #6c757d);
+    opacity: 0.6;
+}
+
+/* Textarea */
+.form-field textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Select */
+.form-field select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+}
+
+/* Radio and Checkbox */
+.form-field .radio-group,
+.form-field .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-field .radio-option,
+.form-field .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border: 1px solid var(--nexus-border-color, #dee2e6);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-field .radio-option:hover,
+.form-field .checkbox-option:hover {
+    background: var(--nexus-bg-light, #f8f9fa);
+    border-color: var(--nexus-primary-color, #007bff);
+}
+
+.form-field .radio-option input,
+.form-field .checkbox-option input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--nexus-primary-color, #007bff);
+}
+
+.form-field .radio-option label,
+.form-field .checkbox-option label {
+    margin: 0;
+    font-weight: 400;
+    cursor: pointer;
+    flex: 1;
+}
+
+/* File Upload */
+.form-field input[type="file"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px dashed var(--nexus-border-color, #dee2e6);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--nexus-bg-light, #f8f9fa);
+}
+
+.form-field input[type="file"]:hover {
+    border-color: var(--nexus-primary-color, #007bff);
+    background: rgba(0,123,255,0.05);
+}
+
+.file-upload-wrapper {
+    position: relative;
+}
+
+.file-upload-wrapper .file-info {
+    font-size: 0.8125rem;
+    color: var(--nexus-text-muted, #6c757d);
+    margin-top: 8px;
+}
+
+/* Error States */
+.form-field.has-error input,
+.form-field.has-error textarea,
+.form-field.has-error select {
+    border-color: var(--nexus-danger-color, #dc3545);
+}
+
+.form-field.has-error .field-error {
+    display: block;
+    color: var(--nexus-danger-color, #dc3545);
+    font-size: 0.8125rem;
+    margin-top: 5px;
+}
+
+.field-error {
+    display: none;
+}
+
+/* Success State */
+.form-field.has-success input,
+.form-field.has-success textarea,
+.form-field.has-success select {
+    border-color: var(--nexus-success-color, #28a745);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid var(--nexus-border-color, #e9ecef);
+}
+
+.form-actions button[type="submit"] {
+    padding: 12px 30px;
+    background: var(--nexus-primary-color, #007bff);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-actions button[type="submit"]:hover {
+    background: var(--nexus-primary-hover, #0056b3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+}
+
+.form-actions button[type="submit"]:disabled {
+    background: var(--nexus-text-muted, #6c757d);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-actions button[type="reset"] {
+    padding: 12px 30px;
+    background: transparent;
+    color: var(--nexus-text-muted, #6c757d);
+    border: 1px solid var(--nexus-border-color, #dee2e6);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-actions button[type="reset"]:hover {
+    background: var(--nexus-bg-light, #f8f9fa);
+    border-color: var(--nexus-text-muted, #6c757d);
+}
+
+/* Form Messages */
+.form-message {
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    font-size: 0.9375rem;
+}
+
+.form-message.success {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid var(--nexus-success-color, #28a745);
+    color: var(--nexus-success-color, #28a745);
+}
+
+.form-message.error {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid var(--nexus-danger-color, #dc3545);
+    color: var(--nexus-danger-color, #dc3545);
+}
+
+.form-message.info {
+    background: rgba(0, 123, 255, 0.1);
+    border: 1px solid var(--nexus-primary-color, #007bff);
+    color: var(--nexus-primary-color, #007bff);
+}
+
+/* Loading Spinner */
+.form-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.form-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--nexus-border-color, #dee2e6);
+    border-top-color: var(--nexus-primary-color, #007bff);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Multi-Column Layout */
+.form-row {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.form-row.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-row.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-row .form-field {
+    margin-bottom: 0;
+}
+
+/* GDPR Consent */
+.form-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    background: var(--nexus-bg-light, #f8f9fa);
+    border-radius: 4px;
+    margin-bottom: 25px;
+}
+
+.form-consent input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--nexus-primary-color, #007bff);
+}
+
+.form-consent label {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--nexus-text-color, #212529);
+    cursor: pointer;
+}
+
+.form-consent label a {
+    color: var(--nexus-primary-color, #007bff);
+    text-decoration: none;
+}
+
+.form-consent label a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nexus-form {
+        padding: 20px;
+    }
+    
+    .form-row.columns-2,
+    .form-row.columns-3 {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .nexus-form {
+        padding: 15px;
+        border-radius: 4px;
+    }
+    
+    .nexus-form .form-title {
+        font-size: 1.5rem;
+    }
+    
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}

@@ -1,0 +1,70 @@
+/*--------------------------------------------------------------
+# Variables
+--------------------------------------------------------------*/
+
+// Colors - Will be overridden by CSS custom properties from customizer
+$primary-color: var(--nexus-primary, #0066cc);
+$secondary-color: var(--nexus-secondary, #333333);
+$accent-color: var(--nexus-accent, #ff6600);
+$success-color: var(--nexus-success, #28a745);
+$warning-color: var(--nexus-warning, #ffc107);
+$danger-color: var(--nexus-danger, #dc3545);
+$info-color: var(--nexus-info, #17a2b8);
+$light-color: var(--nexus-light, #f8f9fa);
+$dark-color: var(--nexus-dark, #343a40);
+
+// Typography
+$heading-font: var(--nexus-heading-font, 'Roboto', sans-serif);
+$body-font: var(--nexus-body-font, 'Open Sans', sans-serif);
+$code-font: 'Consolas', 'Monaco', 'Courier New', monospace;
+
+// Font Sizes
+$font-size-base: 16px;
+$font-size-h1: 2.5rem;
+$font-size-h2: 2rem;
+$font-size-h3: 1.75rem;
+$font-size-h4: 1.5rem;
+$font-size-h5: 1.25rem;
+$font-size-h6: 1rem;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Container
+$container-width: 1200px;
+$container-padding: 15px;
+
+// Breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Transitions
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.15s ease;
+
+// Shadows
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+// Z-index
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;

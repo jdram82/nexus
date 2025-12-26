@@ -1,0 +1,118 @@
+/*--------------------------------------------------------------
+# Comments
+--------------------------------------------------------------*/
+
+.comments-area {
+  margin-top: $spacing-xl;
+  padding-top: $spacing-xl;
+  border-top: 2px solid #e0e0e0;
+
+  .comments-title {
+    margin-bottom: $spacing-lg;
+  }
+
+  .comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .comment {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+      background: $light-color;
+      @include border-radius($border-radius-md);
+
+      .comment-author {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-sm;
+
+        .avatar {
+          @include border-radius(50%);
+        }
+
+        .fn {
+          font-weight: 700;
+        }
+
+        .says {
+          display: none;
+        }
+      }
+
+      .comment-metadata {
+        font-size: 0.875rem;
+        color: #666;
+        margin-bottom: $spacing-sm;
+
+        a {
+          color: #666;
+
+          &:hover {
+            color: $primary-color;
+          }
+        }
+      }
+
+      .comment-content {
+        p:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .reply {
+        margin-top: $spacing-sm;
+
+        a {
+          font-size: 0.875rem;
+          padding: 0.5rem 1rem;
+          background: $primary-color;
+          color: #ffffff;
+          @include border-radius($border-radius-sm);
+          display: inline-block;
+          @include transition();
+
+          &:hover {
+            background: darken($primary-color, 10%);
+          }
+        }
+      }
+    }
+
+    .children {
+      list-style: none;
+      padding-left: $spacing-lg;
+      margin-top: $spacing-md;
+    }
+  }
+
+  .comment-respond {
+    margin-top: $spacing-xl;
+
+    .comment-reply-title {
+      margin-bottom: $spacing-md;
+
+      small {
+        a {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .comment-form {
+      p {
+        margin-bottom: $spacing-md;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .required {
+        color: $danger-color;
+      }
+    }
+  }
+}

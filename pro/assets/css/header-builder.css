@@ -1,0 +1,402 @@
+/**
+ * Header Builder Styles
+ * Nexus Pro - Visual Header Builder
+ */
+
+/* Header Container */
+.nexus-header-builder {
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Header Rows */
+.header-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    transition: all 0.3s ease;
+}
+
+.header-row-top {
+    background: var(--nexus-header-top-bg, #f8f9fa);
+    border-bottom: 1px solid var(--nexus-border-color, #e9ecef);
+    font-size: 0.875rem;
+}
+
+.header-row-main {
+    background: var(--nexus-header-bg, #ffffff);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-row-bottom {
+    background: var(--nexus-header-bottom-bg, #ffffff);
+    border-top: 1px solid var(--nexus-border-color, #e9ecef);
+}
+
+/* Row Content Container */
+.header-row-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--nexus-container-width, 1200px);
+    margin: 0 auto;
+    width: 100%;
+    padding: 15px 0;
+}
+
+.header-row-main .header-row-content {
+    padding: 20px 0;
+}
+
+/* Column Layouts */
+.header-column {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-column-left {
+    justify-content: flex-start;
+    flex: 1;
+}
+
+.header-column-center {
+    justify-content: center;
+    flex: 1;
+}
+
+.header-column-right {
+    justify-content: flex-end;
+    flex: 1;
+}
+
+/* Header Elements */
+.header-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Logo Element */
+.header-element-logo img {
+    max-height: 50px;
+    width: auto;
+    display: block;
+}
+
+.header-row-main .header-element-logo img {
+    max-height: 60px;
+}
+
+.header-element-logo .site-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--nexus-text-color, #212529);
+}
+
+/* Menu Element */
+.header-element-menu nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+}
+
+.header-element-menu nav ul li {
+    position: relative;
+}
+
+.header-element-menu nav ul li a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--nexus-text-color, #212529);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.header-element-menu nav ul li a:hover,
+.header-element-menu nav ul li.current-menu-item a {
+    background: var(--nexus-primary-color, #007bff);
+    color: #ffffff;
+}
+
+/* Dropdown Menus */
+.header-element-menu nav ul li ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    min-width: 200px;
+    padding: 8px 0;
+    z-index: 1001;
+}
+
+.header-element-menu nav ul li:hover > ul {
+    display: flex;
+}
+
+.header-element-menu nav ul li ul li a {
+    padding: 10px 20px;
+    border-radius: 0;
+}
+
+/* Search Element */
+.header-element-search form {
+    display: flex;
+    position: relative;
+}
+
+.header-element-search input[type="search"] {
+    padding: 8px 35px 8px 12px;
+    border: 1px solid var(--nexus-border-color, #dee2e6);
+    border-radius: 4px;
+    min-width: 200px;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.header-element-search input[type="search"]:focus {
+    outline: none;
+    border-color: var(--nexus-primary-color, #007bff);
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.header-element-search button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: none;
+    border: none;
+    padding: 0 10px;
+    cursor: pointer;
+    color: var(--nexus-text-muted, #6c757d);
+}
+
+.header-element-search button:hover {
+    color: var(--nexus-primary-color, #007bff);
+}
+
+/* Cart Element */
+.header-element-cart a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--nexus-border-color, #dee2e6);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--nexus-text-color, #212529);
+    transition: all 0.2s ease;
+}
+
+.header-element-cart a:hover {
+    background: var(--nexus-primary-color, #007bff);
+    color: #ffffff;
+    border-color: var(--nexus-primary-color, #007bff);
+}
+
+.header-element-cart .cart-count {
+    background: var(--nexus-primary-color, #007bff);
+    color: #ffffff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.header-element-cart a:hover .cart-count {
+    background: #ffffff;
+    color: var(--nexus-primary-color, #007bff);
+}
+
+/* Account Element */
+.header-element-account a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--nexus-text-color, #212529);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.header-element-account a:hover {
+    background: var(--nexus-bg-light, #f8f9fa);
+}
+
+/* Social Element */
+.header-element-social {
+    display: flex;
+    gap: 10px;
+}
+
+.header-element-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--nexus-bg-light, #f8f9fa);
+    color: var(--nexus-text-color, #212529);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.header-element-social a:hover {
+    background: var(--nexus-primary-color, #007bff);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Button Element */
+.header-element-button a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: var(--nexus-primary-color, #007bff);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.header-element-button a:hover {
+    background: var(--nexus-primary-hover, #0056b3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+}
+
+/* Text Element */
+.header-element-text {
+    color: var(--nexus-text-muted, #6c757d);
+    font-size: 0.875rem;
+}
+
+/* Widget Element */
+.header-element-widget .widget {
+    margin: 0;
+}
+
+/* Header Styles */
+.nexus-header-builder.header-style-transparent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+}
+
+.nexus-header-builder.header-style-transparent .header-row-main {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.nexus-header-builder.header-style-sticky {
+    position: sticky;
+    top: 0;
+}
+
+.nexus-header-builder.header-style-sticky.scrolled .header-row-main {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--nexus-text-color, #212529);
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .header-row {
+        padding: 0 15px;
+    }
+    
+    .header-row-content {
+        flex-wrap: wrap;
+    }
+    
+    .header-column {
+        gap: 15px;
+    }
+    
+    .header-element-search input[type="search"] {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .header-element-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+    
+    .header-element-menu.active {
+        display: block;
+    }
+    
+    .header-element-menu nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .header-element-menu nav ul li a {
+        padding: 12px 15px;
+        border-radius: 0;
+        border-bottom: 1px solid var(--nexus-border-color, #e9ecef);
+    }
+    
+    .header-element-menu nav ul li ul {
+        position: static;
+        box-shadow: none;
+        background: var(--nexus-bg-light, #f8f9fa);
+        margin-top: 0;
+    }
+    
+    .header-column-center,
+    .header-row-top,
+    .header-row-bottom {
+        display: none;
+    }
+}

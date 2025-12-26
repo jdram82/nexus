@@ -1,0 +1,121 @@
+/*--------------------------------------------------------------
+# Products
+--------------------------------------------------------------*/
+
+.nexus-product {
+  margin-bottom: $spacing-xl;
+  padding-bottom: $spacing-xl;
+  border-bottom: 1px solid #e0e0e0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .entry-header {
+    margin-bottom: $spacing-md;
+  }
+
+  .entry-title {
+    margin-bottom: $spacing-sm;
+  }
+
+  .product-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: $spacing-sm;
+
+    .product-category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: $light-color;
+      color: $dark-color;
+      font-size: 0.875rem;
+      @include border-radius($border-radius-sm);
+      @include transition();
+
+      &:hover {
+        background: $primary-color;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .product-thumbnail {
+    margin-bottom: $spacing-md;
+    @include border-radius($border-radius-md);
+    overflow: hidden;
+    @include box-shadow($shadow-sm);
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      @include transition(transform);
+    }
+
+    a:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  .product-tags {
+    margin-top: $spacing-md;
+
+    .product-tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      margin-right: 0.5rem;
+      background: $info-color;
+      color: #ffffff;
+      font-size: 0.8rem;
+      @include border-radius($border-radius-sm);
+
+      &:hover {
+        background: darken($info-color, 10%);
+      }
+    }
+  }
+}
+
+// Product Grid
+.products-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-lg;
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .nexus-product {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    @include box-shadow($shadow-sm);
+    @include border-radius($border-radius-md);
+    padding: $spacing-md;
+    @include transition();
+
+    &:hover {
+      @include box-shadow($shadow-md);
+      transform: translateY(-5px);
+    }
+  }
+}
+
+// Specifications
+.nexus-specifications {
+  margin-top: $spacing-xl;
+  padding-top: $spacing-xl;
+  border-top: 2px solid #e0e0e0;
+
+  h3 {
+    margin-bottom: $spacing-md;
+    color: $primary-color;
+  }
+}

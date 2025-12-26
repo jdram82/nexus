@@ -1,0 +1,39 @@
+/*
+Theme Name: Nexus
+Theme URI: https://nexustheme.com
+Author: Your Name
+Author URI: https://yourwebsite.com
+Description: A powerful WordPress theme designed for Electrical & Control Systems, AI/ML, and Embedded Systems businesses. Features advanced product catalogs, technical documentation, and project portfolios.
+Version: 1.0.0
+Requires at least: 5.8
+Tested up to: 6.4
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: nexus
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, e-commerce, portfolio, blog
+
+Nexus WordPress Theme, (C) 2025
+Nexus is distributed under the terms of the GNU GPL.
+*/
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Generic
+# Typography
+# Elements
+# Forms
+# Navigation
+# Accessibility
+# Widgets
+# Content
+# Footer
+# Infinite scroll
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Generic
+--------------------------------------------------------------*/
+
+/* Normalize is handled in SASS */

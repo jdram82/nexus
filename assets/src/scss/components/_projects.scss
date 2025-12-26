@@ -1,0 +1,82 @@
+/*--------------------------------------------------------------
+# Projects
+--------------------------------------------------------------*/
+
+.nexus-project {
+  margin-bottom: $spacing-xl;
+
+  .entry-header {
+    margin-bottom: $spacing-md;
+  }
+
+  .project-industries {
+    margin-top: $spacing-sm;
+    font-size: 0.9rem;
+
+    strong {
+      color: $dark-color;
+      margin-right: 0.5rem;
+    }
+
+    .project-industry {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: $accent-color;
+      color: #ffffff;
+      @include border-radius($border-radius-sm);
+      margin-right: 0.5rem;
+      @include transition();
+
+      &:hover {
+        background: darken($accent-color, 10%);
+      }
+    }
+  }
+
+  .project-thumbnail {
+    margin-bottom: $spacing-md;
+    @include border-radius($border-radius-md);
+    overflow: hidden;
+    @include box-shadow($shadow-md);
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      @include transition(transform);
+    }
+
+    a:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  .project-technologies {
+    margin-top: $spacing-lg;
+    padding-top: $spacing-md;
+    border-top: 1px solid #e0e0e0;
+
+    .technology-tag {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      margin: 0.25rem 0.5rem 0.25rem 0;
+      background: $light-color;
+      color: $dark-color;
+      @include border-radius($border-radius-lg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      @include box-shadow($shadow-sm);
+    }
+  }
+}
+
+// Projects Grid
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-xl;
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

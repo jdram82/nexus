@@ -1,0 +1,78 @@
+/*--------------------------------------------------------------
+# Widgets
+--------------------------------------------------------------*/
+
+.widget {
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  select {
+    width: 100%;
+  }
+}
+
+// Recent Posts Widget
+.widget_recent_entries {
+  ul li {
+    margin-bottom: $spacing-sm;
+
+    a {
+      font-weight: 500;
+    }
+
+    .post-date {
+      display: block;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+// Categories Widget
+.widget_categories {
+  ul li {
+    display: flex;
+    justify-content: space-between;
+
+    .count {
+      color: #666;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Tag Cloud Widget
+.widget_tag_cloud {
+  .tagcloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    a {
+      padding: 0.25rem 0.75rem;
+      background: $light-color;
+      @include border-radius($border-radius-sm);
+      font-size: 0.875rem !important;
+      @include transition();
+
+      &:hover {
+        background: $primary-color;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// Search Widget
+.widget_search {
+  .search-form {
+    display: flex;
+
+    label {
+      flex: 1;
+    }
+  }
+}
