@@ -1,0 +1,32 @@
+/**
+ * SEO Tools - Styles
+ * @package Nexus_Pro
+ * @since 3.0.0
+ */
+
+.nexus-seo-wrap {max-width: 1200px;}
+.nexus-seo-score-card {background: #fff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; margin: 30px 0;}
+.nexus-seo-score-card h2 {margin: 0 0 30px; font-size: 24px;}
+.nexus-score-circle-seo {width: 150px; height: 150px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; position: relative;}
+.nexus-score-inner {background: #fff; width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+.nexus-score-number {font-size: 48px; font-weight: 700; color: #333;}
+.nexus-score-max {font-size: 18px; color: #999;}
+.nexus-seo-issues {background: #fff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 30px 0;}
+.nexus-seo-issues h2 {margin: 0 0 20px; font-size: 20px;}
+.nexus-issues-list {list-style: none; margin: 0; padding: 0;}
+.nexus-issue-item {display: flex; align-items: start; gap: 15px; padding: 20px; margin-bottom: 15px; background: #f9f9f9; border-left: 4px solid #ff9800; border-radius: 4px;}
+.nexus-issue-item.severity-high {border-left-color: #f44336;}
+.nexus-issue-item .dashicons {font-size: 24px;}
+.nexus-issue-item h4 {margin: 0 0 5px; font-size: 16px;}
+.nexus-issue-item p {margin: 0; color: #666;}
+.nexus-seo-sitemap {background: #fff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 30px 0;}
+.nexus-seo-sitemap h2 {margin: 0 0 15px;}
+.nexus-seo-sitemap code {display: block; background: #f5f5f5; padding: 10px; border-radius: 4px; margin: 10px 0 20px;}
+.nexus-seo-meta-box {padding: 15px;}
+.nexus-seo-score-small {margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;}
+.nexus-score-badge {display: inline-block; padding: 4px 12px; border-radius: 12px; font-weight: 600; margin-left: 10px;}
+.nexus-score-badge.score-good {background: #d4edda; color: #155724;}
+.nexus-score-badge.score-ok {background: #fff3cd; color: #856404;}
+.nexus-score-badge.score-bad {background: #f8d7da; color: #721c24;}
+.nexus-seo-meta-box label {display: block; margin-bottom: 5px;}
+.nexus-seo-meta-box .description {display: block; margin-top: 5px; color: #666; font-size: 13px;}

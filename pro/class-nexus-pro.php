@@ -81,6 +81,26 @@ class Nexus_Pro {
 			require_once NEXUS_PRO_DIR . '/mega-menu/class-mega-menu.php';
 		}
 
+		// Phase 3: A/B Testing System
+		if ( file_exists( NEXUS_PRO_DIR . '/ab-testing/class-ab-testing.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/ab-testing/class-ab-testing.php';
+		}
+
+		// Phase 3: Analytics Dashboard
+		if ( file_exists( NEXUS_PRO_DIR . '/analytics/class-analytics.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/analytics/class-analytics.php';
+		}
+
+		// Phase 3: Performance Monitor
+		if ( file_exists( NEXUS_PRO_DIR . '/performance/class-performance.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/performance/class-performance.php';
+		}
+
+		// Phase 3: SEO Tools
+		if ( file_exists( NEXUS_PRO_DIR . '/seo/class-seo.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/seo/class-seo.php';
+		}
+
 		// Header/Footer Builder
 		require_once NEXUS_PRO_DIR . '/builder/class-header-builder.php';
 		require_once NEXUS_PRO_DIR . '/builder/class-footer-builder.php';
