@@ -1,0 +1,153 @@
+/**
+ * Mega Menu - Admin Styles
+ * 
+ * @package Nexus_Pro
+ * @since 3.0.0
+ */
+
+/* ===========================
+   Admin Menu Editor Styles
+   =========================== */
+
+.nexus-mega-menu-settings {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.nexus-mega-menu-settings h4 {
+    margin: 0 0 15px;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #23282d;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.nexus-mega-menu-settings p {
+    margin: 10px 0;
+}
+
+.nexus-mega-menu-settings label {
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.nexus-mega-menu-settings input[type="text"],
+.nexus-mega-menu-settings select {
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.nexus-mega-menu-settings input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.nexus-mega-menu-settings .description {
+    font-weight: 400;
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Two-column layout for badge fields */
+.nexus-mega-menu-settings .description-thin {
+    width: 48%;
+    float: left;
+}
+
+.nexus-mega-menu-settings .description-thin:nth-child(odd) {
+    margin-right: 4%;
+}
+
+.nexus-mega-menu-settings::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Color picker styling */
+.nexus-color-picker {
+    max-width: 100px !important;
+}
+
+.wp-picker-container {
+    display: inline-block;
+}
+
+.wp-picker-container .wp-color-result {
+    height: 30px;
+}
+
+/* Mega menu toggle */
+.nexus-mega-toggle label {
+    font-weight: 600;
+    color: #0073aa;
+}
+
+.nexus-mega-toggle input[type="checkbox"]:checked + label {
+    color: #00a32a;
+}
+
+/* Icon preview */
+.nexus-menu-icon-field input {
+    padding-left: 35px !important;
+}
+
+.nexus-menu-icon-field {
+    position: relative;
+}
+
+.nexus-menu-icon-field::before {
+    content: "\f333";
+    font-family: dashicons;
+    position: absolute;
+    left: 10px;
+    top: 35px;
+    font-size: 18px;
+    color: #888;
+}
+
+/* Options checkboxes */
+.nexus-menu-options label {
+    font-weight: 400;
+    color: #555;
+}
+
+.nexus-menu-options input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .nexus-mega-menu-settings .description-thin {
+        width: 100%;
+        float: none;
+        margin-right: 0;
+    }
+}
+
+/* Menu item depth indicators */
+.menu-item-depth-0 .nexus-mega-menu-settings {
+    background: #e8f5e9;
+    border-color: #4caf50;
+}
+
+.menu-item-depth-1 .nexus-mega-menu-settings {
+    background: #fff3e0;
+    border-color: #ff9800;
+}
+
+.menu-item-depth-2 .nexus-mega-menu-settings {
+    background: #e3f2fd;
+    border-color: #2196f3;
+}

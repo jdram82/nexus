@@ -76,6 +76,11 @@ class Nexus_Pro {
 			require_once NEXUS_PRO_DIR . '/controls/class-controls-manager.php';
 		}
 
+		// Phase 3: Mega Menu Builder
+		if ( file_exists( NEXUS_PRO_DIR . '/mega-menu/class-mega-menu.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/mega-menu/class-mega-menu.php';
+		}
+
 		// Header/Footer Builder
 		require_once NEXUS_PRO_DIR . '/builder/class-header-builder.php';
 		require_once NEXUS_PRO_DIR . '/builder/class-footer-builder.php';
