@@ -45,6 +45,11 @@ require_once NEXUS_DIR . '/inc/template-functions.php';
 require_once NEXUS_DIR . '/inc/template-tags.php';
 
 /**
+ * Block Patterns - Starter Templates
+ */
+require_once NEXUS_DIR . '/inc/block-patterns.php';
+
+/**
  * Enqueue Scripts and Styles
  */
 require_once NEXUS_DIR . '/inc/class-nexus-enqueue.php';
@@ -85,7 +90,8 @@ add_action( 'after_setup_theme', 'nexus_init' );
 
 /**
  * Load Nexus Pro if available
+ * Note: Pro features are disabled by default. Enable in WordPress Admin after theme activation.
  */
-if ( file_exists( NEXUS_DIR . '/pro/class-nexus-pro.php' ) ) {
-require_once NEXUS_DIR . '/pro/class-nexus-pro.php';
+if ( file_exists( NEXUS_DIR . '/pro/class-nexus-pro.php' ) && get_option( 'nexus_enable_pro', false ) ) {
+	require_once NEXUS_DIR . '/pro/class-nexus-pro.php';
 }

@@ -63,11 +63,30 @@ class Nexus_Pro {
 	 * Include Files
 	 */
 	private function includes() {
-		// Activation handler
-		require_once NEXUS_PRO_DIR . '/class-pro-activation.php';
+		// Core: Database Schema (ALL Tiers)
+		if ( file_exists( NEXUS_PRO_DIR . '/class-database-schema.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/class-database-schema.php';
+		}
 		
-		// License Manager (with tier support)
-		require_once NEXUS_PRO_DIR . '/admin/class-license-manager.php';
+		// Activation handler
+		if ( file_exists( NEXUS_PRO_DIR . '/class-pro-activation.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/class-pro-activation.php';
+		}
+		
+		// Core: Cloud Storage (Pro+ Tiers)
+		if ( file_exists( NEXUS_PRO_DIR . '/cloud/class-cloud-storage.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/cloud/class-cloud-storage.php';
+		}
+		
+		// Core: Template Cloud Sync (Pro+ Tiers)
+		if ( file_exists( NEXUS_PRO_DIR . '/cloud/class-template-cloud-sync.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/cloud/class-template-cloud-sync.php';
+		}
+		
+		// Core: Multi-Gateway Payment System (Pro+ Tiers)
+		if ( file_exists( NEXUS_PRO_DIR . '/payment/class-payment-gateway-multi.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/payment/class-payment-gateway-multi.php';
+		}
 		
 		// Phase 1: Plugin Orchestrator (Advanced Tier)
 		if ( file_exists( NEXUS_PRO_DIR . '/plugin-orchestrator/class-plugin-orchestrator.php' ) ) {
@@ -105,9 +124,10 @@ class Nexus_Pro {
 		}
 		
 		// Phase 3A: Credit System (Pro+ Tiers)
-	if ( file_exists( NEXUS_PRO_DIR . '/credits/class-payment-gateway.php' ) ) {
-		require_once NEXUS_PRO_DIR . '/credits/class-payment-gateway.php';
-	}
+		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-payment-gateway.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/credits/class-payment-gateway.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-credit-manager.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/credits/class-credit-manager.php';
 		}
 		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-credit-topup.php' ) ) {
@@ -150,32 +170,64 @@ class Nexus_Pro {
 		}
 
 		// Header/Footer Builder
-		require_once NEXUS_PRO_DIR . '/builder/class-header-builder.php';
-		require_once NEXUS_PRO_DIR . '/builder/class-footer-builder.php';
-		require_once NEXUS_PRO_DIR . '/builder/class-builder-elements.php';
+		if ( file_exists( NEXUS_PRO_DIR . '/builder/class-header-builder.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/builder/class-header-builder.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/builder/class-footer-builder.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/builder/class-footer-builder.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/builder/class-builder-elements.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/builder/class-builder-elements.php';
+		}
 
 		// Advanced Filtering
-		require_once NEXUS_PRO_DIR . '/filtering/class-product-filter.php';
-		require_once NEXUS_PRO_DIR . '/filtering/class-ajax-filter.php';
+		if ( file_exists( NEXUS_PRO_DIR . '/filtering/class-product-filter.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/filtering/class-product-filter.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/filtering/class-ajax-filter.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/filtering/class-ajax-filter.php';
+		}
 
 		// Documentation System
-		require_once NEXUS_PRO_DIR . '/documentation/class-docs-manager.php';
-		require_once NEXUS_PRO_DIR . '/documentation/class-docs-search.php';
-		require_once NEXUS_PRO_DIR . '/documentation/class-code-highlighter.php';
+		if ( file_exists( NEXUS_PRO_DIR . '/documentation/class-docs-manager.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/documentation/class-docs-manager.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/documentation/class-docs-search.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/documentation/class-docs-search.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/documentation/class-code-highlighter.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/documentation/class-code-highlighter.php';
+		}
 
 		// Client Portal
-		require_once NEXUS_PRO_DIR . '/portal/class-portal-manager.php';
-		require_once NEXUS_PRO_DIR . '/portal/class-portal-dashboard.php';
-		require_once NEXUS_PRO_DIR . '/portal/class-portal-projects.php';
+		if ( file_exists( NEXUS_PRO_DIR . '/portal/class-portal-manager.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/portal/class-portal-manager.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/portal/class-portal-dashboard.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/portal/class-portal-dashboard.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/portal/class-portal-projects.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/portal/class-portal-projects.php';
+		}
 
 		// Form Builder
-		require_once NEXUS_PRO_DIR . '/forms/class-form-builder.php';
-		require_once NEXUS_PRO_DIR . '/forms/class-form-processor.php';
-		require_once NEXUS_PRO_DIR . '/forms/class-form-fields.php';
+		if ( file_exists( NEXUS_PRO_DIR . '/forms/class-form-builder.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/forms/class-form-builder.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/forms/class-form-processor.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/forms/class-form-processor.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/forms/class-form-fields.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/forms/class-form-fields.php';
+		}
 
 		// Admin
-		require_once NEXUS_PRO_DIR . '/admin/class-pro-admin.php';
-		require_once NEXUS_PRO_DIR . '/admin/class-license-manager.php';
+		if ( file_exists( NEXUS_PRO_DIR . '/admin/class-pro-admin.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/admin/class-pro-admin.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/admin/class-license-manager.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/admin/class-license-manager.php';
+		}
 	}
 
 	/**
@@ -191,31 +243,61 @@ class Nexus_Pro {
 	 */
 	public function init() {
 		// Header/Footer Builder
-		Nexus_Header_Builder::instance();
-		Nexus_Footer_Builder::instance();
-		Nexus_Builder_Elements::instance();
+		if ( class_exists( 'Nexus_Header_Builder' ) ) {
+			Nexus_Header_Builder::instance();
+		}
+		if ( class_exists( 'Nexus_Footer_Builder' ) ) {
+			Nexus_Footer_Builder::instance();
+		}
+		if ( class_exists( 'Nexus_Builder_Elements' ) ) {
+			Nexus_Builder_Elements::instance();
+		}
 
 		// Advanced Filtering
-		Nexus_Product_Filter::instance();
-		Nexus_Ajax_Filter::instance();
+		if ( class_exists( 'Nexus_Product_Filter' ) ) {
+			Nexus_Product_Filter::instance();
+		}
+		if ( class_exists( 'Nexus_Ajax_Filter' ) ) {
+			Nexus_Ajax_Filter::instance();
+		}
 
 		// Documentation
-		Nexus_Docs_Manager::instance();
-		Nexus_Docs_Search::instance();
-		Nexus_Code_Highlighter::instance();
+		if ( class_exists( 'Nexus_Docs_Manager' ) ) {
+			Nexus_Docs_Manager::instance();
+		}
+		if ( class_exists( 'Nexus_Docs_Search' ) ) {
+			Nexus_Docs_Search::instance();
+		}
+		if ( class_exists( 'Nexus_Code_Highlighter' ) ) {
+			Nexus_Code_Highlighter::instance();
+		}
 
 		// Client Portal
-		Nexus_Portal_Manager::instance();
-		Nexus_Portal_Dashboard::instance();
-		Nexus_Portal_Projects::instance();
+		if ( class_exists( 'Nexus_Portal_Manager' ) ) {
+			Nexus_Portal_Manager::instance();
+		}
+		if ( class_exists( 'Nexus_Portal_Dashboard' ) ) {
+			Nexus_Portal_Dashboard::instance();
+		}
+		if ( class_exists( 'Nexus_Portal_Projects' ) ) {
+			Nexus_Portal_Projects::instance();
+		}
 
 		// Form Builder
-		Nexus_Form_Builder::instance();
-		Nexus_Form_Processor::instance();
+		if ( class_exists( 'Nexus_Form_Builder' ) ) {
+			Nexus_Form_Builder::instance();
+		}
+		if ( class_exists( 'Nexus_Form_Processor' ) ) {
+			Nexus_Form_Processor::instance();
+		}
 
 		// Admin
-		Nexus_Pro_Admin::instance();
-		Nexus_License_Manager::instance();
+		if ( class_exists( 'Nexus_Pro_Admin' ) ) {
+			Nexus_Pro_Admin::instance();
+		}
+		if ( class_exists( 'Nexus_License_Manager' ) ) {
+			Nexus_License_Manager::instance();
+		}
 	}
 
 	/**
