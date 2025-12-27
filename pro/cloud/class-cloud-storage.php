@@ -43,6 +43,14 @@ class Nexus_Cloud_Storage {
 	 * Constructor
 	 */
 	private function __construct() {
+		// LICENSE CHECK: Cloud Storage requires Pro tier or higher
+		$license = Nexus_License_Manager::instance();
+		if ( ! $license->has_feature( 'cloud_storage' ) ) {
+			// Feature disabled - don't initialize
+			add_action( 'admin_notices', array( $this, 'show_upgrade_notice' ) );
+			return;
+		}
+		
 		// Load credentials from options (if saved)
 		$this->load_credentials();
 		
@@ -549,6 +557,21 @@ class Nexus_Cloud_Storage {
 				<a href="https://docs.digitalocean.com/products/spaces/how-to/manage-access/" target="_blank" class="button">
 					<?php _e( 'View DigitalOcean Spaces Documentation', 'nexus' ); ?>
 				</a>
+			</p>
+		</div>
+		<?php
+	}
+	
+	/**
+	 * Show upgrade notice if feature not available
+	 */
+	public function show_upgrade_notice() {
+		$license = Nexus_License_Manager::instance();
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<strong><?php _e( 'Nexus Cloud Storage', 'nexus' ); ?></strong><br>
+				<?php echo $license->get_upgrade_message( 'cloud_storage' ); ?>
 			</p>
 		</div>
 		<?php

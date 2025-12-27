@@ -55,6 +55,11 @@ require_once NEXUS_DIR . '/inc/block-patterns.php';
 require_once NEXUS_DIR . '/inc/class-nexus-theme-updater.php';
 
 /**
+ * License Manager - Protects Premium Features
+ */
+require_once NEXUS_DIR . '/inc/class-nexus-license-manager.php';
+
+/**
  * Enqueue Scripts and Styles
  */
 require_once NEXUS_DIR . '/inc/class-nexus-enqueue.php';
