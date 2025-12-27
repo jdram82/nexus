@@ -75,37 +75,39 @@ class Nexus_Credit_Topup {
         
         wp_enqueue_script(
             'nexus-credits',
-            get_template_directory_uri() . '/pro/assets/js/credits.js',
-            array( 'jquery' ),
-            '1.6.0',
+		get_template_directory_uri() . '/pro/assets/js/credits-multi-gateway.js',
             true
         );
         
-        // Stripe.js (Production: use real Stripe key)
-        wp_enqueue_script( 'stripe-js', 'https://js.stripe.com/v3/', array(), null, true );
-        
-        $credit_manager = Nexus_Credit_Manager::get_instance();
-        
-        wp_localize_script( 'nexus-credits', 'nexusCredits', array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce( 'nexus_credits_nonce' ),
-            'stripe_key' => $this->get_stripe_publishable_key(),
-            'available_credits' => $credit_manager->get_available_credits(),
-            'price_per_credit' => $credit_manager->get_credit_price(),
-            'bulk_pricing' => $credit_manager->get_bulk_pricing(),
-        ) );
-    }
-    
-    /**
-     * Render credit management page
-     */
-    public function render_credit_page() {
-        $credit_manager = Nexus_Credit_Manager::get_instance();
-        $license = Nexus_License_Manager::get_instance();
-        
-        $available = $credit_manager->get_available_credits();
-        $monthly = $credit_manager->get_monthly_credits();
-        $used = $credit_manager->get_credits_used();
+		// Load gateway-specific scripts
+		$gateway_keys = $this->get_gateway_keys();
+		$gateway = $gateway_keys['gateway'];
+		
+		switch ( $gateway ) {
+			case 'razorpay':
+				wp_enqueue_script( 'razorpay-checkout', 'https://checkout.razorpay.com/v1/checkout.js', array(), null, true );
+				break;
+			
+			case 'stripe':
+				wp_enqueue_script( 'stripe-js', 'https://js.stripe.com/v3/', array(), null, true );
+				break;
+			
+			case 'cashfree':
+				wp_enqueue_script( 'cashfree-sdk', 'https://sdk.cashfree.com/js/v3/cashfree.js', array(), null, true );
+				break;
+		}
+		
+		wp_localize_script(
+			'nexus-credits',
+			'nexusCredits',
+			array(
+				'gateway' => $gateway,
+				'gatewayKey' => $gateway_keys['key'],
+				'nonce' => wp_create_nonce( 'nexus_credit_nonce' ),
+				'currency' => Nexus_Payment_Gateway::get_instance()->get_default_currency(),
+			)
+		);
+	}
         $purchased = $credit_manager->get_purchased_credits();
         $rollover = $credit_manager->get_rollover_credits();
         $price_per_credit = $credit_manager->get_credit_price();
@@ -318,95 +320,135 @@ class Nexus_Credit_Topup {
     }
     
     /**
-     * Get Stripe publishable key
-     */
-    private function get_stripe_publishable_key() {
-        // In production, store in wp-config.php: define( 'NEXUS_STRIPE_PK', 'pk_live_...' );
-        if ( defined( 'NEXUS_STRIPE_PK' ) ) {
-            return NEXUS_STRIPE_PK;
-        }
-        
-        // Test mode
-        return get_option( 'nexus_stripe_test_pk', 'pk_test_mock_key' );
-    }
-    
-    /**
-     * Get Stripe secret key
-     */
-    private function get_stripe_secret_key() {
-        // In production, store in wp-config.php: define( 'NEXUS_STRIPE_SK', 'sk_live_...' );
-        if ( defined( 'NEXUS_STRIPE_SK' ) ) {
-            return NEXUS_STRIPE_SK;
-        }
-        
-        // Test mode
-        return get_option( 'nexus_stripe_test_sk', 'sk_test_mock_key' );
-    }
-    
-    /**
-     * AJAX: Create payment intent
-     */
-    public function ajax_create_payment_intent() {
-        check_ajax_referer( 'nexus_credits_nonce', 'nonce' );
-        
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
-        }
-        
-        $credits = isset( $_POST['credits'] ) ? intval( $_POST['credits'] ) : 0;
-        $amount = isset( $_POST['amount'] ) ? floatval( $_POST['amount'] ) : 0;
-        
-        if ( $credits <= 0 || $amount <= 0 ) {
-            wp_send_json_error( array( 'message' => 'Invalid credit amount' ) );
-        }
-        
-        // In production, create real Stripe Payment Intent
-        // For now, mock response
-        $intent_id = 'pi_mock_' . uniqid();
-        $client_secret = 'pi_mock_secret_' . uniqid();
-        
-        // Store pending purchase
-        set_transient( 'nexus_pending_purchase_' . $intent_id, array(
-            'credits' => $credits,
-            'amount' => $amount,
-            'user_id' => get_current_user_id(),
-        ), HOUR_IN_SECONDS );
-        
-        wp_send_json_success( array(
-            'client_secret' => $client_secret,
-            'intent_id' => $intent_id,
-        ) );
-    }
-    
-    /**
-     * AJAX: Confirm credit purchase
-     */
-    public function ajax_confirm_credit_purchase() {
-        check_ajax_referer( 'nexus_credits_nonce', 'nonce' );
-        
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
-        }
-        
-        $intent_id = isset( $_POST['intent_id'] ) ? sanitize_text_field( $_POST['intent_id'] ) : '';
-        
-        $purchase = get_transient( 'nexus_pending_purchase_' . $intent_id );
-        
-        if ( ! $purchase ) {
-            wp_send_json_error( array( 'message' => 'Purchase not found' ) );
-        }
-        
-        // Add credits
-        $credit_manager = Nexus_Credit_Manager::get_instance();
-        $new_balance = $credit_manager->add_purchased_credits( $purchase['credits'], $purchase['user_id'] );
-        
-        // Clean up
-        delete_transient( 'nexus_pending_purchase_' . $intent_id );
-        
-        wp_send_json_success( array(
-            'message' => sprintf( __( '%d credits added successfully!', 'nexus' ), $purchase['credits'] ),
-            'new_balance' => $new_balance,
-        ) );
+	 * Get payment gateway keys
+	 */
+	private function get_gateway_keys() {
+		$gateway_manager = Nexus_Payment_Gateway::get_instance();
+		$active_gateway = $gateway_manager->get_active_gateway();
+		
+		switch ( $active_gateway ) {
+			case 'razorpay':
+				return array(
+					'gateway' => 'razorpay',
+					'key' => get_option( 'nexus_razorpay_key_id', defined( 'NEXUS_RAZORPAY_KEY_ID' ) ? NEXUS_RAZORPAY_KEY_ID : '' ),
+				);
+			
+			case 'stripe':
+				return array(
+					'gateway' => 'stripe',
+					'key' => get_option( 'nexus_stripe_publishable_key', defined( 'NEXUS_STRIPE_PK' ) ? NEXUS_STRIPE_PK : '' ),
+				);
+			
+			case 'cashfree':
+				return array(
+					'gateway' => 'cashfree',
+					'key' => get_option( 'nexus_cashfree_app_id', defined( 'NEXUS_CASHFREE_APP_ID' ) ? NEXUS_CASHFREE_APP_ID : '' ),
+				);
+			
+			default:
+				return array(
+					'gateway' => 'razorpay',
+					'key' => '',
+				);
+		}
+	
+	/**
+	 * AJAX: Create payment intent
+	 */
+	public function ajax_create_payment_intent() {
+		check_ajax_referer( 'nexus_credit_nonce', 'nonce' );
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		}
+		
+		$credits = isset( $_POST['credits'] ) ? intval( $_POST['credits'] ) : 0;
+		$amount = isset( $_POST['amount'] ) ? floatval( $_POST['amount'] ) : 0;
+		
+		if ( $credits <= 0 || $amount <= 0 ) {
+			wp_send_json_error( array( 'message' => 'Invalid credit amount' ) );
+		}
+		
+		// Create payment through gateway manager
+		$gateway = Nexus_Payment_Gateway::get_instance();
+		$currency = $gateway->get_default_currency();
+		
+		$payment = $gateway->create_payment(
+			$amount,
+			$currency,
+			array(
+				'credits' => $credits,
+				'user_id' => get_current_user_id(),
+				'site_url' => get_site_url(),
+			)
+		);
+		
+		if ( is_wp_error( $payment ) ) {
+			wp_send_json_error( array( 'message' => $payment->get_error_message() ) );
+		}
+		
+		// Store pending purchase
+		set_transient(
+			'nexus_pending_purchase_' . $payment['order_id'],
+			array(
+				'credits' => $credits,
+				'amount' => $amount,
+				'currency' => $currency,
+			),
+			3600 // 1 hour
+		);
+		
+		wp_send_json_success(
+			array(
+				'gateway' => $gateway->get_active_gateway(),
+				'order_id' => $payment['order_id'],
+				'payment_data' => $payment,
+			)
+		);
+	}
+	
+	/**
+	 * AJAX: Confirm credit purchase
+	 */
+	public function ajax_confirm_credit_purchase() {
+		check_ajax_referer( 'nexus_credit_nonce', 'nonce' );
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		}
+		
+		$order_id = isset( $_POST['order_id'] ) ? sanitize_text_field( $_POST['order_id'] ) : '';
+		$payment_id = isset( $_POST['payment_id'] ) ? sanitize_text_field( $_POST['payment_id'] ) : '';
+		$signature = isset( $_POST['signature'] ) ? sanitize_text_field( $_POST['signature'] ) : '';
+		
+		// Verify payment
+		$gateway = Nexus_Payment_Gateway::get_instance();
+		$verified = $gateway->verify_payment( $order_id, $payment_id, $signature );
+		
+		if ( is_wp_error( $verified ) ) {
+			wp_send_json_error( array( 'message' => $verified->get_error_message() ) );
+		}
+		
+		$purchase = get_transient( 'nexus_pending_purchase_' . $order_id );
+		
+		if ( ! $purchase ) {
+			wp_send_json_error( array( 'message' => 'Purchase not found' ) );
+		}
+		
+		// Add credits
+		$credit_manager = Nexus_Credit_Manager::get_instance();
+		$new_balance = $credit_manager->add_purchased_credits( $purchase['credits'], get_current_user_id() );
+		
+		// Clean up
+		delete_transient( 'nexus_pending_purchase_' . $order_id );
+		
+		wp_send_json_success(
+			array(
+				'message' => sprintf( __( '%d credits added successfully!', 'nexus' ), $purchase['credits'] ),
+				'new_balance' => $new_balance,
+			)
+		);
+	}
     }
     
     /**

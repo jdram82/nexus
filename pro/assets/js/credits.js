@@ -12,31 +12,19 @@
         
         stripe: null,
         cardElement: null,
-        currentIntentId: null,
-        
-        init() {
-            this.initStripe();
-            this.bindEvents();
-            this.updateCustomPrice();
-        },
-        
-        initStripe() {
-            if (typeof Stripe !== 'undefined' && nexusCredits.stripe_key) {
-                this.stripe = Stripe(nexusCredits.stripe_key);
-                const elements = this.stripe.elements();
-                this.cardElement = elements.create('card');
-            }
-        },
-        
-        bindEvents() {
-            // Buy package
-            $('.buy-package').on('click', (e) => this.buyPackage(e));
-            
-            // Buy custom amount
-            $('#buy-custom').on('click', () => this.buyCustom());
-            
-            // Custom credits input
-            $('#custom-credits').on('input', () => this.updateCustomPrice());
+		currentOrderId: null,
+		gateway: null,
+		
+		init() {
+			this.gateway = nexusCredits.gateway || 'razorpay';
+			this.initGateway();
+			this.bindEvents();
+			this.updateCustomPrice();
+		},
+		
+		initGateway() {
+			if (this.gateway === 'stripe' && typeof Stripe !== 'undefined' && nexusCredits.gatewayKey) {
+				this.stripe = Stripe(nexusCredits.gatewayKey);
             
             // Auto-refill toggle
             $('#enable-auto-refill').on('change', (e) => this.toggleAutoRefill(e));

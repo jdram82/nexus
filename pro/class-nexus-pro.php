@@ -105,7 +105,9 @@ class Nexus_Pro {
 		}
 		
 		// Phase 3A: Credit System (Pro+ Tiers)
-		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-credit-manager.php' ) ) {
+	if ( file_exists( NEXUS_PRO_DIR . '/credits/class-payment-gateway.php' ) ) {
+		require_once NEXUS_PRO_DIR . '/credits/class-payment-gateway.php';
+	}
 			require_once NEXUS_PRO_DIR . '/credits/class-credit-manager.php';
 		}
 		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-credit-topup.php' ) ) {
