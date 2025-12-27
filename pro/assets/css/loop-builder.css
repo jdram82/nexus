@@ -1,0 +1,364 @@
+/**
+ * Nexus Loop Builder Styles
+ * 
+ * @package Nexus_Theme
+ * @since 1.4.0
+ */
+
+.nexus-loop-builder-wrap {
+    margin: 0 -20px;
+}
+
+.nexus-loop-builder-wrap h1 {
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.nexus-loop-builder-container {
+    background: #f9f9f9;
+    padding: 20px;
+}
+
+/* Builder Layout - Three Panel */
+.nexus-builder-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 400px;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.nexus-panel {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background: linear-gradient(to bottom, #fff, #f9f9f9);
+}
+
+.panel-header h2 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.panel-header .description {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.panel-body {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+/* Control Groups */
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.control-group .description {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.control-group select,
+.control-group input[type="text"],
+.control-group input[type="number"] {
+    width: 100%;
+}
+
+.control-group input[type="range"] {
+    width: calc(100% - 50px);
+    vertical-align: middle;
+}
+
+.control-group .value-display {
+    display: inline-block;
+    width: 45px;
+    text-align: right;
+    font-weight: 600;
+    color: #0066cc;
+}
+
+/* Layout Selector */
+.layout-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.layout-option {
+    padding: 15px 10px;
+    border: 2px solid #ddd;
+    background: white;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.layout-option:hover {
+    border-color: #0066cc;
+    background: #f0f8ff;
+}
+
+.layout-option.active {
+    border-color: #0066cc;
+    background: #0066cc;
+    color: white;
+}
+
+.layout-option .dashicons {
+    display: block;
+    font-size: 24px;
+    margin: 0 auto 5px;
+}
+
+/* Card Elements */
+.sortable-list {
+    min-height: 100px;
+}
+
+.card-element {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    cursor: move;
+}
+
+.card-element .drag-handle {
+    color: #999;
+    cursor: grab;
+}
+
+.card-element .drag-handle:active {
+    cursor: grabbing;
+}
+
+.card-element .element-type {
+    flex: 1;
+    font-weight: 600;
+}
+
+.card-element .element-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Filter Rows */
+.filter-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.filter-row select,
+.filter-row input {
+    flex: 1;
+}
+
+.filter-row .remove-filter {
+    flex-shrink: 0;
+}
+
+/* Preview Panel */
+.preview-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.preview-controls button {
+    padding: 4px 8px;
+}
+
+.preview-frame {
+    min-height: 400px;
+    background: #fff;
+    padding: 20px;
+}
+
+.preview-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: #666;
+}
+
+.preview-loading .spinner {
+    float: none;
+    margin: 0 auto 10px;
+}
+
+/* Live Preview Rendering */
+.nexus-loop {
+    display: grid;
+    gap: var(--gap);
+}
+
+.nexus-loop-grid {
+    grid-template-columns: repeat(var(--columns), 1fr);
+}
+
+.nexus-loop-masonry {
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-auto-flow: dense;
+}
+
+.nexus-loop-list {
+    grid-template-columns: 1fr;
+}
+
+.nexus-loop-carousel {
+    grid-auto-flow: column;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.nexus-loop-item {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nexus-loop-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nexus-loop-item .element-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nexus-loop-item .element-title {
+    margin: 15px 15px 10px;
+    font-size: 18px;
+}
+
+.nexus-loop-item .element-title a {
+    text-decoration: none;
+    color: #333;
+}
+
+.nexus-loop-item .element-title a:hover {
+    color: #0066cc;
+}
+
+.nexus-loop-item .element-excerpt {
+    margin: 0 15px 15px;
+    color: #666;
+}
+
+.nexus-loop-item .element-meta {
+    margin: 0 15px 15px;
+    font-size: 13px;
+    color: #999;
+}
+
+.nexus-loop-item .element-button {
+    margin: 15px;
+}
+
+.nexus-loop-item .nexus-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0066cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.nexus-loop-item .nexus-button:hover {
+    background: #0052a3;
+}
+
+/* Bottom Actions */
+.nexus-builder-actions {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nexus-builder-actions .left-actions input {
+    width: 300px;
+}
+
+.nexus-builder-actions .right-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Saved Loops Table */
+.nexus-saved-loops {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.nexus-saved-loops h2 {
+    margin-top: 0;
+}
+
+.nexus-saved-loops code {
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.copy-shortcode {
+    margin-left: 5px;
+    padding: 2px 8px;
+    font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+    .nexus-builder-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .panel-body {
+        max-height: 400px;
+    }
+}

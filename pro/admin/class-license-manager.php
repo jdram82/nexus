@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Nexus License Manager Class
+ * Nexus License Manager Class with Tier Support
  */
 class Nexus_License_Manager {
 
@@ -24,6 +24,19 @@ class Nexus_License_Manager {
 	 * License Server URL
 	 */
 	private $server_url = 'https://yourdomain.com'; // Change this
+	
+	/**
+	 * License tiers
+	 */
+	const TIER_FREE = 'free';
+	const TIER_PRO = 'pro';
+	const TIER_ADVANCED = 'advanced';
+	const TIER_AGENCY = 'agency';
+	
+	/**
+	 * License data
+	 */
+	private $license_data = null;
 
 	/**
 	 * Get Instance
@@ -34,6 +47,13 @@ class Nexus_License_Manager {
 		}
 		return self::$instance;
 	}
+	
+	/**
+	 * Get Instance (alias for consistency)
+	 */
+	public static function get_instance() {
+		return self::instance();
+	}
 
 	/**
 	 * Constructor
@@ -41,6 +61,72 @@ class Nexus_License_Manager {
 	private function __construct() {
 		add_action( 'admin_init', array( $this, 'process_license_form' ) );
 		add_action( 'admin_notices', array( $this, 'license_notices' ) );
+		
+		// Load license data
+		$this->load_license_data();
+	}
+	
+	/**
+	 * Load license data from options
+	 */
+	private function load_license_data() {
+		$this->license_data = get_option( 'nexus_license_data', array(
+			'key' => '',
+			'tier' => self::TIER_FREE,
+			'status' => 'inactive',
+			'expires' => '',
+			'activated_at' => '',
+		) );
+	}
+	
+	/**
+	 * Get current license tier
+	 */
+	public function get_tier() {
+		return $this->license_data['tier'] ?? self::TIER_FREE;
+	}
+	
+	/**
+	 * Get license status
+	 */
+	public function get_status() {
+		return $this->license_data['status'] ?? 'inactive';
+	}
+	
+	/**
+	 * Check if license is active
+	 */
+	public function is_active() {
+		return $this->get_status() === 'active';
+	}
+	
+	/**
+	 * Check if feature is available for current tier
+	 */
+	public function has_feature( $feature ) {
+		$tier = $this->get_tier();
+		
+		// Feature tier requirements
+		$feature_tiers = array(
+			'plugin_harmony' => self::TIER_PRO,
+			'rest_api' => self::TIER_PRO,
+			'plugin_orchestrator' => self::TIER_ADVANCED,
+			'loop_builder' => self::TIER_ADVANCED,
+			'advanced_theme_builder' => self::TIER_ADVANCED,
+			'white_label' => self::TIER_AGENCY,
+		);
+		
+		if ( ! isset( $feature_tiers[ $feature ] ) ) {
+			return true; // Feature available to all
+		}
+		
+		$required_tier = $feature_tiers[ $feature ];
+		$tier_order = array( self::TIER_FREE, self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY );
+		
+		$current_index = array_search( $tier, $tier_order, true );
+		$required_index = array_search( $required_tier, $tier_order, true );
+		
+		return $current_index >= $required_index;
 	}
 
 	/**

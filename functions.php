@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '1.0.0' );
+define( 'NEXUS_VERSION', '1.5.0' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -48,6 +48,16 @@ require_once NEXUS_DIR . '/inc/template-tags.php';
  * Enqueue Scripts and Styles
  */
 require_once NEXUS_DIR . '/inc/class-nexus-enqueue.php';
+
+/**
+ * Phase 1 Features - Plugin Harmony (Pro Tier)
+ */
+require_once NEXUS_DIR . '/inc/class-nexus-plugin-harmony.php';
+
+/**
+ * Phase 1 Features - REST API (Pro Tier)
+ */
+require_once NEXUS_DIR . '/inc/api/class-nexus-rest-api.php';
 
 /**
  * WooCommerce Support

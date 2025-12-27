@@ -65,6 +65,44 @@ class Nexus_Pro {
 	private function includes() {
 		// Activation handler
 		require_once NEXUS_PRO_DIR . '/class-pro-activation.php';
+		
+		// License Manager (with tier support)
+		require_once NEXUS_PRO_DIR . '/admin/class-license-manager.php';
+		
+		// Phase 1: Plugin Orchestrator (Advanced Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/plugin-orchestrator/class-plugin-orchestrator.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/plugin-orchestrator/class-plugin-orchestrator.php';
+		}
+		
+		// Phase 1: Loop Builder (Advanced Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/loop-builder/class-loop-builder.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/loop-builder/class-loop-builder.php';
+		}
+		
+		// Phase 2: Template Library (Pro Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/templates/class-template-library.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/templates/class-template-library.php';
+		}
+		
+		// Phase 2: AI Template Generator (Advanced Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/ai/class-template-generator.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/ai/class-template-generator.php';
+		}
+		
+		// Phase 2: AI Documentation Generator (Advanced Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/ai/class-docs-generator.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/ai/class-docs-generator.php';
+		}
+		
+		// Phase 2: White-Label System (Advanced Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/agency/class-white-label.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/agency/class-white-label.php';
+		}
+		
+		// Phase 2: Multi-Site Dashboard (Agency Tier)
+		if ( file_exists( NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php';
+		}
 
 		// Phase 3: Theme Builder (Advanced)
 		if ( file_exists( NEXUS_PRO_DIR . '/theme-builder/class-theme-builder.php' ) ) {
