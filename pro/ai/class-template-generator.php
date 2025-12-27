@@ -293,42 +293,38 @@ class Nexus_AI_Template_Generator {
             wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
         }
         
-        // Check credits
-        if ( ! $this->has_credits() ) {
-            wp_send_json_error( array( 'message' => 'No credits remaining this month.' ) );
-        }
-        
-        $prompt = sanitize_textarea_field( $_POST['prompt'] );
-        $options = array(
-            'primary_color' => sanitize_text_field( $_POST['primary_color'] ?? '#0066cc' ),
-            'typography'    => sanitize_text_field( $_POST['typography'] ?? 'modern' ),
-            'layout'        => sanitize_text_field( $_POST['layout'] ?? 'full-width' ),
-            'density'       => sanitize_text_field( $_POST['density'] ?? 'normal' ),
-        );
-        
-        // Generate template with AI
-        $template = $this->generate_template( $prompt, $options );
-        
-        // Increment credits
-        $this->increment_credits();
-        
-        // Save to history
-        $this->save_to_history( $prompt, $template );
-        
-        wp_send_json_success( array(
-            'template'        => $template,
-            'credits_used'    => $this->get_credits_used(),
-            'credits_remaining' => $this->get_credits_limit() - $this->get_credits_used(),
-        ) );
-    }
-    
-    /**
-     * AJAX: Refine template
-     */
-    public function ajax_refine_template() {
-        check_ajax_referer( 'nexus_ai_nonce', 'nonce' );
-        
-        if ( ! current_user_can( 'manage_options' ) ) {
+		// Check credits using Credit Manager
+		$credit_manager = Nexus_Credit_Manager::get_instance();
+		if ( ! $credit_manager->has_credits( 1 ) ) {
+			wp_send_json_error( array( 
+				'message' => 'No AI credits remaining. Purchase more credits to continue.',
+				'redirect' => admin_url( 'admin.php?page=nexus-credits' )
+			) );
+		}
+		
+		$prompt = sanitize_textarea_field( $_POST['prompt'] );
+		$options = array(
+			'primary_color' => sanitize_text_field( $_POST['primary_color'] ?? '#0066cc' ),
+			'typography'    => sanitize_text_field( $_POST['typography'] ?? 'modern' ),
+			'layout'        => sanitize_text_field( $_POST['layout'] ?? 'full-width' ),
+			'density'       => sanitize_text_field( $_POST['density'] ?? 'normal' ),
+		);
+		
+		// Generate template with AI
+		$template = $this->generate_template( $prompt, $options );
+		
+		// Use credit
+		$result = $credit_manager->use_credits( 1 );
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+		
+		// Save to history
+		$this->save_to_history( $prompt, $template );
+		
+		wp_send_json_success( array(
+			'template'          => $template,
+			'credits_available' => $credit_manager->get_available_credits(),
             wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
         }
         

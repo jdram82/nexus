@@ -1,0 +1,377 @@
+/**
+ * Nexus Credits CSS
+ * 
+ * @package Nexus_Theme
+ * @since 1.6.0
+ */
+
+.nexus-credits-wrap {
+    max-width: 1200px;
+}
+
+/* Credit Overview */
+.credit-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.credit-stat-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.credit-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.credit-stat-card .stat-icon {
+    font-size: 48px;
+    line-height: 1;
+}
+
+.credit-stat-card .stat-content {
+    flex: 1;
+}
+
+.credit-stat-card .stat-value {
+    font-size: 36px;
+    font-weight: bold;
+    color: #0066cc;
+    margin-bottom: 5px;
+}
+
+.credit-stat-card .stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.credit-stat-card.total .stat-value {
+    color: #0066cc;
+}
+
+.credit-stat-card.monthly .stat-value {
+    color: #46b450;
+}
+
+.credit-stat-card.purchased .stat-value {
+    color: #f093fb;
+}
+
+.credit-stat-card.rollover .stat-value {
+    color: #ff9800;
+}
+
+.stat-progress {
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(135deg, #46b450 0%, #66d46b 100%);
+    transition: width 0.5s ease;
+}
+
+/* Buy Credits Section */
+.buy-credits-section {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 30px 0;
+}
+
+.buy-credits-section h2 {
+    margin-top: 0;
+}
+
+.credit-packages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.credit-package {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.credit-package:hover {
+    border-color: #0066cc;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,102,204,0.2);
+}
+
+.credit-package.custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.package-header {
+    margin-bottom: 20px;
+}
+
+.package-credits {
+    font-size: 48px;
+    font-weight: bold;
+    color: #0066cc;
+    line-height: 1;
+}
+
+.credit-package.custom .package-credits,
+.credit-package.custom .package-label {
+    color: white;
+}
+
+.package-label {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.package-discount {
+    display: inline-block;
+    background: #ff6b6b;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.package-price {
+    margin: 20px 0;
+}
+
+.package-price .price {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+}
+
+.credit-package.custom .package-price .price {
+    color: white;
+}
+
+.package-price .per-credit {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.credit-package.custom .package-price .per-credit {
+    color: rgba(255,255,255,0.8);
+}
+
+.buy-package {
+    width: 100%;
+}
+
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.custom-credits-input {
+    width: 100px;
+    font-size: 18px;
+    text-align: center;
+    padding: 8px;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.custom-credits-input:focus {
+    border-color: white;
+    outline: none;
+}
+
+.custom-input-group .input-label {
+    color: rgba(255,255,255,0.9);
+}
+
+/* Auto-Refill Section */
+.auto-refill-section {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 30px 0;
+}
+
+.auto-refill-section h2 {
+    margin-top: 0;
+}
+
+.auto-refill-form {
+    max-width: 600px;
+}
+
+.auto-refill-form label {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.auto-refill-form input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.refill-settings {
+    margin-left: 24px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.refill-settings label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.refill-settings input,
+.refill-settings select {
+    flex: 1;
+    max-width: 200px;
+}
+
+/* Credit History */
+.credit-history-section {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 30px 0;
+}
+
+.credit-history-section h2 {
+    margin-top: 0;
+}
+
+.credit-debit {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.credit-credit {
+    color: #46b450;
+    font-weight: 600;
+}
+
+/* Payment Modal */
+.nexus-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.payment-summary {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.summary-row.total {
+    border-top: 2px solid #ddd;
+    margin-top: 10px;
+    padding-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card-element {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.card-errors {
+    color: #dc3545;
+    margin: 10px 0;
+    min-height: 20px;
+}
+
+#submit-payment {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .credit-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .credit-packages {
+        grid-template-columns: 1fr;
+    }
+    
+    .credit-stat-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}

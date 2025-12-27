@@ -103,6 +103,14 @@ class Nexus_Pro {
 		if ( file_exists( NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php';
 		}
+		
+		// Phase 3A: Credit System (Pro+ Tiers)
+		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-credit-manager.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/credits/class-credit-manager.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/credits/class-credit-topup.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/credits/class-credit-topup.php';
+		}
 
 		// Phase 3: Theme Builder (Advanced)
 		if ( file_exists( NEXUS_PRO_DIR . '/theme-builder/class-theme-builder.php' ) ) {
