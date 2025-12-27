@@ -138,11 +138,20 @@ class Nexus_Theme_Updater {
 	 * Get latest release from GitHub
 	 */
 	private function get_latest_release() {
+		// Prepare headers
+		$headers = array(
+			'Accept' => 'application/vnd.github.v3+json',
+		);
+		
+		// Add GitHub token if available (to avoid rate limits)
+		$github_token = defined( 'NEXUS_GITHUB_TOKEN' ) ? NEXUS_GITHUB_TOKEN : false;
+		if ( $github_token ) {
+			$headers['Authorization'] = 'token ' . $github_token;
+		}
+		
 		$response = wp_remote_get( $this->github_api_url, array(
 			'timeout' => 15,
-			'headers' => array(
-				'Accept' => 'application/vnd.github.v3+json',
-			),
+			'headers' => $headers,
 		) );
 		
 		if ( is_wp_error( $response ) ) {
@@ -150,16 +159,24 @@ class Nexus_Theme_Updater {
 		}
 		
 		$response_code = wp_remote_retrieve_response_code( $response );
+		$body = wp_remote_retrieve_body( $response );
+		
+		// Check for rate limit
+		if ( 403 === $response_code ) {
+			$data = json_decode( $body, true );
+			if ( isset( $data['message'] ) && strpos( $data['message'], 'rate limit' ) !== false ) {
+				return new WP_Error( 'rate_limit', 'GitHub API rate limit exceeded. Please wait or add NEXUS_GITHUB_TOKEN to wp-config.php.' );
+			}
+		}
 		
 		if ( 200 !== $response_code ) {
 			return new WP_Error( 'github_error', sprintf( 'GitHub API returned %d', $response_code ) );
 		}
 		
-		$body = wp_remote_retrieve_body( $response );
 		$release = json_decode( $body, true );
 		
 		if ( empty( $release['tag_name'] ) ) {
-			return new WP_Error( 'invalid_response', 'Invalid GitHub response' );
+			return new WP_Error( 'invalid_response', 'Invalid GitHub response: ' . substr( $body, 0, 200 ) );
 		}
 		
 		return $release;
