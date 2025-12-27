@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '1.6.0' );
+define( 'NEXUS_VERSION', '1.7.0' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
