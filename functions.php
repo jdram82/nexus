@@ -91,6 +91,7 @@ function nexus_init() {
 	Nexus_Projects::instance();
 	Nexus_Downloads::instance();
 	Nexus_Enqueue::instance();
+	Nexus_Theme_Updater::instance(); // Initialize automatic updates
 	
 	if ( class_exists( 'WooCommerce' ) ) {
 		Nexus_WooCommerce::instance();
