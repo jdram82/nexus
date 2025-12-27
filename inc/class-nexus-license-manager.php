@@ -313,7 +313,7 @@ class Nexus_License_Manager {
 	public function add_license_page() {
 		add_submenu_page(
 			'themes.php',
-			__( 'Nexus License', 'nexus' ),
+			__( 'Nexus by Jdsan Digitel - License', 'nexus' ),
 			__( 'License', 'nexus' ),
 			'manage_options',
 			'nexus-license',

@@ -324,7 +324,7 @@ class Nexus_Theme_Updater {
 	 */
 	public function add_update_page() {
 		add_theme_page(
-			__( 'Nexus Updates', 'nexus' ),
+			__( 'Nexus by Jdsan Digitel - Updates', 'nexus' ),
 			__( 'Updates', 'nexus' ),
 			'update_themes',
 			'nexus-updates',
