@@ -1,12 +1,14 @@
 # Nexus Theme - Enterprise WordPress Theme for SaaS & Technical Content
 
-[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/jdram82/nexus)
+[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/jdram82/nexus)
 [![License](https://img.shields.io/badge/license-GPL--2.0+-green.svg)](LICENSE)
 [![WordPress](https://img.shields.io/badge/wordpress-6.0+-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/php-7.4+-purple.svg)](https://php.net/)
-[![Code](https://img.shields.io/badge/code-21,693_lines-orange.svg)](https://github.com/jdram82/nexus)
+[![Auto Updates](https://img.shields.io/badge/updates-automatic-brightgreen.svg)](docs/THEME_UPDATE_GUIDE.md)
 
 A comprehensive WordPress theme designed specifically for **SaaS products**, **technical blogs**, **API documentation**, and **simulation websites**. Built with three progressive phases totaling **21,693 lines of code**, Nexus provides everything you need without relying on external plugins or subscriptions.
+
+**🆕 NEW in v1.6.0:** [Automatic GitHub-based updates](#-automatic-updates-new) - No more manual reinstallation!
 
 ## 🎯 Perfect For
 
@@ -77,6 +79,17 @@ git clone https://github.com/jdram82/nexus.git nexus-theme
 3. Navigate to **Nexus Pro → Dashboard**
 4. Click **"Run Database Setup"** (first-time only)
 5. Start building! 🎉
+
+### 🔄 Automatic Updates (NEW)
+
+Nexus now includes automatic GitHub-based updates:
+
+1. **No manual reinstallation** - Updates happen with one click
+2. **Update notifications** - Get notified when new versions are available
+3. **Settings preserved** - All your configurations stay intact
+4. **One-click update** - Go to Appearance → Themes and click "Update Now"
+
+See [Update Guide](docs/THEME_UPDATE_GUIDE.md) for details.
 
 ### Requirements
 
@@ -321,6 +334,9 @@ Result: Variant B wins with 97% confidence (23% higher conversion)
 Comprehensive guides available in the `docs/` folder:
 
 - **[Installation Guide](docs/INSTALLATION.md)** - Step-by-step setup
+- **[Theme Update Guide](docs/THEME_UPDATE_GUIDE.md)** - 🆕 Automatic updates, manual updates, troubleshooting
+- **[Update Quick Reference](UPDATE_QUICK_REFERENCE.md)** - 🆕 Quick reference for updating theme
+- **[Changelog](CHANGELOG.md)** - 🆕 Version history and release notes
 - **[Phase 1: Core Theme](docs/PHASE-1-CORE.md)** - Foundation features
 - **[Phase 2: Pro Features](docs/PHASE-2-PRO.md)** - 5 premium features
 - **[Phase 3: Advanced](docs/PHASE-3-ADVANCED.md)** - 8 enterprise features

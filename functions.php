@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '1.5.0' );
+define( 'NEXUS_VERSION', '1.6.0' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -48,6 +48,11 @@ require_once NEXUS_DIR . '/inc/template-tags.php';
  * Block Patterns - Starter Templates
  */
 require_once NEXUS_DIR . '/inc/block-patterns.php';
+
+/**
+ * Theme Updater - GitHub Integration
+ */
+require_once NEXUS_DIR . '/inc/class-nexus-theme-updater.php';
 
 /**
  * Enqueue Scripts and Styles
