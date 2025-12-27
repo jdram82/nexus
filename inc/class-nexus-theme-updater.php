@@ -73,6 +73,7 @@ class Nexus_Theme_Updater {
 		add_action( 'admin_notices', array( $this, 'show_update_notice' ) );
 		add_action( 'admin_init', array( $this, 'manual_update_check' ) );
 		add_action( 'wp_ajax_nexus_check_update', array( $this, 'ajax_check_update' ) );
+		add_action( 'upgrader_process_complete', array( $this, 'clear_cache_after_update' ), 10, 2 );
 		
 		// Add update button in Appearance → Themes
 		add_action( 'admin_menu', array( $this, 'add_update_page' ) );
@@ -191,27 +192,35 @@ class Nexus_Theme_Updater {
 	public function fix_theme_folder_name( $source, $remote_source, $upgrader ) {
 		global $wp_filesystem;
 		
-		// Check if this is a theme update
-		if ( ! isset( $upgrader->skin->theme ) || $this->theme_slug !== $upgrader->skin->theme ) {
+		// Only run for theme updates
+		if ( ! isset( $upgrader->skin->theme_info ) && ! isset( $upgrader->skin->theme ) ) {
 			return $source;
 		}
 		
-		// Get the actual folder name
+		// Check if this is updating our theme
+		$updating_theme = isset( $upgrader->skin->theme ) ? $upgrader->skin->theme : '';
+		if ( ! empty( $updating_theme ) && $this->theme_slug !== $updating_theme ) {
+			return $source;
+		}
+		
+		// Get the actual folder name from the extracted ZIP
 		$source_name = basename( $source );
 		
-		// If it's already correct, return
+		// If it's already named correctly, return
 		if ( $this->theme_slug === $source_name ) {
 			return $source;
 		}
 		
-		// Rename to correct folder name
+		// GitHub creates folders like "nexus-abc1234" or "jdram82-nexus-abc1234"
+		// We need to rename it to "nexus-theme"
 		$new_source = dirname( $source ) . '/' . $this->theme_slug;
 		
+		// Move the folder to correct name
 		if ( $wp_filesystem->move( $source, $new_source, true ) ) {
 			return $new_source;
 		}
 		
-		return new WP_Error( 'rename_failed', 'Could not rename theme folder' );
+		return new WP_Error( 'rename_failed', __( 'Could not rename theme folder. Please reinstall manually.', 'nexus' ) );
 	}
 	
 	/**
@@ -477,6 +486,29 @@ class Nexus_Theme_Updater {
 		});
 		</script>
 		<?php
+	}
+	
+	/**
+	 * Clear cache after successful update
+	 */
+	public function clear_cache_after_update( $upgrader_object, $options ) {
+		// Check if this is a theme update
+		if ( $options['action'] !== 'update' || $options['type'] !== 'theme' ) {
+			return;
+		}
+		
+		// Check if our theme was updated
+		if ( isset( $options['themes'] ) && in_array( $this->theme_slug, $options['themes'] ) ) {
+			// Clear our update cache
+			delete_transient( $this->transient_name );
+			
+			// Clear WordPress theme cache
+			delete_site_transient( 'update_themes' );
+			wp_clean_themes_cache();
+			
+			// Force refresh theme data
+			wp_update_themes();
+		}
 	}
 	
 	/**
