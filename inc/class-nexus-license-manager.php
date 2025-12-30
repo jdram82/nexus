@@ -19,7 +19,12 @@ class Nexus_License_Manager {
 	 * License server URL
 	 * IMPORTANT: Change this to YOUR domain
 	 */
-	private $license_server = 'https://yoursite.com/wp-json/nexus-licenses/v1/';
+	private $license_server = 'https://jdsandigitel.com/wp-json/nexus-licenses/v1/';
+	
+	/**
+	 * Use legacy API (for servers with REST API disabled)
+	 */
+	private $use_legacy_api = true;
 	
 	/**
 	 * License types
@@ -98,26 +103,39 @@ class Nexus_License_Manager {
 	public function has_feature( $feature ) {
 		// Feature to tier mapping
 		$feature_tiers = array(
-			// Pro Tier Features
+			// FREE TIER FEATURES (Not Listed Here - Default to Free)
+			// - plugin_harmony: Basic plugin compatibility detection
+			// - rest_api: Basic REST API endpoints
+			// - All core WordPress theme features
+			
+			// Pro Tier Features (Pro, Advanced, Agency)
 			'cloud_storage' => array( self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'payment_gateway' => array( self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'template_sync' => array( self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'template_library' => array( self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'credits_system' => array( self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'database_schema' => array( self::TIER_PRO, self::TIER_ADVANCED, self::TIER_AGENCY ),
 			
-			// Advanced Tier Features
+			// Advanced Tier Features (Advanced, Agency)
+			'plugin_orchestrator' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'loop_builder' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'template_manager' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'ai_template_generator' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'theme_builder' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'advanced_controls' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'mega_menu' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'api_docs' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'circuit_simulator' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
+			'performance_analytics' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'seo_manager' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'performance_monitor' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
-			'ai_template_generator' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'advanced_filtering' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
 			'form_builder' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
-			'loop_builder' => array( self::TIER_ADVANCED, self::TIER_AGENCY ),
 			
-			// Agency Tier Features
+			// Agency Tier Features (Agency only)
+			'ab_testing' => array( self::TIER_AGENCY ),
 			'white_label' => array( self::TIER_AGENCY ),
 			'agency_dashboard' => array( self::TIER_AGENCY ),
-			'ab_testing' => array( self::TIER_AGENCY ),
 			'analytics' => array( self::TIER_AGENCY ),
 			'client_portal' => array( self::TIER_AGENCY ),
 		);
@@ -190,8 +208,16 @@ class Nexus_License_Manager {
 			return new WP_Error( 'empty_key', 'License key is required' );
 		}
 		
+		// Determine API URL
+		if ( $this->use_legacy_api ) {
+			$api_url = str_replace( '/wp-json/nexus-licenses/v1/', '', $this->license_server );
+			$api_url .= '?nexus_api_action=activate';
+		} else {
+			$api_url = $this->license_server . 'activate';
+		}
+		
 		// Call license server
-		$response = wp_remote_post( $this->license_server . 'activate', array(
+		$response = wp_remote_post( $api_url, array(
 			'timeout' => 15,
 			'body' => array(
 				'license_key' => $license_key,
@@ -237,8 +263,16 @@ class Nexus_License_Manager {
 			return new WP_Error( 'no_license', 'No license to deactivate' );
 		}
 		
+		// Determine API URL
+		if ( $this->use_legacy_api ) {
+			$api_url = str_replace( '/wp-json/nexus-licenses/v1/', '', $this->license_server );
+			$api_url .= '?nexus_api_action=deactivate';
+		} else {
+			$api_url = $this->license_server . 'deactivate';
+		}
+		
 		// Call license server
-		$response = wp_remote_post( $this->license_server . 'deactivate', array(
+		$response = wp_remote_post( $api_url, array(
 			'timeout' => 15,
 			'body' => array(
 				'license_key' => $this->license_data['key'],
@@ -271,8 +305,16 @@ class Nexus_License_Manager {
 			return false;
 		}
 		
+		// Determine API URL
+		if ( $this->use_legacy_api ) {
+			$api_url = str_replace( '/wp-json/nexus-licenses/v1/', '', $this->license_server );
+			$api_url .= '?nexus_api_action=validate';
+		} else {
+			$api_url = $this->license_server . 'validate';
+		}
+		
 		// Call license server
-		$response = wp_remote_post( $this->license_server . 'validate', array(
+		$response = wp_remote_post( $api_url, array(
 			'timeout' => 15,
 			'body' => array(
 				'license_key' => $this->license_data['key'],
