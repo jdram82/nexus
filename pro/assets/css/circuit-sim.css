@@ -1,0 +1,570 @@
+/**
+ * Circuit Simulator Styles
+ *
+ * @package Nexus_Pro
+ * @subpackage Circuit_Simulator
+ * @since 3.0.0
+ */
+
+/* ========== Main Container ========== */
+.nexus-circuit-simulator {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 32px);
+	background: #f5f5f5;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+}
+
+/* ========== Toolbar ========== */
+.circuit-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 15px 20px;
+	background: #fff;
+	border-bottom: 1px solid #ddd;
+	flex-shrink: 0;
+}
+
+.toolbar-group {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	padding: 0 10px;
+	border-right: 1px solid #ddd;
+}
+
+.toolbar-group:last-child {
+	border-right: none;
+}
+
+.toolbar-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 14px;
+	background: #0073aa;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 13px;
+	transition: background 0.2s;
+}
+
+.toolbar-btn:hover {
+	background: #005177;
+}
+
+.toolbar-btn.secondary {
+	background: #f0f0f1;
+	color: #2c3338;
+}
+
+.toolbar-btn.secondary:hover {
+	background: #dcdcde;
+}
+
+.toolbar-btn.danger {
+	background: #d63638;
+}
+
+.toolbar-btn.danger:hover {
+	background: #b32d2e;
+}
+
+.toolbar-btn .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+/* ========== Main Content ========== */
+.circuit-main {
+	display: flex;
+	flex: 1;
+	overflow: hidden;
+}
+
+/* ========== Component Library Sidebar ========== */
+.component-library {
+	width: 280px;
+	background: #fff;
+	border-right: 1px solid #ddd;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.library-header {
+	padding: 15px 20px;
+	border-bottom: 1px solid #ddd;
+	background: #f9f9f9;
+}
+
+.library-header h3 {
+	margin: 0 0 10px 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.component-search {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.library-categories {
+	flex: 1;
+	overflow-y: auto;
+	padding: 10px 0;
+}
+
+.category {
+	margin-bottom: 5px;
+}
+
+.category-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 20px;
+	cursor: pointer;
+	user-select: none;
+	font-weight: 500;
+	font-size: 13px;
+	color: #2c3338;
+	transition: background 0.2s;
+}
+
+.category-header:hover {
+	background: #f0f0f1;
+}
+
+.category-header .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.category-toggle {
+	margin-left: auto;
+	transition: transform 0.2s;
+}
+
+.category.collapsed .category-toggle {
+	transform: rotate(-90deg);
+}
+
+.category-components {
+	display: none;
+	padding: 5px 0 5px 20px;
+}
+
+.category.expanded .category-components {
+	display: block;
+}
+
+.component-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 20px;
+	cursor: move;
+	user-select: none;
+	font-size: 13px;
+	transition: background 0.2s;
+}
+
+.component-item:hover {
+	background: #f0f0f1;
+}
+
+.component-item.dragging {
+	opacity: 0.5;
+}
+
+.component-symbol {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	background: #f0f0f1;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	font-weight: bold;
+	font-size: 12px;
+	color: #2c3338;
+}
+
+.component-info {
+	flex: 1;
+}
+
+.component-name {
+	font-weight: 500;
+	color: #1d2327;
+}
+
+.component-description {
+	font-size: 11px;
+	color: #646970;
+}
+
+/* ========== Canvas Area ========== */
+.canvas-container {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	position: relative;
+	overflow: hidden;
+}
+
+.canvas-wrapper {
+	flex: 1;
+	position: relative;
+	overflow: auto;
+}
+
+#circuit-canvas {
+	display: block;
+	cursor: crosshair;
+	background: 
+		linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, .05) 25%, transparent 26%, transparent 74%, rgba(0, 0, 0, .05) 75%, transparent 76%, transparent),
+		linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, .05) 25%, transparent 26%, transparent 74%, rgba(0, 0, 0, .05) 75%, transparent 76%, transparent);
+	background-size: 20px 20px;
+	background-position: -1px -1px;
+}
+
+.canvas-status {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	padding: 6px 12px;
+	background: rgba(255, 255, 255, 0.95);
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 12px;
+	color: #646970;
+	pointer-events: none;
+}
+
+/* ========== Properties Panel ========== */
+.properties-panel {
+	width: 320px;
+	background: #fff;
+	border-left: 1px solid #ddd;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.panel-header {
+	padding: 15px 20px;
+	border-bottom: 1px solid #ddd;
+	background: #f9f9f9;
+}
+
+.panel-header h3 {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.panel-content {
+	flex: 1;
+	overflow-y: auto;
+	padding: 20px;
+}
+
+.property-field {
+	margin-bottom: 20px;
+}
+
+.property-field label {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #1d2327;
+}
+
+.property-field input,
+.property-field select {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.property-field .unit {
+	display: inline-block;
+	margin-left: 8px;
+	color: #646970;
+	font-size: 12px;
+}
+
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 200px;
+	color: #646970;
+	text-align: center;
+	padding: 20px;
+}
+
+.empty-state .dashicons {
+	font-size: 48px;
+	width: 48px;
+	height: 48px;
+	opacity: 0.3;
+	margin-bottom: 10px;
+}
+
+/* ========== Simulation Results ========== */
+.simulation-panel {
+	padding: 20px;
+	border-top: 1px solid #ddd;
+	background: #f9f9f9;
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.simulation-panel h4 {
+	margin: 0 0 15px 0;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.result-section {
+	margin-bottom: 20px;
+}
+
+.result-section h5 {
+	margin: 0 0 10px 0;
+	font-size: 12px;
+	font-weight: 600;
+	color: #2c3338;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.result-item {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 0;
+	border-bottom: 1px solid #e5e5e5;
+	font-size: 13px;
+}
+
+.result-item:last-child {
+	border-bottom: none;
+}
+
+.result-label {
+	color: #646970;
+}
+
+.result-value {
+	font-weight: 500;
+	color: #1d2327;
+}
+
+.warning-item {
+	padding: 10px;
+	background: #fcf3cd;
+	border-left: 3px solid #dba617;
+	margin-bottom: 10px;
+	font-size: 12px;
+	color: #646970;
+}
+
+.recommendation-item {
+	padding: 10px;
+	background: #d7f1ff;
+	border-left: 3px solid #0073aa;
+	margin-bottom: 10px;
+	font-size: 12px;
+	color: #646970;
+}
+
+/* ========== Saved Circuits ========== */
+.saved-circuits {
+	padding: 20px;
+	border-top: 1px solid #ddd;
+}
+
+.saved-circuits h4 {
+	margin: 0 0 15px 0;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.circuit-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 15px;
+}
+
+.circuit-card {
+	padding: 15px;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.circuit-card:hover {
+	border-color: #0073aa;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.circuit-card h5 {
+	margin: 0 0 8px 0;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.circuit-meta {
+	display: flex;
+	gap: 10px;
+	font-size: 11px;
+	color: #646970;
+	margin-bottom: 10px;
+}
+
+.circuit-actions {
+	display: flex;
+	gap: 5px;
+	margin-top: 10px;
+}
+
+.circuit-actions button {
+	flex: 1;
+	padding: 6px 10px;
+	background: #f0f0f1;
+	color: #2c3338;
+	border: none;
+	border-radius: 3px;
+	font-size: 11px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.circuit-actions button:hover {
+	background: #dcdcde;
+}
+
+.circuit-actions button.delete {
+	background: #d63638;
+	color: #fff;
+}
+
+.circuit-actions button.delete:hover {
+	background: #b32d2e;
+}
+
+/* ========== Component on Canvas ========== */
+.canvas-component {
+	position: absolute;
+	background: #fff;
+	border: 2px solid #0073aa;
+	border-radius: 4px;
+	padding: 8px;
+	cursor: move;
+	user-select: none;
+}
+
+.canvas-component.selected {
+	border-color: #d63638;
+	box-shadow: 0 0 0 2px rgba(214, 54, 56, 0.2);
+}
+
+.canvas-component .component-label {
+	font-size: 11px;
+	font-weight: 600;
+	color: #1d2327;
+	margin-bottom: 4px;
+}
+
+.canvas-component .component-value {
+	font-size: 10px;
+	color: #646970;
+}
+
+/* ========== Connection Wires ========== */
+.wire {
+	stroke: #2c3338;
+	stroke-width: 2;
+	fill: none;
+	pointer-events: stroke;
+	cursor: pointer;
+}
+
+.wire.selected {
+	stroke: #d63638;
+	stroke-width: 3;
+}
+
+.wire:hover {
+	stroke: #0073aa;
+	stroke-width: 3;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1280px) {
+	.properties-panel {
+		width: 280px;
+	}
+	
+	.component-library {
+		width: 240px;
+	}
+}
+
+@media (max-width: 1024px) {
+	.properties-panel,
+	.component-library {
+		width: 220px;
+	}
+}
+
+/* ========== Loading State ========== */
+.loading-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.9);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.loading-spinner {
+	width: 40px;
+	height: 40px;
+	border: 4px solid #f0f0f1;
+	border-top-color: #0073aa;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}

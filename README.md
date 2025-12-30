@@ -1,5 +1,7 @@
 # Nexus Theme - Enterprise WordPress Theme for SaaS & Technical Content
 
+![Nexus Theme Hero](Nexus_images/Hero_Banner.png)
+
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/jdram82/nexus)
 [![License](https://img.shields.io/badge/license-GPL--2.0+-green.svg)](LICENSE)
 [![WordPress](https://img.shields.io/badge/wordpress-6.0+-blue.svg)](https://wordpress.org/)
@@ -7,6 +9,8 @@
 [![Auto Updates](https://img.shields.io/badge/updates-automatic-brightgreen.svg)](docs/THEME_UPDATE_GUIDE.md)
 
 A comprehensive WordPress theme designed specifically for **SaaS products**, **technical blogs**, **API documentation**, and **simulation websites**. Built with three progressive phases totaling **21,693 lines of code**, Nexus provides everything you need without relying on external plugins or subscriptions.
+
+![Nexus Responsive Design](Nexus_images/Responsive%20Design.png)
 
 **🆕 NEW in v1.6.0:** [Automatic GitHub-based updates](#-automatic-updates-new) - No more manual reinstallation!
 
@@ -56,6 +60,16 @@ A comprehensive WordPress theme designed specifically for **SaaS products**, **t
 - **Total: $750+/year** 💸
 
 **With Nexus: $0** - Everything included, GPL licensed ✅
+
+---
+
+## 🎨 Visual Showcase
+
+### Professional Interface Design
+![Builder Interface](Nexus_images/Builder%20Interface.png)
+
+### Powerful Analytics & Performance
+![Performance Tracking](Nexus_images/Performance%20Concept.png)
 
 ---
 

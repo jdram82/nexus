@@ -1,0 +1,1 @@
+{"name":"Corporate Layout 5","description":"Professional corporate page","category":"business","type":"page","tags":["business","corporate"],"sections":[{"id":"hero","type":"section","settings":{"padding":"80px 20px"},"columns":[{"width":"100%","widgets":[{"type":"heading","settings":{"text":"Corporate Excellence","tag":"h1"}}]}]}]}

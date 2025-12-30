@@ -151,3 +151,292 @@
     background: #e3f2fd;
     border-color: #2196f3;
 }
+
+/* ============================================
+   Column Preview Grid
+   ============================================ */
+
+.nexus-column-preview {
+    margin-top: 12px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.nexus-column-preview-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.nexus-column-preview-grid {
+    display: grid;
+    gap: 6px;
+}
+
+.nexus-column-preview-grid.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.nexus-column-preview-grid.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.nexus-column-preview-grid.columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.nexus-column-preview-grid.columns-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.nexus-column-preview-grid.columns-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.nexus-column-preview-item {
+    height: 35px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* ============================================
+   Dashicons Picker Modal
+   ============================================ */
+
+.nexus-dashicons-picker-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 650px;
+    max-width: 90%;
+    max-height: 80vh;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 100000;
+}
+
+.nexus-dashicons-picker-modal.active {
+    display: block;
+}
+
+.nexus-dashicons-picker-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99999;
+}
+
+.nexus-dashicons-picker-overlay.active {
+    display: block;
+}
+
+.nexus-dashicons-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.nexus-dashicons-picker-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.nexus-dashicons-picker-close {
+    padding: 6px 10px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 3px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.nexus-dashicons-picker-close:hover {
+    background: #e0e0e0;
+    color: #000;
+}
+
+.nexus-dashicons-picker-search {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.nexus-dashicons-picker-search input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.nexus-dashicons-picker-search input:focus {
+    border-color: #0073aa;
+    outline: none;
+}
+
+.nexus-dashicons-picker-body {
+    padding: 20px;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.nexus-dashicons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+    gap: 10px;
+}
+
+.nexus-dashicon-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 55px;
+    background: #f9f9f9;
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nexus-dashicon-item:hover {
+    background: #fff;
+    border-color: #0073aa;
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0, 115, 170, 0.2);
+}
+
+.nexus-dashicon-item.selected {
+    background: #0073aa;
+    border-color: #0073aa;
+}
+
+.nexus-dashicon-item .dashicons {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+    color: #23282d;
+}
+
+.nexus-dashicon-item.selected .dashicons {
+    color: #fff;
+}
+
+/* Icon picker button */
+.nexus-icon-picker-button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-top: 8px;
+    background: #0073aa;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.nexus-icon-picker-button:hover {
+    background: #005a87;
+}
+
+/* Icon preview enhanced */
+.nexus-icon-preview-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+}
+
+.nexus-icon-preview-container .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: #0073aa;
+}
+
+.nexus-icon-preview-container .nexus-icon-name {
+    font-size: 12px;
+    color: #666;
+    font-family: monospace;
+}
+
+/* ============================================
+   Visual Indicators
+   ============================================ */
+
+.menu-item-bar .menu-item-title {
+    position: relative;
+}
+
+.nexus-has-mega-menu > .menu-item-bar .menu-item-title:before {
+    content: "\f529";
+    font-family: dashicons;
+    display: inline-block;
+    margin-right: 6px;
+    color: #4caf50;
+    font-size: 16px;
+}
+
+.nexus-has-icon > .menu-item-bar .menu-item-title:after {
+    content: "\f128";
+    font-family: dashicons;
+    display: inline-block;
+    margin-left: 6px;
+    color: #2196f3;
+    font-size: 14px;
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+
+.nexus-mega-menu-settings label:focus-within {
+    outline: 2px solid #0073aa;
+    outline-offset: 2px;
+}
+
+.nexus-dashicon-item:focus {
+    outline: 2px solid #0073aa;
+    outline-offset: 2px;
+}
+
+/* Screen reader text */
+.nexus-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

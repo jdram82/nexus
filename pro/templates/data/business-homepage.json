@@ -1,0 +1,33 @@
+{
+  "name": "Business Homepage",
+  "description": "Professional business homepage with services, team, and contact sections",
+  "category": "business",
+  "type": "page",
+  "tags": ["business", "corporate", "professional"],
+  "thumbnail": "business-homepage.jpg",
+  "sections": [
+    {
+      "id": "hero",
+      "type": "section",
+      "settings": {"background": "#f5f5f5", "padding": "80px 20px"},
+      "columns": [{
+        "width": "100%",
+        "widgets": [
+          {"type": "heading", "settings": {"text": "Your Business Growth Partner", "tag": "h1"}},
+          {"type": "text", "settings": {"content": "<p>We help businesses scale with proven strategies and expert guidance.</p>"}},
+          {"type": "button", "settings": {"text": "Get Started", "url": "/contact", "style": "primary"}}
+        ]
+      }]
+    },
+    {
+      "id": "services",
+      "type": "section",
+      "settings": {"padding": "60px 20px"},
+      "columns": [
+        {"width": "33.33%", "widgets": [{"type": "heading", "settings": {"text": "Consulting", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>Strategic business consulting</p>"}}]},
+        {"width": "33.33%", "widgets": [{"type": "heading", "settings": {"text": "Development", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>Custom software solutions</p>"}}]},
+        {"width": "33.33%", "widgets": [{"type": "heading", "settings": {"text": "Support", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>24/7 technical support</p>"}}]}
+      ]
+    }
+  ]
+}

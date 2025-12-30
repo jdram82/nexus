@@ -65,12 +65,12 @@ require_once NEXUS_DIR . '/inc/class-nexus-license-manager.php';
 require_once NEXUS_DIR . '/inc/class-nexus-enqueue.php';
 
 /**
- * Phase 1 Features - Plugin Harmony (Pro Tier)
+ * Plugin Harmony - Auto-compatibility (Free Tier)
  */
 require_once NEXUS_DIR . '/inc/class-nexus-plugin-harmony.php';
 
 /**
- * Phase 1 Features - REST API (Pro Tier)
+ * REST API - Basic Endpoints (Free Tier)
  */
 require_once NEXUS_DIR . '/inc/api/class-nexus-rest-api.php';
 

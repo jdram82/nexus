@@ -1,0 +1,1 @@
+{"name":"SaaS Product Page 2","description":"Product showcase page","category":"saas","type":"page","tags":["saas","product"],"sections":[{"id":"hero","type":"section","settings":{"padding":"100px 20px","background":"#667eea"},"columns":[{"width":"100%","widgets":[{"type":"heading","settings":{"text":"Innovative SaaS Solution","tag":"h1","color":"#ffffff"}}]}]}]}

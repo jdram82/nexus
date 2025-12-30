@@ -15,6 +15,11 @@ $license_status = Nexus_License_Manager::instance()->get_license_status();
 <div class="wrap nexus-pro-dashboard">
 	<h1><?php esc_html_e( 'Nexus Pro Dashboard', 'nexus' ); ?></h1>
 
+	<!-- Dashboard Hero -->
+	<div class="nexus-dashboard-hero">
+		<img src="<?php echo esc_url( get_template_directory_uri() . '/Nexus_images/Analytics dashboard.png' ); ?>" alt="Nexus Dashboard" style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 20px;">
+	</div>
+
 	<div class="nexus-dashboard-grid">
 		
 		<!-- License Status -->

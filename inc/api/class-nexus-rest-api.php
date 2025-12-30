@@ -1,14 +1,14 @@
 <?php
 /**
- * Nexus REST API (Pro Tier)
+ * Nexus REST API (Free Tier)
  * 
- * API-First architecture exposing theme functionality via REST endpoints.
+ * Basic API endpoints exposing core theme functionality.
  * Enables headless WordPress, third-party integrations, and developer extensions.
  * 
  * @package Nexus_Theme
  * @subpackage API
  * @since 1.4.0
- * @tier Pro
+ * @tier Free
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

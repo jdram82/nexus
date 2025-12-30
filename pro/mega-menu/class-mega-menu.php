@@ -124,6 +124,12 @@ class Nexus_Mega_Menu {
             update_post_meta( $menu_item_db_id, '_nexus_mega_columns', $columns );
         }
 
+        // Save widget area
+        if ( isset( $_POST['menu-item-nexus-widget-area'][ $menu_item_db_id ] ) ) {
+            $widget_area = sanitize_text_field( $_POST['menu-item-nexus-widget-area'][ $menu_item_db_id ] );
+            update_post_meta( $menu_item_db_id, '_nexus_mega_widget_area', $widget_area );
+        }
+
         // Save icon
         if ( isset( $_POST['menu-item-nexus-icon'][ $menu_item_db_id ] ) ) {
             $icon = sanitize_text_field( $_POST['menu-item-nexus-icon'][ $menu_item_db_id ] );

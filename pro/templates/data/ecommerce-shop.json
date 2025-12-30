@@ -1,0 +1,17 @@
+{
+  "name": "E-commerce Shop",
+  "description": "Complete online store with product grid and cart",
+  "category": "ecommerce",
+  "type": "page",
+  "tags": ["ecommerce", "shop", "woocommerce"],
+  "thumbnail": "ecommerce-shop.jpg",
+  "sections": [
+    {"id": "header", "type": "section", "settings": {"padding": "40px 20px"}, "columns": [{"width": "100%", "widgets": [{"type": "heading", "settings": {"text": "Our Products", "tag": "h1"}}]}]},
+    {"id": "products", "type": "section", "settings": {"padding": "60px 20px"}, "columns": [
+      {"width": "25%", "widgets": [{"type": "heading", "settings": {"text": "Product 1", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>$99.00</p>"}}, {"type": "button", "settings": {"text": "Add to Cart", "url": "#", "style": "primary"}}]},
+      {"width": "25%", "widgets": [{"type": "heading", "settings": {"text": "Product 2", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>$149.00</p>"}}, {"type": "button", "settings": {"text": "Add to Cart", "url": "#", "style": "primary"}}]},
+      {"width": "25%", "widgets": [{"type": "heading", "settings": {"text": "Product 3", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>$79.00</p>"}}, {"type": "button", "settings": {"text": "Add to Cart", "url": "#", "style": "primary"}}]},
+      {"width": "25%", "widgets": [{"type": "heading", "settings": {"text": "Product 4", "tag": "h3"}}, {"type": "text", "settings": {"content": "<p>$199.00</p>"}}, {"type": "button", "settings": {"text": "Add to Cart", "url": "#", "style": "primary"}}]}
+    ]}
+  ]
+}

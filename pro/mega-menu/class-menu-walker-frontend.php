@@ -41,6 +41,16 @@ class Nexus_Menu_Walker_Frontend extends Walker_Nav_Menu {
         if ( $depth === 0 && $is_mega ) {
             $classes[] = 'nexus-mega-menu';
             $classes[] = 'nexus-mega-columns-' . $mega_columns;
+            
+            // Check if widget area is enabled
+            if ( isset( $args->mega_menu_item_id ) ) {
+                $widget_area_id = get_post_meta( $args->mega_menu_item_id, '_nexus_mega_widget_area', true );
+                
+                if ( $widget_area_id && is_active_sidebar( 'nexus-mega-menu-' . $widget_area_id ) ) {
+                    $args->mega_has_widget = true;
+                    $args->mega_widget_id = $widget_area_id;
+                }
+            }
         }
 
         $class_names = implode( ' ', $classes );
@@ -150,5 +160,34 @@ class Nexus_Menu_Walker_Frontend extends Walker_Nav_Menu {
         $item_output .= isset( $args->after ) ? $args->after : '';
 
         $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+    }
+
+    /**
+     * End level - close UL wrapper and optionally render widget area
+     *
+     * @param string $output Output HTML.
+     * @param int    $depth  Depth of menu item.
+     * @param array  $args   Menu item args.
+     */
+    public function end_lvl( &$output, $depth = 0, $args = null ) {
+        $indent = str_repeat( "\t", $depth );
+
+        // Render widget area if enabled for mega menu
+        if ( $depth === 0 && isset( $args->mega_has_widget ) && $args->mega_has_widget ) {
+            $output .= "\n{$indent}\t<li class='nexus-mega-widget-area'>";
+            
+            ob_start();
+            dynamic_sidebar( 'nexus-mega-menu-' . $args->mega_widget_id );
+            $widget_output = ob_get_clean();
+            
+            $output .= $widget_output;
+            $output .= "</li>\n";
+            
+            // Reset widget flag
+            unset( $args->mega_has_widget );
+            unset( $args->mega_widget_id );
+        }
+
+        $output .= "{$indent}</ul>\n";
     }
 }

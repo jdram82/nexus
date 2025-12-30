@@ -1,6 +1,6 @@
 <?php
 /**
- * Nexus Plugin Harmony Architecture (Pro Tier)
+ * Nexus Plugin Harmony Architecture (Free Tier)
  * 
  * Intelligent plugin detection and graceful feature degradation.
  * Ensures Nexus works harmoniously with popular WordPress plugins.
@@ -8,7 +8,7 @@
  * @package Nexus_Theme
  * @subpackage Plugin_Harmony
  * @since 1.4.0
- * @tier Pro
+ * @tier Free
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

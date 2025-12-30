@@ -63,6 +63,7 @@ class Nexus_Controls_Manager {
         require_once NEXUS_PRO_PATH . 'controls/class-border-control.php';
         require_once NEXUS_PRO_PATH . 'controls/class-spacing-control.php';
         require_once NEXUS_PRO_PATH . 'controls/class-icon-picker-control.php';
+        require_once NEXUS_PRO_PATH . 'controls/class-image-position-control.php';
 
         // Register controls
         $wp_customize->register_control_type( 'Nexus_Typography_Control' );
@@ -71,6 +72,7 @@ class Nexus_Controls_Manager {
         $wp_customize->register_control_type( 'Nexus_Border_Control' );
         $wp_customize->register_control_type( 'Nexus_Spacing_Control' );
         $wp_customize->register_control_type( 'Nexus_Icon_Picker_Control' );
+        $wp_customize->register_control_type( 'Nexus_Image_Position_Control' );
     }
 
     /**

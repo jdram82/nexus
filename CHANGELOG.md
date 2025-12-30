@@ -5,6 +5,60 @@ All notable changes to Nexus Theme will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.1] - 2025-12-27
+
+### Fixed
+- Fixed update notification loop - "Update Now" button no longer reappears after successful update
+- Improved GitHub zipball folder renaming for better WordPress compatibility
+- Added automatic cache clearing after successful updates
+- Enhanced theme detection in WordPress upgrader hook
+- Update system now properly recognizes installed version
+
+### Technical
+- Improved `fix_theme_folder_name()` with better theme detection logic
+- Added `clear_cache_after_update()` method for post-update cleanup
+- Proper transient cache clearing on `upgrader_process_complete` hook
+- Better handling of folder structure edge cases
+
+## [1.8.0] - 2025-12-27
+
+### Changed
+- **Major Rebranding: Nexus by Jdsan Digitel**
+- Theme Author: JDRAM → Jdsan Digitel
+- Author URI: https://jdsandigitel.com
+- Theme URI: https://jdsandigitel.com/nexus
+- Copyright updated to "Copyright (C) 2025 Jdsan Digitel"
+- Footer displays "Nexus by Jdsan Digitel"
+- All admin page titles updated with company branding
+
+## [1.7.0] - 2025-12-27
+
+### Added
+- **Automatic GitHub-based update system**
+- GitHub Personal Access Token support (5000 req/hr vs 60 req/hr)
+- Automatic update checking every 12 hours
+- One-click updates from WordPress admin
+- Update notifications in Appearance → Themes
+- New "Updates" admin page under Appearance
+- Manual "Check for Updates Now" functionality
+- GitHub zipball automatic folder renaming
+- Settings preservation during updates
+- Comprehensive diagnostic tools
+
+### Technical
+- Created `inc/class-nexus-theme-updater.php` (518 lines)
+- GitHub Releases API integration
+- 12-hour transient caching for API efficiency
+- NEXUS_GITHUB_TOKEN constant support
+- WordPress hooks: `pre_set_site_transient_update_themes`, `upgrader_source_selection`
+
+### Documentation
+- Created UPDATE_SYSTEM_GUIDE.md
+- Created DEPLOYMENT_GUIDE.md
+- Created diagnostic plugin tools
+- Update configuration guides
+- Quick reference documentation
+
 ## [Unreleased]
 
 ### Added

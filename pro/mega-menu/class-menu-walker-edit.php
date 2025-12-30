@@ -36,10 +36,14 @@ class Nexus_Menu_Walker_Edit extends Walker_Nav_Menu_Edit {
         $badge_color    = get_post_meta( $item->ID, '_nexus_menu_badge_color', true );
         $hide_text      = get_post_meta( $item->ID, '_nexus_menu_hide_text', true );
         $disable_link   = get_post_meta( $item->ID, '_nexus_menu_disable_link', true );
+        $widget_area_id = get_post_meta( $item->ID, '_nexus_mega_widget_area', true );
 
         // Default values
         $mega_columns  = $mega_columns ? $mega_columns : 4;
         $badge_color   = $badge_color ? $badge_color : '#e74c3c';
+
+        // Get available widget areas
+        $widget_areas = get_option( 'nexus_mega_menu_widget_areas', array() );
 
         // Custom fields HTML
         ob_start();
@@ -67,6 +71,22 @@ class Nexus_Menu_Walker_Edit extends Walker_Nav_Menu_Edit {
                             <option value="3" <?php selected( $mega_columns, 3 ); ?>>3 <?php esc_html_e( 'Columns', 'nexus-pro' ); ?></option>
                             <option value="4" <?php selected( $mega_columns, 4 ); ?>>4 <?php esc_html_e( 'Columns', 'nexus-pro' ); ?></option>
                             <option value="5" <?php selected( $mega_columns, 5 ); ?>>5 <?php esc_html_e( 'Columns', 'nexus-pro' ); ?></option>
+
+                <p class="description description-wide nexus-mega-widget-area" style="<?php echo $mega_enabled ? '' : 'display:none;'; ?>">
+                    <label for="edit-menu-item-nexus-widget-area-<?php echo esc_attr( $item->ID ); ?>">
+                        <?php esc_html_e( 'Widget Area (optional)', 'nexus-pro' ); ?><br>
+                        <select name="menu-item-nexus-widget-area[<?php echo esc_attr( $item->ID ); ?>]" 
+                                id="edit-menu-item-nexus-widget-area-<?php echo esc_attr( $item->ID ); ?>">
+                            <option value=""><?php esc_html_e( '-- None --', 'nexus-pro' ); ?></option>
+                            <?php foreach ( $widget_areas as $area ) : ?>
+                                <option value="<?php echo esc_attr( $area['id'] ); ?>" <?php selected( $widget_area_id, $area['id'] ); ?>>
+                                    <?php echo esc_html( $area['name'] ); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="description"><?php esc_html_e( 'Add widgets to this mega menu from Appearance > Widgets', 'nexus-pro' ); ?></span>
+                    </label>
+                </p>
                             <option value="6" <?php selected( $mega_columns, 6 ); ?>>6 <?php esc_html_e( 'Columns', 'nexus-pro' ); ?></option>
                         </select>
                     </label>

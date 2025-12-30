@@ -20,6 +20,7 @@
             this.initBorderControls();
             this.initSpacingControls();
             this.initIconPickerControls();
+            this.initImagePositionControls();
         },
 
         /**
@@ -367,6 +368,128 @@
                     $selectBtn.html('<span class="placeholder">Select Icon</span>');
                     $(this).remove();
                     $hidden.val('').trigger('change');
+                });
+            });
+        },
+
+        /**
+         * Image Position Control
+         */
+        initImagePositionControls: function() {
+            $('.nexus-image-position-control').each(function() {
+                const $control = $(this);
+                const $hidden = $control.find('.position-value');
+                const $focalPoint = $control.find('.position-focal-point');
+                const $grid = $control.find('.position-grid');
+                const $xSlider = $control.find('.position-x-slider');
+                const $ySlider = $control.find('.position-y-slider');
+                const $xNumber = $control.find('.position-x-number');
+                const $yNumber = $control.find('.position-y-number');
+                const $xDisplay = $control.find('.position-x-display');
+                const $yDisplay = $control.find('.position-y-display');
+
+                // Update focal point position
+                function updateFocalPoint() {
+                    const x = $xSlider.val();
+                    const y = $ySlider.val();
+                    
+                    $focalPoint.css({
+                        left: x + '%',
+                        top: y + '%'
+                    });
+                    
+                    $xNumber.val(x);
+                    $yNumber.val(y);
+                    $xDisplay.text(x + '%');
+                    $yDisplay.text(y + '%');
+                }
+
+                // Update value and trigger change
+                function updateValue() {
+                    const settings = {};
+                    $control.find('[data-setting]').each(function() {
+                        const key = $(this).data('setting');
+                        const value = $(this).val();
+                        settings[key] = value;
+                    });
+                    $hidden.val(JSON.stringify(settings)).trigger('change');
+                }
+
+                // Slider changes
+                $xSlider.on('input', function() {
+                    updateFocalPoint();
+                    updateValue();
+                });
+
+                $ySlider.on('input', function() {
+                    updateFocalPoint();
+                    updateValue();
+                });
+
+                // Number input changes
+                $xNumber.on('change', function() {
+                    const val = Math.max(0, Math.min(100, $(this).val()));
+                    $(this).val(val);
+                    $xSlider.val(val);
+                    updateFocalPoint();
+                    updateValue();
+                });
+
+                $yNumber.on('change', function() {
+                    const val = Math.max(0, Math.min(100, $(this).val()));
+                    $(this).val(val);
+                    $ySlider.val(val);
+                    updateFocalPoint();
+                    updateValue();
+                });
+
+                // Grid click
+                $grid.on('click', function(e) {
+                    if ($(e.target).hasClass('position-point')) return;
+                    
+                    const rect = this.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(0);
+                    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(0);
+                    
+                    $xSlider.val(x);
+                    $ySlider.val(y);
+                    updateFocalPoint();
+                    updateValue();
+                });
+
+                // Preset buttons
+                $control.find('.position-preset-btn').on('click', function(e) {
+                    e.preventDefault();
+                    const x = $(this).data('x');
+                    const y = $(this).data('y');
+                    
+                    $xSlider.val(x);
+                    $ySlider.val(y);
+                    updateFocalPoint();
+                    updateValue();
+                });
+
+                // Position point clicks
+                $control.find('.position-point').on('click', function(e) {
+                    e.stopPropagation();
+                    const index = $(this).data('point');
+                    const positions = [
+                        [0, 0], [50, 0], [100, 0],
+                        [0, 50], [50, 50], [100, 50],
+                        [0, 100], [50, 100], [100, 100]
+                    ];
+                    
+                    if (positions[index]) {
+                        $xSlider.val(positions[index][0]);
+                        $ySlider.val(positions[index][1]);
+                        updateFocalPoint();
+                        updateValue();
+                    }
+                });
+
+                // Other settings changes
+                $control.find('.position-size, .position-repeat, .position-attachment').on('change', function() {
+                    updateValue();
                 });
             });
         }
