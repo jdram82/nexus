@@ -76,10 +76,13 @@
             }
             
             templates.forEach(template => {
+                const thumbnailFallback = template.thumbnail_fallback || nexusTemplates.placeholder_image || '';
                 const card = `
-                    <div class="template-card" data-id="${template.id}">
+                    <div class="template-card" data-id="${template.id}" data-file="${template.file || template.id}">
                         <div class="template-thumbnail">
-                            <img src="${template.thumbnail}" alt="${template.title}">
+                            <img src="${template.thumbnail}" 
+                                 alt="${template.title}" 
+                                 onerror="this.onerror=null; this.src='${thumbnailFallback}'; if(!this.src) this.parentElement.innerHTML='<div class=\\'template-placeholder\\'><span class=\\'dashicons dashicons-admin-page\\'></span><p>${template.title}</p></div>';">
                             ${template.price !== 'free' ? `<span class="price-badge">${template.price}</span>` : '<span class="free-badge">Free</span>'}
                         </div>
                         <div class="template-info">
@@ -87,15 +90,14 @@
                             <p>${template.description}</p>
                             <div class="template-meta">
                                 <span class="author">by ${template.author}</span>
-                                <span class="downloads">↓ ${template.downloads}</span>
-                                <span class="rating">★ ${template.rating}</span>
+                                <span class="category">${template.category || 'general'}</span>
                             </div>
                         </div>
                         <div class="template-actions">
-                            <button class="button button-primary import-template" data-id="${template.id}">
-                                Import Template
+                            <button class="button button-primary import-template" data-id="${template.id}" data-file="${template.file || template.id}">
+                                Import
                             </button>
-                            <button class="button preview-template" data-id="${template.id}">
+                            <button class="button preview-template" data-id="${template.id}" data-file="${template.file || template.id}">
                                 Preview
                             </button>
                         </div>
@@ -108,7 +110,12 @@
         importTemplate(e) {
             e.preventDefault();
             const button = $(e.currentTarget);
-            const templateId = button.data('id');
+            const templateId = button.data('file') || button.data('id');
+            
+            if (!templateId) {
+                alert('Invalid template ID');
+                return;
+            }
             
             button.prop('disabled', true).text('Importing...');
             
@@ -122,14 +129,21 @@
                 },
                 success: (response) => {
                     if (response.success) {
-                        alert('Template imported successfully!');
-                        location.reload();
+                        alert('Template imported successfully as a draft page!');
+                        // Redirect to edit the new page
+                        if (response.data.edit_url) {
+                            window.location.href = response.data.edit_url;
+                        } else {
+                            location.reload();
+                        }
                     } else {
-                        alert('Failed to import template: ' + response.data.message);
+                        alert('Failed to import template: ' + (response.data.message || 'Unknown error'));
+                        button.prop('disabled', false).text('Import');
                     }
                 },
-                complete: () => {
-                    button.prop('disabled', false).text('Import Template');
+                error: (xhr, status, error) => {
+                    alert('Error importing template: ' + error);
+                    button.prop('disabled', false).text('Import');
                 }
             });
         },

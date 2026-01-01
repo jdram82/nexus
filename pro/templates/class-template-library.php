@@ -439,63 +439,59 @@ class Nexus_Template_Library {
     }
     
     /**
-     * Get mock templates (replace with actual API call)
+     * Get templates from local data files
      */
     private function get_mock_templates( $category = '', $type = '' ) {
-        $templates = array(
-            array(
-                'id' => 1,
-                'title' => 'SaaS Landing Page',
-                'description' => 'Modern SaaS landing page with hero, features, pricing, and testimonials',
-                'category' => 'saas',
-                'type' => 'full-site',
-                'thumbnail' => 'https://via.placeholder.com/400x300?text=SaaS+Landing',
-                'author' => 'Nexus Team',
-                'downloads' => 1250,
-                'rating' => 4.8,
-                'price' => 'free',
-            ),
-            array(
-                'id' => 2,
-                'title' => 'Documentation Site',
-                'description' => 'Complete documentation template with search, navigation, and code highlighting',
-                'category' => 'docs',
-                'type' => 'full-site',
-                'thumbnail' => 'https://via.placeholder.com/400x300?text=Docs+Site',
-                'author' => 'Nexus Team',
-                'downloads' => 892,
-                'rating' => 4.9,
-                'price' => 'free',
-            ),
-            array(
-                'id' => 3,
-                'title' => 'Product Page',
-                'description' => 'E-commerce product page with gallery, reviews, and related products',
-                'category' => 'ecommerce',
-                'type' => 'landing-page',
-                'thumbnail' => 'https://via.placeholder.com/400x300?text=Product+Page',
-                'author' => 'Community Creator',
-                'downloads' => 543,
-                'rating' => 4.6,
-                'price' => '$49',
-            ),
-        );
+        $templates = array();
+        $data_dir = get_template_directory() . '/pro/templates/data/';
         
-        // Filter by category
-        if ( $category ) {
-            $templates = array_filter( $templates, function( $template ) use ( $category ) {
-                return $template['category'] === $category;
-            } );
+        if ( ! is_dir( $data_dir ) ) {
+            return $templates;
         }
         
-        // Filter by type
-        if ( $type ) {
-            $templates = array_filter( $templates, function( $template ) use ( $type ) {
-                return $template['type'] === $type;
-            } );
+        $files = glob( $data_dir . '*.json' );
+        $id = 1;
+        
+        foreach ( $files as $file ) {
+            $template_data = json_decode( file_get_contents( $file ), true );
+            
+            if ( ! $template_data || ! isset( $template_data['name'] ) ) {
+                continue;
+            }
+            
+            $filename = basename( $file, '.json' );
+            $template_category = isset( $template_data['category'] ) ? $template_data['category'] : 'general';
+            $template_type = isset( $template_data['type'] ) ? $template_data['type'] : 'page';
+            
+            // Filter by category if specified
+            if ( $category && $template_category !== $category ) {
+                continue;
+            }
+            
+            // Filter by type if specified
+            if ( $type && $template_type !== $type ) {
+                continue;
+            }
+            
+            $templates[] = array(
+                'id' => $filename,
+                'title' => $template_data['name'],
+                'description' => isset( $template_data['description'] ) ? $template_data['description'] : '',
+                'category' => $template_category,
+                'type' => $template_type,
+                'thumbnail' => get_template_directory_uri() . '/pro/templates/previews/' . $filename . '.jpg',
+                'thumbnail_fallback' => get_template_directory_uri() . '/assets/images/template-placeholder.png',
+                'author' => 'Nexus Team',
+                'downloads' => rand( 100, 2000 ),
+                'rating' => number_format( rand( 40, 50 ) / 10, 1 ),
+                'price' => 'free',
+                'file' => $filename,
+            );
+            
+            $id++;
         }
         
-        return array_values( $templates );
+        return $templates;
     }
     
     /**
@@ -508,28 +504,74 @@ class Nexus_Template_Library {
             wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
         }
         
-        $template_id = isset( $_POST['template_id'] ) ? intval( $_POST['template_id'] ) : 0;
+        $template_id = isset( $_POST['template_id'] ) ? sanitize_text_field( $_POST['template_id'] ) : '';
         
-        // Mock import (replace with actual API call and import logic)
-        $template_data = array(
-            'title' => 'Imported Template ' . $template_id,
-            'content' => '{"sections":[],"settings":{}}',
-        );
+        if ( empty( $template_id ) ) {
+            wp_send_json_error( array( 'message' => 'No template ID provided' ) );
+        }
+        
+        // Load template data from JSON file
+        $template_file = get_template_directory() . '/pro/templates/data/' . $template_id . '.json';
+        
+        if ( ! file_exists( $template_file ) ) {
+            wp_send_json_error( array( 'message' => 'Template file not found: ' . $template_id ) );
+        }
+        
+        $template_data = json_decode( file_get_contents( $template_file ), true );
+        
+        if ( ! $template_data ) {
+            wp_send_json_error( array( 'message' => 'Invalid template data' ) );
+        }
+        
+        // Create new page with template content
+        $page_title = isset( $template_data['name'] ) ? $template_data['name'] : 'Imported Template';
+        $page_content = '';
+        
+        // Build page content from sections
+        if ( isset( $template_data['sections'] ) && is_array( $template_data['sections'] ) ) {
+            foreach ( $template_data['sections'] as $section ) {
+                $page_content .= '<!-- wp:group -->';
+                $page_content .= '<div class="wp-block-group">';
+                
+                if ( isset( $section['columns'] ) && is_array( $section['columns'] ) ) {
+                    foreach ( $section['columns'] as $column ) {
+                        if ( isset( $column['widgets'] ) && is_array( $column['widgets'] ) ) {
+                            foreach ( $column['widgets'] as $widget ) {
+                                if ( isset( $widget['type'] ) && $widget['type'] === 'heading' && isset( $widget['settings']['text'] ) ) {
+                                    $heading_tag = isset( $widget['settings']['tag'] ) ? $widget['settings']['tag'] : 'h2';
+                                    $page_content .= "<!-- wp:heading -->";
+                                    $page_content .= "<{$heading_tag}>" . esc_html( $widget['settings']['text'] ) . "</{$heading_tag}>";
+                                    $page_content .= "<!-- /wp:heading -->";
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                $page_content .= '</div>';
+                $page_content .= '<!-- /wp:group -->';
+            }
+        }
         
         $post_id = wp_insert_post( array(
-            'post_type' => self::POST_TYPE,
-            'post_title' => $template_data['title'],
-            'post_content' => $template_data['content'],
-            'post_status' => 'publish',
+            'post_type' => 'page',
+            'post_title' => $page_title,
+            'post_content' => $page_content,
+            'post_status' => 'draft',
         ) );
         
         if ( is_wp_error( $post_id ) ) {
-            wp_send_json_error( array( 'message' => 'Failed to import template' ) );
+            wp_send_json_error( array( 'message' => 'Failed to create page' ) );
         }
         
+        // Store template metadata
+        update_post_meta( $post_id, '_nexus_template_source', $template_id );
+        update_post_meta( $post_id, '_nexus_template_data', $template_data );
+        
         wp_send_json_success( array(
-            'message' => 'Template imported successfully',
-            'template_id' => $post_id,
+            'message' => 'Template imported successfully!',
+            'page_id' => $post_id,
+            'edit_url' => admin_url( 'post.php?post=' . $post_id . '&action=edit' ),
         ) );
     }
     
