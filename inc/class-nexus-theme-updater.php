@@ -25,9 +25,9 @@ class Nexus_Theme_Updater {
 	private $github_repo = 'nexus';
 	
 	/**
-	 * Theme slug
+	 * Theme slug (dynamically determined)
 	 */
-	private $theme_slug = 'nexus-theme';
+	private $theme_slug;
 	
 	/**
 	 * Current theme version
@@ -63,8 +63,10 @@ class Nexus_Theme_Updater {
 	 * Constructor
 	 */
 	private function __construct() {
-		$theme = wp_get_theme( $this->theme_slug );
+		// Get current theme (works regardless of folder name)
+		$theme = wp_get_theme();
 		$this->version = $theme->get( 'Version' );
+		$this->theme_slug = $theme->get_stylesheet();
 		$this->github_api_url = "https://api.github.com/repos/{$this->github_user}/{$this->github_repo}/releases/latest";
 		
 		// Add hooks
@@ -100,10 +102,23 @@ class Nexus_Theme_Updater {
 				return $transient;
 			}
 			
+			// Try to find the packaged theme asset (nexus-x.x.x.zip)
+			$package_url = $release['zipball_url']; // Fallback to zipball
+			
+			if ( ! empty( $release['assets'] ) && is_array( $release['assets'] ) ) {
+				foreach ( $release['assets'] as $asset ) {
+					// Look for nexus-*.zip file
+					if ( isset( $asset['name'] ) && preg_match( '/^nexus-[\d\.]+\.zip$/i', $asset['name'] ) ) {
+						$package_url = $asset['browser_download_url'];
+						break;
+					}
+				}
+			}
+			
 			$update_cache = array(
 				'version' => $release['tag_name'],
 				'url' => $release['html_url'],
-				'package' => $release['zipball_url'],
+				'package' => $package_url,
 				'requires' => '6.0',
 				'requires_php' => '7.4',
 			);
@@ -186,8 +201,9 @@ class Nexus_Theme_Updater {
 	/**
 	 * Fix theme folder name after update
 	 * 
-	 * GitHub downloads create folder like "jdram82-nexus-abc123"
-	 * We need to rename it to "nexus-theme"
+	 * The packaged release already has correct folder name (nexus-theme)
+	 * But GitHub zipball creates folder like "jdram82-nexus-abc123"
+	 * We need to rename it only if it's from zipball
 	 */
 	public function fix_theme_folder_name( $source, $remote_source, $upgrader ) {
 		global $wp_filesystem;
@@ -206,13 +222,13 @@ class Nexus_Theme_Updater {
 		// Get the actual folder name from the extracted ZIP
 		$source_name = basename( $source );
 		
-		// If it's already named correctly, return
+		// If it's already named correctly (from our packaged release), return as is
 		if ( $this->theme_slug === $source_name ) {
 			return $source;
 		}
 		
-		// GitHub creates folders like "nexus-abc1234" or "jdram82-nexus-abc1234"
-		// We need to rename it to "nexus-theme"
+		// GitHub zipball creates folders like "nexus-abc1234" or "jdram82-nexus-abc1234"
+		// We need to rename it to match theme slug (usually "nexus-theme")
 		$new_source = dirname( $source ) . '/' . $this->theme_slug;
 		
 		// Move the folder to correct name
@@ -316,12 +332,23 @@ class Nexus_Theme_Updater {
 		$remote_version = ltrim( $release['tag_name'], 'v' );
 		$update_available = version_compare( $this->version, $remote_version, '<' );
 		
+		// Get package URL (prefer release asset)
+		$package_url = $release['zipball_url'];
+		if ( ! empty( $release['assets'] ) && is_array( $release['assets'] ) ) {
+			foreach ( $release['assets'] as $asset ) {
+				if ( isset( $asset['name'] ) && preg_match( '/^nexus-[\d\.]+\.zip$/i', $asset['name'] ) ) {
+					$package_url = $asset['browser_download_url'];
+					break;
+				}
+			}
+		}
+		
 		wp_send_json_success( array(
 			'update_available' => $update_available,
 			'current_version' => $this->version,
 			'latest_version' => $remote_version,
 			'release_url' => $release['html_url'],
-			'download_url' => $release['zipball_url'],
+			'download_url' => $package_url,
 			'message' => $update_available
 				? sprintf( 'Update available: %s → %s', $this->version, $remote_version )
 				: 'You have the latest version',
