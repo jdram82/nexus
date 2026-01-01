@@ -123,8 +123,8 @@ class Nexus_Theme_Updater {
 				'requires_php' => '7.4',
 			);
 			
-			// Cache for 12 hours
-			set_transient( $this->transient_name, $update_cache, 12 * HOUR_IN_SECONDS );
+			// Cache for 1 hour (faster update detection)
+			set_transient( $this->transient_name, $update_cache, HOUR_IN_SECONDS );
 		}
 		
 		// Skip if cached error
@@ -231,6 +231,11 @@ class Nexus_Theme_Updater {
 		// We need to rename it to match theme slug (usually "nexus-theme")
 		$new_source = dirname( $source ) . '/' . $this->theme_slug;
 		
+		// Ensure target doesn't exist (shouldn't happen, but safety check)
+		if ( $wp_filesystem->exists( $new_source ) ) {
+			$wp_filesystem->delete( $new_source, true );
+		}
+		
 		// Move the folder to correct name
 		if ( $wp_filesystem->move( $source, $new_source, true ) ) {
 			return $new_source;
@@ -247,6 +252,27 @@ class Nexus_Theme_Updater {
 		
 		// Only show on dashboard and themes page
 		if ( ! in_array( $screen->id, array( 'dashboard', 'themes' ) ) ) {
+			return;
+		}
+		
+		// Check if we need to show reactivation notice
+		if ( get_transient( 'nexus_show_reactivate_notice' ) ) {
+			delete_transient( 'nexus_show_reactivate_notice' );
+			?>
+			<div class="notice notice-success is-dismissible">
+				<p>
+					<strong><?php _e( 'Nexus Theme Updated Successfully!', 'nexus' ); ?></strong>
+				</p>
+				<p>
+					<?php _e( 'Please reactivate the Nexus theme to restore the Nexus Dashboard and all features.', 'nexus' ); ?>
+				</p>
+				<p>
+					<a href="<?php echo esc_url( admin_url( 'themes.php' ) ); ?>" class="button button-primary">
+						<?php _e( 'Go to Themes', 'nexus' ); ?>
+					</a>
+				</p>
+			</div>
+			<?php
 			return;
 		}
 		
@@ -273,6 +299,11 @@ class Nexus_Theme_Updater {
 						esc_html( $this->version )
 					);
 					?>
+				</p>
+				<p>
+					<em style="color: #666;">
+						<?php _e( 'Tip: If updating while theme is active fails, temporarily switch to a default theme (like Twenty Twenty-Four), then update Nexus, and switch back.', 'nexus' ); ?>
+					</em>
 				</p>
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'themes.php' ) ); ?>" class="button button-primary">
@@ -530,6 +561,12 @@ class Nexus_Theme_Updater {
 			delete_transient( $this->transient_name );
 			
 			// Clear WordPress theme cache
+			
+			// If theme was active and got deactivated during update, show notice to reactivate
+			$current_theme = get_stylesheet();
+			if ( $current_theme !== $this->theme_slug ) {
+				set_transient( 'nexus_show_reactivate_notice', true, 60 );
+			}
 			delete_site_transient( 'update_themes' );
 			wp_clean_themes_cache();
 			
