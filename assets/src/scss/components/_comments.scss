@@ -74,7 +74,7 @@
           @include transition();
 
           &:hover {
-            background: darken($primary-color, 10%);
+            background: darken($primary-base, 10%);
           }
         }
       }

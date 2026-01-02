@@ -1,0 +1,33 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#fffbeb"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#78350f"/>
+  <text x="60" y="50" font-family="Arial, sans-serif" font-size="24" fill="#fef3c7" font-weight="bold">MY BLOG</text>
+  <text x="1000" y="50" font-family="Arial, sans-serif" font-size="14" fill="#fef3c7">Home</text>
+  <text x="1080" y="50" font-family="Arial, sans-serif" font-size="14" fill="#fef3c7">About</text>
+  
+  <!-- Blog Title -->
+  <text x="600" y="160" font-family="Arial, sans-serif" font-size="48" fill="#78350f" font-weight="bold" text-anchor="middle">Personal Stories</text>
+  <text x="600" y="205" font-family="Arial, sans-serif" font-size="18" fill="#92400e" text-anchor="middle">Thoughts, experiences, and ideas</text>
+  
+  <!-- Featured Post -->
+  <rect x="100" y="280" width="700" height="300" fill="white" rx="12" stroke="#fde68a" stroke-width="2"/>
+  <rect x="120" y="300" width="660" height="180" fill="#fef3c7" rx="8"/>
+  <text x="450" y="400" font-family="Arial, sans-serif" font-size="18" fill="#92400e" text-anchor="middle">Featured Image</text>
+  <text x="130" y="520" font-family="Arial, sans-serif" font-size="24" fill="#78350f" font-weight="bold">Latest Article Title</text>
+  <text x="130" y="555" font-family="Arial, sans-serif" font-size="14" fill="#92400e">A captivating introduction to the latest blog post...</text>
+  
+  <!-- Sidebar -->
+  <rect x="850" y="280" width="300" height="200" fill="white" rx="12" stroke="#fde68a" stroke-width="2"/>
+  <text x="1000" y="320" font-family="Arial, sans-serif" font-size="20" fill="#78350f" font-weight="bold" text-anchor="middle">About Me</text>
+  <circle cx="1000" cy="380" r="40" fill="#fde68a"/>
+  <text x="1000" y="450" font-family="Arial, sans-serif" font-size="14" fill="#92400e" text-anchor="middle">Blogger & Writer</text>
+  
+  <!-- Recent Posts -->
+  <rect x="100" y="630" width="320" height="120" fill="white" rx="8" stroke="#fde68a" stroke-width="2"/>
+  <text x="120" y="665" font-family="Arial, sans-serif" font-size="16" fill="#78350f" font-weight="bold">Recent Post 1</text>
+  
+  <rect x="460" y="630" width="320" height="120" fill="white" rx="8" stroke="#fde68a" stroke-width="2"/>
+  <text x="480" y="665" font-family="Arial, sans-serif" font-size="16" fill="#78350f" font-weight="bold">Recent Post 2</text>
+</svg>

@@ -52,7 +52,7 @@ a {
   @include transition(color);
 
   &:hover {
-    color: darken($primary-color, 10%);
+    color: darken($primary-base, 10%);
   }
 }
 

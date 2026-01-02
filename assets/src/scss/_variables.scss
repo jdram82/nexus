@@ -2,16 +2,27 @@
 # Variables
 --------------------------------------------------------------*/
 
+// Base Colors (static values for SCSS functions)
+$primary-base: #0066cc;
+$secondary-base: #333333;
+$accent-base: #ff6600;
+$success-base: #28a745;
+$warning-base: #ffc107;
+$danger-base: #dc3545;
+$info-base: #17a2b8;
+$light-base: #f8f9fa;
+$dark-base: #343a40;
+
 // Colors - Will be overridden by CSS custom properties from customizer
-$primary-color: var(--nexus-primary, #0066cc);
-$secondary-color: var(--nexus-secondary, #333333);
-$accent-color: var(--nexus-accent, #ff6600);
-$success-color: var(--nexus-success, #28a745);
-$warning-color: var(--nexus-warning, #ffc107);
-$danger-color: var(--nexus-danger, #dc3545);
-$info-color: var(--nexus-info, #17a2b8);
-$light-color: var(--nexus-light, #f8f9fa);
-$dark-color: var(--nexus-dark, #343a40);
+$primary-color: var(--nexus-primary, #{$primary-base});
+$secondary-color: var(--nexus-secondary, #{$secondary-base});
+$accent-color: var(--nexus-accent, #{$accent-base});
+$success-color: var(--nexus-success, #{$success-base});
+$warning-color: var(--nexus-warning, #{$warning-base});
+$danger-color: var(--nexus-danger, #{$danger-base});
+$info-color: var(--nexus-info, #{$info-base});
+$light-color: var(--nexus-light, #{$light-base});
+$dark-color: var(--nexus-dark, #{$dark-base});
 
 // Typography
 $heading-font: var(--nexus-heading-font, 'Roboto', sans-serif);

@@ -72,7 +72,7 @@
       @include border-radius($border-radius-sm);
 
       &:hover {
-        background: darken($info-color, 10%);
+        background: darken($info-base, 10%);
       }
     }
   }

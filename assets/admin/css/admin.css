@@ -1,0 +1,771 @@
+/**
+ * Nexus Admin Styles
+ * 
+ * @package Nexus
+ * @since 3.1.0
+ */
+
+/* ===========================
+   Admin Wrap & Header
+   =========================== */
+
+.nexus-admin-wrap {
+    margin: 20px 20px 0 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.nexus-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 40px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.nexus-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nexus-logo h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    color: #1d2327;
+}
+
+.nexus-version {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #f0f0f1;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #50575e;
+}
+
+.nexus-license-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.license-tier {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.license-tier.tier-free {
+    background: #f0f0f1;
+    color: #50575e;
+}
+
+.license-tier.tier-pro {
+    background: #e7f5ff;
+    color: #0066cc;
+}
+
+.license-tier.tier-advanced {
+    background: #f0f9ff;
+    color: #0ea5e9;
+}
+
+.license-tier.tier-agency {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.license-status {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.license-status.active {
+    color: #10b981;
+}
+
+.license-status.inactive {
+    color: #6b7280;
+}
+
+/* ===========================
+   Content Area
+   =========================== */
+
+.nexus-admin-content {
+    padding: 40px;
+}
+
+/* ===========================
+   Stats Grid
+   =========================== */
+
+.nexus-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.nexus-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    color: #fff;
+}
+
+.nexus-stat-card:nth-child(2) {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.nexus-stat-card:nth-child(3) {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.nexus-stat-card:nth-child(4) {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.stat-icon {
+    font-size: 40px;
+    opacity: 0.9;
+}
+
+.stat-content h3 {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* ===========================
+   Content Grid
+   =========================== */
+
+.nexus-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+}
+
+@media (max-width: 1280px) {
+    .nexus-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===========================
+   Cards
+   =========================== */
+
+.nexus-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fafafa;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d2327;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* ===========================
+   Checklist
+   =========================== */
+
+.nexus-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checklist-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 3px solid #e5e5e5;
+}
+
+.checklist-item.completed {
+    border-left-color: #10b981;
+    background: #f0fdf4;
+}
+
+.checklist-item .dashicons {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    color: #6b7280;
+}
+
+.checklist-item.completed .dashicons {
+    color: #10b981;
+}
+
+.item-content h4 {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.item-content p {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ===========================
+   Features Grid
+   =========================== */
+
+.nexus-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.feature-item .dashicons {
+    color: #10b981;
+}
+
+.feature-item.premium .dashicons {
+    color: #f59e0b;
+}
+
+.feature-item.locked {
+    opacity: 0.5;
+}
+
+.feature-item.locked .dashicons {
+    color: #9ca3af;
+}
+
+/* ===========================
+   Upgrade Card
+   =========================== */
+
+.nexus-upgrade-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #fff;
+}
+
+.nexus-upgrade-card .card-header {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.nexus-upgrade-card .card-header h2 {
+    color: #fff;
+}
+
+.nexus-upgrade-card p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.upgrade-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.upgrade-features li {
+    padding: 8px 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.nexus-upgrade-card .button-hero {
+    width: 100%;
+    margin-top: 12px;
+}
+
+/* ===========================
+   Quick Links
+   =========================== */
+
+.quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quick-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #1d2327;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.quick-links a:hover {
+    background: #f9fafb;
+    color: #0066cc;
+}
+
+.quick-links .dashicons {
+    color: #6b7280;
+}
+
+.quick-links a:hover .dashicons {
+    color: #0066cc;
+}
+
+/* ===========================
+   System Status
+   =========================== */
+
+.system-status {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f1;
+    font-size: 13px;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-value {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* ===========================
+   Templates Page
+   =========================== */
+
+.nexus-template-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.filter-btn {
+    padding: 8px 20px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: #0066cc;
+    color: #0066cc;
+}
+
+.filter-btn.active {
+    background: #0066cc;
+    border-color: #0066cc;
+    color: #fff;
+}
+
+.nexus-templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.template-item {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.template-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.template-item.locked {
+    opacity: 0.7;
+}
+
+.template-preview {
+    position: relative;
+}
+
+.template-image {
+    position: relative;
+    width: 100%;
+    padding-top: 75%;
+    background: #f9fafb;
+    overflow: hidden;
+}
+
+.template-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    color: #e5e5e5;
+}
+
+.template-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    z-index: 10;
+}
+
+.template-overlay .dashicons {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.template-info {
+    padding: 16px;
+}
+
+.template-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.template-category {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.pro-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f59e0b;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.template-actions {
+    display: flex;
+    gap: 8px;
+    padding: 16px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.template-actions .button {
+    flex: 1;
+}
+
+/* ===========================
+   Settings Page
+   =========================== */
+
+.nexus-settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.locked-card {
+    position: relative;
+}
+
+.upgrade-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 10;
+    gap: 12px;
+}
+
+.upgrade-overlay .dashicons {
+    font-size: 48px;
+    color: #9ca3af;
+}
+
+.nexus-settings-footer {
+    display: flex;
+    gap: 12px;
+    padding: 24px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 24px;
+}
+
+/* ===========================
+   Getting Started
+   =========================== */
+
+.nexus-welcome-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.welcome-video .video-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    background: #1d2327;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.video-placeholder .dashicons {
+    font-size: 64px;
+    margin-bottom: 12px;
+}
+
+.setup-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.step {
+    display: flex;
+    gap: 20px;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0066cc;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.step-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.step-content p {
+    margin: 0 0 12px 0;
+    color: #6b7280;
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.resource-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    background: #f9fafb;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #1d2327;
+    transition: all 0.2s;
+}
+
+.resource-item:hover {
+    background: #f0f0f1;
+    transform: translateY(-2px);
+}
+
+.resource-item .dashicons {
+    font-size: 40px;
+    color: #0066cc;
+    margin-bottom: 12px;
+}
+
+.resource-item h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.resource-item p {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq-item {
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.faq-item summary {
+    font-weight: 600;
+    font-size: 14px;
+    outline: none;
+}
+
+.faq-item p {
+    margin: 12px 0 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* ===========================
+   System Info
+   =========================== */
+
+.nexus-system-info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.system-info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.system-info-table tr {
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.system-info-table tr:last-child {
+    border-bottom: none;
+}
+
+.system-info-table td {
+    padding: 12px 0;
+    font-size: 13px;
+}
+
+.system-info-table td:first-child {
+    font-weight: 600;
+    width: 200px;
+    color: #1d2327;
+}
+
+.system-info-table td:last-child {
+    color: #6b7280;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+
+@media (max-width: 782px) {
+    .nexus-admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .nexus-admin-content {
+        padding: 20px;
+    }
+    
+    .nexus-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nexus-templates-grid {
+        grid-template-columns: 1fr;
+    }
+}

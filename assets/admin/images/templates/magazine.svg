@@ -1,0 +1,47 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#f1f5f9"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="100" fill="#1e293b"/>
+  <text x="60" y="60" font-family="Arial, sans-serif" font-size="32" fill="#f1f5f9" font-weight="bold">MAGAZINE</text>
+  <text x="900" y="60" font-family="Arial, sans-serif" font-size="14" fill="#cbd5e1">NEWS</text>
+  <text x="980" y="60" font-family="Arial, sans-serif" font-size="14" fill="#cbd5e1">TECH</text>
+  <text x="1050" y="60" font-family="Arial, sans-serif" font-size="14" fill="#cbd5e1">LIFESTYLE</text>
+  
+  <!-- Featured Article -->
+  <rect x="80" y="140" width="700" height="400" fill="#334155" rx="8"/>
+  <text x="430" y="320" font-family="Arial, sans-serif" font-size="20" fill="#cbd5e1" text-anchor="middle">Featured Article Image</text>
+  <rect x="80" y="460" width="700" height="140" fill="white"/>
+  <text x="100" y="490" font-family="Arial, sans-serif" font-size="12" fill="#ef4444" font-weight="bold">TRENDING</text>
+  <text x="100" y="525" font-family="Arial, sans-serif" font-size="28" fill="#1e293b" font-weight="bold">The Future of Technology</text>
+  <text x="100" y="560" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Exploring the latest innovations shaping tomorrow's world</text>
+  <text x="100" y="585" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">By Jane Smith • 5 min read</text>
+  
+  <!-- Sidebar Articles -->
+  <rect x="820" y="140" width="300" height="180" fill="white" rx="8" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="840" y="175" font-family="Arial, sans-serif" font-size="12" fill="#3b82f6" font-weight="bold">BUSINESS</text>
+  <text x="840" y="210" font-family="Arial, sans-serif" font-size="18" fill="#1e293b" font-weight="bold">Market Insights</text>
+  <text x="840" y="240" font-family="Arial, sans-serif" font-size="13" fill="#64748b">Analysis of current trends</text>
+  
+  <rect x="820" y="350" width="300" height="180" fill="white" rx="8" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="840" y="385" font-family="Arial, sans-serif" font-size="12" fill="#8b5cf6" font-weight="bold">CULTURE</text>
+  <text x="840" y="420" font-family="Arial, sans-serif" font-size="18" fill="#1e293b" font-weight="bold">Arts & Entertainment</text>
+  <text x="840" y="450" font-family="Arial, sans-serif" font-size="13" fill="#64748b">Latest cultural events</text>
+  
+  <!-- Recent Posts -->
+  <rect x="80" y="640" width="330" height="140" fill="white" rx="8" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="100" y="680" font-family="Arial, sans-serif" font-size="16" fill="#1e293b" font-weight="bold">Health & Wellness</text>
+  <text x="100" y="710" font-family="Arial, sans-serif" font-size="13" fill="#64748b">Tips for better living</text>
+  
+  <rect x="450" y="640" width="330" height="140" fill="white" rx="8" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="470" y="680" font-family="Arial, sans-serif" font-size="16" fill="#1e293b" font-weight="bold">Travel Guide</text>
+  <text x="470" y="710" font-family="Arial, sans-serif" font-size="13" fill="#64748b">Destinations to explore</text>
+  
+  <rect x="820" y="640" width="300" height="140" fill="white" rx="8" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="840" y="680" font-family="Arial, sans-serif" font-size="16" fill="#1e293b" font-weight="bold">Science News</text>
+  <text x="840" y="710" font-family="Arial, sans-serif" font-size="13" fill="#64748b">Latest discoveries</text>
+  
+  <!-- PRO Badge -->
+  <rect x="1050" y="150" width="80" height="30" rx="15" fill="#ef4444"/>
+  <text x="1090" y="172" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">PRO</text>
+</svg>

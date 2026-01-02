@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '1.8.1' );
+define( 'NEXUS_VERSION', '3.1.0' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -60,6 +60,11 @@ require_once NEXUS_DIR . '/inc/class-nexus-theme-updater.php';
 require_once NEXUS_DIR . '/inc/class-nexus-license-manager.php';
 
 /**
+ * Admin Dashboard
+ */
+require_once NEXUS_DIR . '/inc/admin/class-nexus-admin.php';
+
+/**
  * Enqueue Scripts and Styles
  */
 require_once NEXUS_DIR . '/inc/class-nexus-enqueue.php';
@@ -84,14 +89,17 @@ if ( class_exists( 'WooCommerce' ) ) {
 /**
  * Initialize Theme
  */
+// Initialize Theme Setup first (handles after_setup_theme internally)
+Nexus_Theme_Setup::instance();
+
 function nexus_init() {
-	Nexus_Theme_Setup::instance();
 	Nexus_Customizer::instance();
 	Nexus_Products::instance();
 	Nexus_Projects::instance();
 	Nexus_Downloads::instance();
 	Nexus_Enqueue::instance();
 	Nexus_Theme_Updater::instance(); // Initialize automatic updates
+	Nexus_Admin::instance(); // Initialize admin dashboard
 	
 	if ( class_exists( 'WooCommerce' ) ) {
 		Nexus_WooCommerce::instance();

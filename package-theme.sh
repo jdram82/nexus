@@ -6,11 +6,11 @@ echo "======================================"
 echo ""
 
 # Set variables
-THEME_NAME="nexus"
+THEME_NAME="nexus-theme"
 VERSION="3.0.0"
 CURRENT_DIR="$(pwd)"
 OUTPUT_DIR="${CURRENT_DIR}/dist"
-OUTPUT_FILE="${THEME_NAME}-${VERSION}.zip"
+OUTPUT_FILE="nexus-${VERSION}.zip"
 TEMP_DIR="/tmp/${THEME_NAME}"
 
 # Clean up previous builds

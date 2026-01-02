@@ -81,7 +81,7 @@ cd /path/to/wordpress/wp-content/plugins/
 chmod -R 755 nexus-license-api-plugin/
 
 # Activate via WP-CLI (if available)
-wp plugin activate nexus-license-api
+wp plugin activate nexus-license-api-plugin
 ```
 
 ---

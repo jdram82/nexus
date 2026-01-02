@@ -62,7 +62,7 @@ class Nexus_License_Manager {
 		$this->load_license();
 		
 		// Add hooks
-		add_action( 'admin_menu', array( $this, 'add_license_page' ) );
+		// Note: License page menu is added by Nexus_Admin class
 		add_action( 'admin_notices', array( $this, 'show_license_notices' ) );
 		add_action( 'admin_init', array( $this, 'handle_license_actions' ) );
 		
@@ -165,6 +165,25 @@ class Nexus_License_Manager {
 	}
 	
 	/**
+	 * Get license information for display
+	 * 
+	 * @return array License information
+	 */
+	public function get_license_info() {
+		// Ensure license data is loaded
+		if ( null === $this->license_data ) {
+			$this->load_license();
+		}
+		
+		return array(
+			'tier' => $this->get_tier(),
+			'status' => $this->is_license_valid() ? 'active' : 'inactive',
+			'key' => isset( $this->license_data['key'] ) ? $this->license_data['key'] : '',
+			'expires' => isset( $this->license_data['expires'] ) ? $this->license_data['expires'] : 0,
+		);
+	}
+	
+	/**
 	 * Check if license is valid
 	 * 
 	 * @return bool True if valid
@@ -238,12 +257,18 @@ class Nexus_License_Manager {
 			return new WP_Error( 'activation_failed', $message );
 		}
 		
+		// Convert expiry date to timestamp
+		$expires_timestamp = 0;
+		if ( ! empty( $body['expires'] ) ) {
+			$expires_timestamp = is_numeric( $body['expires'] ) ? $body['expires'] : strtotime( $body['expires'] );
+		}
+		
 		// Save license data
 		$this->license_data = array(
 			'key' => $license_key,
-			'tier' => $body['tier'],
+			'tier' => ! empty( $body['tier'] ) ? $body['tier'] : self::TIER_PRO,
 			'status' => 'active',
-			'expires' => $body['expires'],
+			'expires' => $expires_timestamp,
 			'site_url' => get_site_url(),
 			'last_check' => time(),
 		);
@@ -332,11 +357,20 @@ class Nexus_License_Manager {
 		
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 		
-		if ( ! empty( $body['success'] ) && 'active' === $body['status'] ) {
+		// Check for both 'valid' (from validate endpoint) and 'success' (from activate endpoint)
+		$is_valid = ( ! empty( $body['valid'] ) || ! empty( $body['success'] ) );
+		
+		if ( $is_valid ) {
+			// Convert expiry date to timestamp
+			$expires_timestamp = 0;
+			if ( ! empty( $body['expires'] ) ) {
+				$expires_timestamp = is_numeric( $body['expires'] ) ? $body['expires'] : strtotime( $body['expires'] );
+			}
+			
 			// Update license data
 			$this->license_data['status'] = 'active';
-			$this->license_data['expires'] = $body['expires'];
-			$this->license_data['tier'] = $body['tier'];
+			$this->license_data['expires'] = $expires_timestamp;
+			$this->license_data['tier'] = ! empty( $body['tier'] ) ? $body['tier'] : $this->license_data['tier'];
 			$this->license_data['last_check'] = time();
 			$this->save_license();
 			return true;
@@ -351,26 +385,28 @@ class Nexus_License_Manager {
 	
 	/**
 	 * Add license page to admin menu
+	 * 
+	 * Note: This method is deprecated as the license page is now registered
+	 * via the Nexus_Admin class. Kept for backward compatibility.
 	 */
 	public function add_license_page() {
-		add_submenu_page(
-			'themes.php',
-			__( 'Nexus by Jdsan Digitel - License', 'nexus' ),
-			__( 'License', 'nexus' ),
-			'manage_options',
-			'nexus-license',
-			array( $this, 'render_license_page' )
-		);
+		// No longer needed - page is added by Nexus_Admin class
+		// This prevents duplicate menu registration errors
 	}
 	
 	/**
 	 * Render license page
 	 */
 	public function render_license_page() {
+		// Ensure license data is loaded
+		if ( null === $this->license_data ) {
+			$this->load_license();
+		}
+		
 		$tier = $this->get_tier();
 		$is_valid = $this->is_license_valid();
-		$license_key = $this->license_data['key'];
-		$expires = $this->license_data['expires'];
+		$license_key = isset( $this->license_data['key'] ) ? $this->license_data['key'] : '';
+		$expires = isset( $this->license_data['expires'] ) ? $this->license_data['expires'] : 0;
 		
 		?>
 		<div class="wrap">
@@ -625,7 +661,7 @@ class Nexus_License_Manager {
 				<p>
 					<strong><?php _e( 'Nexus License Expired or Invalid', 'nexus' ); ?></strong><br>
 					<?php _e( 'Premium features are disabled. Please renew your license.', 'nexus' ); ?>
-					<a href="<?php echo admin_url( 'themes.php?page=nexus-license' ); ?>">
+					<a href="<?php echo admin_url( 'admin.php?page=nexus-license' ); ?>">
 						<?php _e( 'Manage License', 'nexus' ); ?>
 					</a>
 				</p>

@@ -45,6 +45,22 @@
 				</div><!-- .footer-widgets -->
 			<?php endif; ?>
 
+			<?php if ( has_nav_menu( 'footer' ) ) : ?>
+				<nav class="footer-navigation" aria-label="<?php esc_attr_e( 'Footer Menu', 'nexus' ); ?>">
+					<?php
+					wp_nav_menu(
+						array(
+							'theme_location' => 'footer',
+							'menu_id'        => 'footer-menu',
+							'menu_class'     => 'footer-menu',
+							'depth'          => 1,
+							'container'      => false,
+						)
+					);
+					?>
+				</nav><!-- .footer-navigation -->
+			<?php endif; ?>
+
 			<div class="site-info">
 				<p class="copyright">
 					<?php

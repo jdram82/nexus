@@ -1,0 +1,29 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#faf5ff"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#581c87"/>
+  <text x="60" y="50" font-family="Arial, sans-serif" font-size="24" fill="#fae8ff" font-weight="bold">CREATIVE PORTFOLIO</text>
+  
+  <!-- Name -->
+  <text x="600" y="180" font-family="Arial, sans-serif" font-size="64" fill="#581c87" font-weight="bold" text-anchor="middle">Jane Doe</text>
+  <text x="600" y="230" font-family="Arial, sans-serif" font-size="24" fill="#a855f7" text-anchor="middle">Designer • Developer • Creator</text>
+  
+  <!-- Portfolio Grid -->
+  <rect x="80" y="320" width="340" height="250" fill="#e9d5ff" rx="12"/>
+  <text x="250" y="435" font-family="Arial, sans-serif" font-size="20" fill="#7c3aed" text-anchor="middle">Project Alpha</text>
+  
+  <rect x="460" y="320" width="340" height="250" fill="#e9d5ff" rx="12"/>
+  <text x="630" y="435" font-family="Arial, sans-serif" font-size="20" fill="#7c3aed" text-anchor="middle">Project Beta</text>
+  
+  <rect x="840" y="320" width="340" height="250" fill="#e9d5ff" rx="12"/>
+  <text x="1010" y="435" font-family="Arial, sans-serif" font-size="20" fill="#7c3aed" text-anchor="middle">Project Gamma</text>
+  
+  <!-- CTA -->
+  <rect x="500" y="650" width="200" height="50" rx="8" fill="#a855f7"/>
+  <text x="600" y="682" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">View All Work</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="150" cy="800" r="30" fill="#c084fc" opacity="0.3"/>
+  <circle cx="1050" cy="800" r="40" fill="#c084fc" opacity="0.2"/>
+</svg>
