@@ -1,7 +1,7 @@
-# Nexus Theme v3.1.4 - Release Notes
+# Nexus Theme v3.1.5 - Release Notes
 
 **Release Date:** January 2, 2026  
-**Version:** 3.1.4  
+**Version:** 3.1.5  
 **Status:** Stable Release
 
 ---
@@ -109,7 +109,7 @@ The theme now fully supports native WordPress menus without requiring widgets.
 ## 📦 Installation
 
 ### Fresh Install:
-1. Download `nexus-3.1.4.zip`
+1. Download `nexus-3.1.5.zip`
 2. Upload via **Appearance → Themes → Add New**
 3. Activate theme
 4. Go to **Appearance → Menus** to create menus
@@ -209,7 +209,7 @@ No migration needed. Existing themes will automatically benefit from:
 ## 📝 Changelog Summary
 
 ```
-v3.1.4 - 2026-01-02
+v3.1.5 - 2026-01-02
 - FIXED: Native WordPress menu support
 - ADDED: 9 starter template previews
 - ADDED: Template browsing interface
@@ -233,4 +233,4 @@ After updating:
 
 ---
 
-**Enjoy Nexus v3.1.4!** 🚀
+**Enjoy Nexus v3.1.5!** 🚀
