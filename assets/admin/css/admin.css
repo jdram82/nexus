@@ -400,24 +400,42 @@
     flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e5e5e5;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
 }
 
 .filter-btn {
-    padding: 8px 20px;
+    padding: 10px 24px;
     background: #fff;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
+    border: 2px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
     color: #6b7280;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .filter-btn:hover {
     border-color: #0066cc;
+    color: #0066cc;
+    background: #f0f7ff;
+}
+
+.filter-btn.active {
+    background: #0066cc;
+    border-color: #0066cc;
+    color: #fff;
+}
+
+.filter-btn .dashicons {
+    font-size: 16px;
+}
     color: #0066cc;
 }
 
@@ -429,25 +447,44 @@
 
 .nexus-templates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 30px;
+}
+
+@media (max-width: 1400px) {
+    .nexus-templates-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .nexus-templates-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .template-item {
     background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
+    border: 2px solid #e5e5e5;
+    border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s;
+    position: relative;
 }
 
 .template-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    border-color: #0066cc;
 }
 
 .template-item.locked {
-    opacity: 0.7;
+    opacity: 0.8;
+}
+
+.template-item.locked:hover {
+    border-color: #e5e5e5;
 }
 
 .template-preview {
@@ -460,6 +497,15 @@
     padding-top: 75%;
     background: #f9fafb;
     overflow: hidden;
+}
+
+.template-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .template-placeholder {
@@ -487,48 +533,71 @@
     justify-content: center;
     background: rgba(0, 0, 0, 0.7);
     color: #fff;
-    z-index: 10;
-}
-
-.template-overlay .dashicons {
-    font-size: 48px;
-    margin-bottom: 8px;
-}
-
-.template-info {
-    padding: 16px;
+    z-index: 20px;
+    background: #fff;
 }
 
 .template-info h3 {
-    margin: 0 0 4px 0;
-    font-size: 15px;
+    margin: 0 0 8px 0;
+    font-size: 16px;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #1d2327;
 }
 
 .template-category {
     margin: 0;
     font-size: 12px;
     color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.template-description {
+    margin: 12px 0 0 0;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.5;
 }
 
 .pro-badge {
     display: inline-block;
-    padding: 2px 8px;
-    background: #f59e0b;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: #fff;
-    border-radius: 4px;
+    border-radius: 12px;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
 }
 
 .template-actions {
     display: flex;
-    gap: 8px;
-    padding: 16px;
+    gap: 10px;
+    padding: 16px 20px 20px;
+    border-top: 1px solid #f0f0f1;
+    background: #fafafa;
+}
+
+.template-actions .button {
+    flex: 1;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.template-actions .button-primary {
+    background: #0066cc;
+    border-color: #0066cc;
+}
+
+.template-actions .button-primary:hover {
+    background: #0052a3;
+    border-color: #0052a3: 16px;
     border-top: 1px solid #e5e5e5;
 }
 

@@ -18,30 +18,30 @@ $templates = array(
     'business' => array(
         'label' => 'Business',
         'items' => array(
-            array('id' => 'corporate', 'name' => 'Corporate', 'pro' => false, 'image' => 'corporate.svg'),
-            array('id' => 'agency', 'name' => 'Agency', 'pro' => true, 'image' => 'agency.svg'),
-            array('id' => 'consulting', 'name' => 'Consulting', 'pro' => true, 'image' => 'consulting.svg'),
+            array('id' => 'corporate', 'name' => 'Corporate', 'pro' => false, 'image' => 'corporate.svg', 'desc' => 'Professional business website with services showcase'),
+            array('id' => 'agency', 'name' => 'Agency', 'pro' => true, 'image' => 'agency.svg', 'desc' => 'Creative agency portfolio with modern design'),
+            array('id' => 'consulting', 'name' => 'Consulting', 'pro' => true, 'image' => 'consulting.svg', 'desc' => 'Professional consulting services layout'),
         ),
     ),
     'ecommerce' => array(
         'label' => 'E-Commerce',
         'items' => array(
-            array('id' => 'shop', 'name' => 'Online Shop', 'pro' => true, 'image' => 'shop.svg'),
-            array('id' => 'fashion', 'name' => 'Fashion Store', 'pro' => true, 'image' => 'fashion.svg'),
+            array('id' => 'shop', 'name' => 'Online Shop', 'pro' => true, 'image' => 'shop.svg', 'desc' => 'Complete e-commerce store template'),
+            array('id' => 'fashion', 'name' => 'Fashion Store', 'pro' => true, 'image' => 'fashion.svg', 'desc' => 'Elegant fashion boutique design'),
         ),
     ),
     'portfolio' => array(
         'label' => 'Portfolio',
         'items' => array(
-            array('id' => 'creative', 'name' => 'Creative Portfolio', 'pro' => false, 'image' => 'creative.svg'),
-            array('id' => 'photographer', 'name' => 'Photographer', 'pro' => true, 'image' => 'photographer.svg'),
+            array('id' => 'creative', 'name' => 'Creative Portfolio', 'pro' => false, 'image' => 'creative.svg', 'desc' => 'Showcase your creative work beautifully'),
+            array('id' => 'photographer', 'name' => 'Photographer', 'pro' => true, 'image' => 'photographer.svg', 'desc' => 'Photography portfolio with gallery'),
         ),
     ),
     'blog' => array(
         'label' => 'Blog',
         'items' => array(
-            array('id' => 'personal', 'name' => 'Personal Blog', 'pro' => false, 'image' => 'blog.svg'),
-            array('id' => 'magazine', 'name' => 'Magazine', 'pro' => true, 'image' => 'magazine.svg'),
+            array('id' => 'personal', 'name' => 'Personal Blog', 'pro' => false, 'image' => 'blog.svg', 'desc' => 'Clean blog layout for writers'),
+            array('id' => 'magazine', 'name' => 'Magazine', 'pro' => true, 'image' => 'magazine.svg', 'desc' => 'News and magazine style layout'),
         ),
     ),
 );
@@ -111,6 +111,9 @@ $templates = array(
                                     <?php endif; ?>
                                 </h3>
                                 <p class="template-category"><?php echo esc_html($data['label']); ?></p>
+                                <?php if (!empty($template['desc'])): ?>
+                                    <p class="template-description"><?php echo esc_html($template['desc']); ?></p>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="template-actions">
