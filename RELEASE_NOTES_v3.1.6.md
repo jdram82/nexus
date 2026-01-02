@@ -1,7 +1,7 @@
-# Nexus Theme v3.1.5 - Release Notes
+# Nexus Theme v3.1.6 - Release Notes
 
 **Release Date:** January 2, 2026  
-**Version:** 3.1.5  
+**Version:** 3.1.6  
 **Status:** Stable Release
 
 ---
