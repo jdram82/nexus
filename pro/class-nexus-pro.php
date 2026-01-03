@@ -63,9 +63,14 @@ class Nexus_Pro {
 	 * Include Files
 	 */
 	private function includes() {
-		// Get license manager instance first
-		$license_manager = Nexus_License_Manager::instance();
-		$current_tier = $license_manager->get_tier();
+		// Get license manager instance first (if available)
+		$license_manager = null;
+		$current_tier = 'FREE';
+		
+		if ( class_exists( 'Nexus_License_Manager' ) ) {
+			$license_manager = Nexus_License_Manager::instance();
+			$current_tier = $license_manager->get_tier();
+		}
 		
 		// Core: Database Schema (ALL Tiers)
 		if ( file_exists( NEXUS_PRO_DIR . '/class-database-schema.php' ) ) {
@@ -80,25 +85,25 @@ class Nexus_Pro {
 		// ==========================================
 		// PRO TIER FEATURES (Pro, Advanced, Agency)
 		// ==========================================
-		if ( $license_manager->has_feature( 'cloud_storage' ) ) {
+		if ( $license_manager && $license_manager->has_feature( 'cloud_storage' ) ) {
 			if ( file_exists( NEXUS_PRO_DIR . '/cloud/class-cloud-storage.php' ) ) {
 				require_once NEXUS_PRO_DIR . '/cloud/class-cloud-storage.php';
 			}
 		}
 		
-		if ( $license_manager->has_feature( 'template_sync' ) ) {
+		if ( $license_manager && $license_manager->has_feature( 'template_sync' ) ) {
 			if ( file_exists( NEXUS_PRO_DIR . '/cloud/class-template-cloud-sync.php' ) ) {
 				require_once NEXUS_PRO_DIR . '/cloud/class-template-cloud-sync.php';
 			}
 		}
 		
-		if ( $license_manager->has_feature( 'payment_gateway' ) ) {
+		if ( $license_manager && $license_manager->has_feature( 'payment_gateway' ) ) {
 			if ( file_exists( NEXUS_PRO_DIR . '/payment/class-payment-gateway-multi.php' ) ) {
 				require_once NEXUS_PRO_DIR . '/payment/class-payment-gateway-multi.php';
 			}
 		}
 		
-		if ( $license_manager->has_feature( 'credits_system' ) ) {
+		if ( $license_manager && $license_manager->has_feature( 'credits_system' ) ) {
 			if ( file_exists( NEXUS_PRO_DIR . '/credits/class-payment-gateway.php' ) ) {
 				require_once NEXUS_PRO_DIR . '/credits/class-payment-gateway.php';
 			}
@@ -113,20 +118,20 @@ class Nexus_Pro {
 		// ==========================================
 		// ADVANCED TIER FEATURES (Advanced, Agency)
 		// ==========================================
-		if ( $license_manager->has_feature( 'plugin_orchestrator' ) ) {
+		if ( $license_manager && $license_manager->has_feature( 'plugin_orchestrator' ) ) {
 			if ( file_exists( NEXUS_PRO_DIR . '/plugin-orchestrator/class-plugin-orchestrator.php' ) ) {
 				require_once NEXUS_PRO_DIR . '/plugin-orchestrator/class-plugin-orchestrator.php';
 			}
 		}
 		
-		if ( $license_manager->has_feature( 'loop_builder' ) ) {
+		if ( $license_manager && $license_manager->has_feature( 'loop_builder' ) ) {
 			if ( file_exists( NEXUS_PRO_DIR . '/loop-builder/class-loop-builder.php' ) ) {
 				require_once NEXUS_PRO_DIR . '/loop-builder/class-loop-builder.php';
 			}
 		}
 	
 	// Phase 3: Template Manager (Advanced Tier)
-	if ( $license_manager->has_feature( 'template_manager' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'template_manager' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/templates/class-template-manager.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/templates/class-template-manager.php';
 		}
@@ -136,21 +141,21 @@ class Nexus_Pro {
 	}
 	
 	// Phase 2: AI Template Generator (Advanced Tier)
-	if ( $license_manager->has_feature( 'ai_template_generator' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'ai_template_generator' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/ai/class-template-generator.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/ai/class-template-generator.php';
 		}
 	}
 	
 	// Phase 3: Theme Builder (Advanced)
-	if ( $license_manager->has_feature( 'theme_builder' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'theme_builder' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/theme-builder/class-theme-builder.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/theme-builder/class-theme-builder.php';
 		}
 	}
 
 	// Phase 4: Popup Builder (Advanced)
-	if ( $license_manager->has_feature( 'popup_builder' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'popup_builder' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/popup-builder/class-popup-builder.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/popup-builder/class-popup-builder.php';
 		}
@@ -166,14 +171,14 @@ class Nexus_Pro {
 	}
 
 	// Phase 3: Advanced Controls (Advanced)
-	if ( $license_manager->has_feature( 'advanced_controls' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'advanced_controls' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/controls/class-controls-manager.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/controls/class-controls-manager.php';
 		}
 	}
 
 	// Phase 3: Mega Menu Builder (Advanced)
-	if ( $license_manager->has_feature( 'mega_menu' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'mega_menu' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/mega-menu/class-mega-menu.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/mega-menu/class-mega-menu.php';
 		}
@@ -183,14 +188,14 @@ class Nexus_Pro {
 	}
 
 	// Phase 3: API Documentation Generator (Advanced)
-	if ( $license_manager->has_feature( 'api_docs' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'api_docs' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/api-docs/class-api-docs.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/api-docs/class-api-docs.php';
 		}
 	}
 
 	// Phase 3: Circuit Simulator (Advanced)
-	if ( $license_manager->has_feature( 'circuit_simulator' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'circuit_simulator' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/circuit-sim/class-circuit-simulator.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/circuit-sim/class-circuit-simulator.php';
 			require_once NEXUS_PRO_DIR . '/circuit-sim/class-component-library.php';
@@ -199,7 +204,7 @@ class Nexus_Pro {
 	}
 
 	// Phase 3: Performance Analytics (Advanced)
-	if ( $license_manager->has_feature( 'performance_analytics' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'performance_analytics' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/analytics/class-performance-analytics.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/analytics/class-performance-analytics.php';
 			require_once NEXUS_PRO_DIR . '/analytics/class-metrics-collector.php';
@@ -210,7 +215,7 @@ class Nexus_Pro {
 	// ==========================================
 	// AGENCY TIER FEATURES (Agency only)
 	// ==========================================
-	if ( $license_manager->has_feature( 'ab_testing' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'ab_testing' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/ab-testing/class-ab-testing.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/ab-testing/class-test-manager.php';
 			require_once NEXUS_PRO_DIR . '/ab-testing/class-analytics-tracker.php';
@@ -218,7 +223,7 @@ class Nexus_Pro {
 		}
 	}
 	
-	if ( $license_manager->has_feature( 'white_label' ) ) {
+	if ( $license_manager && $license_manager->has_feature( 'white_label' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php';
 		}
