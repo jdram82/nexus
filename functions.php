@@ -109,8 +109,9 @@ add_action( 'after_setup_theme', 'nexus_init' );
 
 /**
  * Load Nexus Pro if available
- * Note: Pro features are disabled by default. Enable in WordPress Admin after theme activation.
+ * PRO features load automatically when a valid license is detected
  */
-if ( file_exists( NEXUS_DIR . '/pro/class-nexus-pro.php' ) && get_option( 'nexus_enable_pro', false ) ) {
+if ( file_exists( NEXUS_DIR . '/pro/class-nexus-pro.php' ) ) {
+	// Load PRO if license exists (checked within Nexus_Pro class)
 	require_once NEXUS_DIR . '/pro/class-nexus-pro.php';
 }
