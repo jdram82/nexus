@@ -115,6 +115,8 @@ if ( file_exists( NEXUS_DIR . '/pro/class-nexus-pro.php' ) ) {
 	// Only load if no critical errors
 	try {
 		require_once NEXUS_DIR . '/pro/class-nexus-pro.php';
+		// Initialize PRO features
+		Nexus_Pro::instance();
 	} catch ( Exception $e ) {
 		// Log error but don't crash site
 		error_log( 'Nexus PRO Load Error: ' . $e->getMessage() );
