@@ -112,6 +112,11 @@ add_action( 'after_setup_theme', 'nexus_init' );
  * PRO features load automatically when a valid license is detected
  */
 if ( file_exists( NEXUS_DIR . '/pro/class-nexus-pro.php' ) ) {
-	// Load PRO if license exists (checked within Nexus_Pro class)
-	require_once NEXUS_DIR . '/pro/class-nexus-pro.php';
+	// Only load if no critical errors
+	try {
+		require_once NEXUS_DIR . '/pro/class-nexus-pro.php';
+	} catch ( Exception $e ) {
+		// Log error but don't crash site
+		error_log( 'Nexus PRO Load Error: ' . $e->getMessage() );
+	}
 }
