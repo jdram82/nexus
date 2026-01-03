@@ -1,236 +1,112 @@
 # Nexus Theme v3.1.6 - Release Notes
 
-**Release Date:** January 2, 2026  
+**Release Date:** January 3, 2026  
 **Version:** 3.1.6  
-**Status:** Stable Release
+**Status:** Stable Release - Package Fixed
 
 ---
 
-## 🎉 What's New
+## 🔧 CRITICAL FIX (January 3, 2026)
 
-### ✅ Native WordPress Menu Support (FIXED!)
-The theme now fully supports native WordPress menus without requiring widgets.
+### ✅ Package Installation Error Fixed
+**Problem:** WordPress installation failed with error:  
+`"The package could not be installed. The theme is missing the style.css stylesheet."`
+
+**Root Cause:** The zip package contained a folder named `nexus-theme/` instead of `nexus/`  
+WordPress requires the folder name to match the theme slug (Text Domain: nexus)
+
+**Solution:** 
+- Updated `package-theme.sh` script
+- Changed `THEME_NAME` from `"nexus-theme"` to `"nexus"`
+- Rebuilt package with correct folder structure
+- Verified style.css is at `nexus/style.css`
+
+**Status:** ✅ FIXED - New package uploaded to GitHub releases
+
+---
+
+## 🚀 Phase 4 Implementation Progress (48% Complete)
+
+### ✅ Popup Builder - 100% Complete (3,000 lines)
+
+**Core Files:**
+1. `class-popup-builder.php` (680 lines) - Post type, admin menus, rendering
+2. `class-popup-triggers.php` (420 lines) - 6 trigger types
+3. `class-popup-targeting.php` (450 lines) - Targeting rules
+4. `class-popup-editor.php` (450 lines) - Visual editor, meta boxes
+
+**Assets:**
+- Frontend: `popup-builder.css` (300 lines), `popup-builder.js` (350 lines)
+- Admin: `popup-builder-admin.css` (200 lines), `popup-builder-admin.js` (150 lines)
 
 **Features:**
+- 6 Trigger Types: Page Load, Scroll, Exit Intent, Click, Time Delay, Inactivity
+- Device Targeting: Desktop, Tablet, Mobile
+- Page Targeting: Include/exclude rules
+- User Targeting: Login status, user roles
+- Frequency Controls: Show once, delay between displays
+- 4 Animation Types: Fade, Slide Up, Slide Down, Zoom
+- 5 Position Options: Center, Top, Bottom, Left, Right
+- Responsive design with accessibility features
+
+### ✅ Priority Widgets - 5/20 Complete (1,100 lines)
+
+**Completed Widgets:**
+1. **Star Rating Widget** (200 lines)
+   - Customizable ratings (0-10)
+   - Half-star support
+   - Color customization
+   - Size and alignment controls
+
+2. **Gallery Widget** (230 lines)
+   - Grid/Masonry/Justified layouts
+   - Lightbox integration
+   - 1-6 columns
+   - Hover effects (zoom, fade, overlay)
+   - Caption support
+
+3. **Icon List Widget** (220 lines)
+   - Dashicons integration
+   - Repeater fields
+   - Vertical/horizontal layouts
+   - Per-item links
+   - Custom styling
+
+4. **Toggle Widget** (200 lines)
+   - Collapsible content sections
+   - Slide animations
+   - Open by default option
+   - Custom icons
+   - Border and color controls
+
+5. **Social Icons Widget** (250 lines)
+   - 12 Social Networks: Facebook, Twitter, Instagram, LinkedIn, YouTube, Pinterest, GitHub, TikTok, WhatsApp, Telegram, Reddit, Discord
+   - 3 Shape Options: None, Square, Circle
+   - Horizontal/Vertical layouts
+   - Custom colors and hover effects
+
+**Files:** Located in `pro/theme-builder/widgets/`
+
+---
+
+## 📊 Overall Progress
+
+- **Total Phase 4:** 8,500 lines estimated
+- **Completed:** 4,100 lines (48%)
+- **Popup Builder:** 3,000 lines (100% ✅)
+- **Widgets:** 1,100/5,500 lines (25%)
+- **Next:** 15 remaining priority widgets
+
+---
+
+## 🎉 Previous Features (v3.1.5)
+
+### ✅ Native WordPress Menu Support
 - Primary navigation menu in header
 - Footer navigation menu
 - Responsive mobile menu toggle
-- Proper menu registration on theme activation
-- Fixed initialization timing issues
-
-**How to Use:**
-1. Go to **Appearance → Menus**
-2. Create or edit a menu
-3. Assign to "Primary Menu" or "Footer Menu"
-4. Done! No widgets needed.
-
----
 
 ### 🎨 Starter Templates System
-
-**9 Beautiful Template Previews:**
-- ✅ Corporate (Business) - FREE
-- ✅ Agency (Business) - PRO
-- ✅ Consulting (Business) - PRO
-- ✅ Creative Portfolio - FREE
-- ✅ Photographer Portfolio - PRO
-- ✅ Personal Blog - FREE
-- ✅ Magazine Blog - PRO
-- ✅ Online Shop (E-commerce) - PRO
-- ✅ Fashion Store (E-commerce) - PRO
-
-**Access:**
-- **Dashboard:** Nexus → Templates (visual browse)
-- **Block Patterns:** Page Editor → Patterns → "Nexus Starter Templates"
-
-**Documentation:**
-- User guide: `TEMPLATES_USER_GUIDE.md`
-- Developer guide: `STARTER_TEMPLATES_SETUP.md`
-- Status: `TEMPLATES_STATUS.md`
-
----
-
-## 🔧 Technical Improvements
-
-### SCSS/Build System
-- ✅ Fixed CSS variable usage in SCSS
-- ✅ Added base color variables for SCSS functions
-- ✅ Fixed all `darken()` function calls
-- ✅ Successfully compiled navigation styles
-- ✅ Resolved webpack build errors
-
-### Code Quality
-- ✅ Fixed theme initialization timing
-- ✅ Proper hook usage for theme setup
-- ✅ Clean SCSS architecture
-- ✅ Compiled CSS output: 26KB
-
-### Files Added/Modified
-**New Files:**
-- 9 template preview SVG images
-- Admin dashboard interface files
-- Comprehensive documentation
-- Compiled CSS with navigation styles
-
-**Modified Files:**
-- `functions.php` - Fixed initialization
-- `footer.php` - Added footer menu
-- 8 SCSS files - Fixed color function usage
-- Various admin and documentation files
-
----
-
-## 📚 New Documentation
-
-1. **TEMPLATES_USER_GUIDE.md** - How to use starter templates
-2. **STARTER_TEMPLATES_SETUP.md** - Developer guide for creating templates
-3. **TEMPLATES_STATUS.md** - Implementation status
-4. **TEMPLATES_QUICK_REF.md** - Quick reference card
-5. **TEMPLATES_READY.md** - Complete solution summary
-6. **ADMIN_DASHBOARD_GUIDE.md** - Dashboard usage guide
-7. **VISUAL_OVERVIEW.md** - Visual feature overview
-
----
-
-## 🐛 Bug Fixes
-
-### Critical Fixes:
-1. **Menu Support** - Theme now natively supports WordPress menus
-2. **SCSS Compilation** - Fixed errors preventing CSS build
-3. **Theme Initialization** - Fixed double-hook timing issue
-
-### Minor Fixes:
-- Improved code organization
-- Better error handling
-- Cleaner file structure
-
----
-
-## 📦 Installation
-
-### Fresh Install:
-1. Download `nexus-3.1.5.zip`
-2. Upload via **Appearance → Themes → Add New**
-3. Activate theme
-4. Go to **Appearance → Menus** to create menus
-5. Visit **Nexus → Templates** to browse designs
-
-### Update from Previous Version:
-1. Backup your site
-2. Update via WordPress dashboard
-3. Menus will now work natively!
-4. Check new template library
-
----
-
-## 🎯 What to Test
-
-1. **Menus:**
-   - Create a primary menu
-   - Create a footer menu
-   - Test on mobile devices
-
-2. **Templates:**
-   - Browse templates in Nexus → Templates
-   - Try inserting block patterns
-   - Build a page using patterns
-
-3. **Styling:**
-   - Check header navigation appears
-   - Check footer navigation appears
-   - Verify responsive behavior
-
----
-
-## ⚠️ Breaking Changes
-
-None! This is a bug fix and feature enhancement release.
-
----
-
-## 🔄 Migration Guide
-
-No migration needed. Existing themes will automatically benefit from:
-- Fixed menu support
-- New template library
-- Improved navigation styling
-
----
-
-## 🚀 Performance
-
-- **CSS Size:** 26KB (compiled, minified in production)
-- **Template Images:** 1.7-3.7KB each (lightweight SVG)
-- **No JavaScript overhead** for menus (CSS-only responsive)
-
----
-
-## 📊 Compatibility
-
-- **WordPress:** 6.0+
-- **PHP:** 8.0+
-- **Browsers:** All modern browsers
-- **Block Editor:** Full support
-- **Classic Editor:** Compatible
-
----
-
-## 🎓 Learning Resources
-
-### For Users:
-- Read `TEMPLATES_USER_GUIDE.md` for template usage
-- Check `QUICK_START_DASHBOARD.md` for dashboard overview
-- Visit **Nexus → Getting Started** in WordPress admin
-
-### For Developers:
-- Read `STARTER_TEMPLATES_SETUP.md` for creating templates
-- Check `TEMPLATES_STATUS.md` for implementation details
-- Review SCSS files in `assets/src/scss/`
-
----
-
-## 🔗 Links
-
-- **Repository:** https://github.com/jdram82/nexus
-- **Website:** https://jdsandigitel.com
-- **Documentation:** See markdown files in theme root
-- **Support:** support@jdsandigitel.com
-
----
-
-## 🙏 Credits
-
-- **Development:** Jdsan Digitel team
-- **AI Assistant:** GitHub Copilot
-- **Testing:** Community feedback
-
----
-
-## 📝 Changelog Summary
-
-```
-v3.1.5 - 2026-01-02
-- FIXED: Native WordPress menu support
-- ADDED: 9 starter template previews
-- ADDED: Template browsing interface
-- ADDED: Footer menu support
-- FIXED: SCSS compilation errors
-- ADDED: Comprehensive documentation
-- IMPROVED: Theme initialization
-- IMPROVED: Code quality and structure
-```
-
----
-
-## 🎊 Next Steps
-
-After updating:
-
-1. ✅ Create your menus (**Appearance → Menus**)
-2. ✅ Browse templates (**Nexus → Templates**)
-3. ✅ Try block patterns in page editor
-4. ✅ Build beautiful pages in minutes!
-
----
-
-**Enjoy Nexus v3.1.5!** 🚀
+- 9 Beautiful template previews
+- Visual browsing interface
+- Block patterns integration
