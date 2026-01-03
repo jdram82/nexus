@@ -1,0 +1,247 @@
+/**
+ * Popup Builder Frontend Styles
+ *
+ * @package Nexus_Pro
+ * @since 3.2.0
+ */
+
+/* Overlay */
+.nexus-popup-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999998;
+	display: none;
+	backdrop-filter: blur(2px);
+	transition: opacity 0.3s ease;
+}
+
+.nexus-popup-overlay.active {
+	display: block;
+}
+
+/* Popup Container */
+.nexus-popup-container {
+	position: fixed;
+	z-index: 999999;
+	display: none;
+	max-width: 95vw;
+	max-height: 95vh;
+	overflow: auto;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.nexus-popup-container.active {
+	display: block;
+}
+
+/* Positioning */
+.nexus-popup-container.position-center {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.nexus-popup-container.position-top {
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.nexus-popup-container.position-bottom {
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.nexus-popup-container.position-left {
+	top: 50%;
+	left: 20px;
+	transform: translateY(-50%);
+}
+
+.nexus-popup-container.position-right {
+	top: 50%;
+	right: 20px;
+	transform: translateY(-50%);
+}
+
+/* Close Button */
+.nexus-popup-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 30px;
+	height: 30px;
+	background: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 18px;
+	line-height: 1;
+	transition: all 0.3s;
+	z-index: 1000000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.nexus-popup-close:hover {
+	background: rgba(0, 0, 0, 0.8);
+	transform: rotate(90deg);
+}
+
+.nexus-popup-close::before {
+	content: '×';
+	font-size: 24px;
+}
+
+/* Content */
+.nexus-popup-content {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.nexus-popup-content p:last-child {
+	margin-bottom: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		transform: translate(-50%, 100%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+}
+
+@keyframes slideDown {
+	from {
+		transform: translate(-50%, -150%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+}
+
+@keyframes zoom {
+	from {
+		transform: translate(-50%, -50%) scale(0.5);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 1;
+	}
+}
+
+/* Animation Classes */
+.nexus-popup-container.animation-fade {
+	animation: fadeIn 0.3s ease;
+}
+
+.nexus-popup-container.animation-slide-up {
+	animation: slideUp 0.4s ease;
+}
+
+.nexus-popup-container.animation-slide-down {
+	animation: slideDown 0.4s ease;
+}
+
+.nexus-popup-container.animation-zoom {
+	animation: zoom 0.3s ease;
+}
+
+/* Closing Animations */
+.nexus-popup-container.closing.animation-fade {
+	animation: fadeOut 0.3s ease;
+}
+
+.nexus-popup-overlay.closing {
+	animation: fadeOut 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.nexus-popup-container {
+		max-width: 90vw !important;
+		max-height: 90vh;
+	}
+
+	.nexus-popup-container.position-center {
+		top: 50% !important;
+		left: 50% !important;
+		right: auto !important;
+		bottom: auto !important;
+		transform: translate(-50%, -50%) !important;
+	}
+
+	.nexus-popup-container.position-top,
+	.nexus-popup-container.position-bottom,
+	.nexus-popup-container.position-left,
+	.nexus-popup-container.position-right {
+		top: 50% !important;
+		left: 50% !important;
+		right: auto !important;
+		bottom: auto !important;
+		transform: translate(-50%, -50%) !important;
+	}
+}
+
+/* Accessibility */
+.nexus-popup-container:focus {
+	outline: 2px solid #0066cc;
+	outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+	.nexus-popup-overlay,
+	.nexus-popup-container {
+		display: none !important;
+	}
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+	.nexus-popup-close {
+		background: #000;
+		border: 2px solid #fff;
+	}
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	.nexus-popup-overlay,
+	.nexus-popup-container {
+		animation: none !important;
+		transition: none !important;
+	}
+}

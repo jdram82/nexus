@@ -1,0 +1,270 @@
+/**
+ * Popup Builder Admin Styles
+ *
+ * @package Nexus_Pro
+ * @since 3.2.0
+ */
+
+/* Meta Box Styles */
+.nexus-popup-editor {
+	margin-top: 10px;
+}
+
+.nexus-popup-editor .description {
+	margin-bottom: 15px;
+	color: #666;
+}
+
+/* Display Settings */
+.nexus-popup-display-settings p {
+	margin-bottom: 15px;
+}
+
+.nexus-popup-display-settings label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.nexus-popup-display-settings strong {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.nexus-popup-display-settings input[type="checkbox"] {
+	margin-right: 5px;
+}
+
+.nexus-popup-display-settings .description {
+	display: block;
+	margin-top: 5px;
+	font-style: italic;
+	color: #666;
+}
+
+/* Design Settings */
+.nexus-popup-design-settings p {
+	margin-bottom: 15px;
+}
+
+.nexus-popup-design-settings label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.nexus-popup-design-settings strong {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.nexus-popup-design-settings .color-picker {
+	width: 100%;
+}
+
+/* Admin Columns */
+.column-popup_status {
+	width: 100px;
+}
+
+.column-popup_triggers {
+	width: 150px;
+}
+
+.column-popup_views {
+	width: 80px;
+}
+
+.column-popup_conversions {
+	width: 100px;
+}
+
+/* Status Badge */
+.nexus-popup-status {
+	display: inline-block;
+	padding: 3px 8px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.nexus-popup-status.active {
+	background: #46b450;
+	color: #fff;
+}
+
+.nexus-popup-status.inactive {
+	background: #dc3232;
+	color: #fff;
+}
+
+.nexus-popup-status.draft {
+	background: #f0f0f1;
+	color: #646970;
+}
+
+/* Trigger Tags */
+.nexus-popup-trigger-tag {
+	display: inline-block;
+	padding: 2px 6px;
+	margin: 2px;
+	background: #f0f0f1;
+	border-radius: 3px;
+	font-size: 11px;
+	color: #646970;
+}
+
+/* Analytics Dashboard */
+.nexus-popup-analytics {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+	margin: 20px 0;
+}
+
+.nexus-popup-stat-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 20px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.nexus-popup-stat-card h3 {
+	margin: 0 0 10px 0;
+	font-size: 14px;
+	color: #646970;
+	text-transform: uppercase;
+	font-weight: 600;
+}
+
+.nexus-popup-stat-card .stat-value {
+	font-size: 32px;
+	font-weight: 700;
+	color: #1e1e1e;
+	line-height: 1.2;
+}
+
+.nexus-popup-stat-card .stat-change {
+	margin-top: 5px;
+	font-size: 12px;
+}
+
+.nexus-popup-stat-card .stat-change.positive {
+	color: #46b450;
+}
+
+.nexus-popup-stat-card .stat-change.negative {
+	color: #dc3232;
+}
+
+/* Templates */
+.nexus-popup-templates {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+	margin: 20px 0;
+}
+
+.nexus-popup-template-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.nexus-popup-template-card:hover {
+	border-color: #2271b1;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+}
+
+.nexus-popup-template-card .template-preview {
+	height: 200px;
+	background: #f0f0f1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 48px;
+	color: #646970;
+}
+
+.nexus-popup-template-card .template-info {
+	padding: 15px;
+}
+
+.nexus-popup-template-card .template-title {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0 0 5px 0;
+}
+
+.nexus-popup-template-card .template-description {
+	font-size: 13px;
+	color: #646970;
+	margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.nexus-popup-analytics {
+		grid-template-columns: 1fr;
+	}
+
+	.nexus-popup-templates {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Color Picker Enhancement */
+.wp-picker-container {
+	display: block;
+}
+
+.wp-picker-container .wp-color-result {
+	margin: 0;
+}
+
+/* Help Text */
+.nexus-popup-help {
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+	padding: 12px;
+	margin: 15px 0;
+}
+
+.nexus-popup-help p {
+	margin: 0;
+	color: #1e1e1e;
+}
+
+.nexus-popup-help .dashicons {
+	color: #2271b1;
+	margin-right: 5px;
+}
+
+/* Loading State */
+.nexus-popup-loading {
+	text-align: center;
+	padding: 40px;
+}
+
+.nexus-popup-loading .spinner {
+	float: none;
+	margin: 0 auto;
+	visibility: visible;
+}
+
+/* Error State */
+.nexus-popup-error {
+	background: #fcf0f1;
+	border-left: 4px solid #dc3232;
+	padding: 12px;
+	margin: 15px 0;
+}
+
+.nexus-popup-error p {
+	margin: 0;
+	color: #dc3232;
+}
