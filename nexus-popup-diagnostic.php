@@ -30,7 +30,7 @@ add_action( 'admin_notices', function() {
 		echo '<p><strong>License Status:</strong></p>';
 		echo '<ul>';
 		echo '<li>Has popup_builder feature: ' . ( $license_manager->has_feature( 'popup_builder' ) ? '✅ Yes' : '❌ No' ) . '</li>';
-		echo '<li>Current Tier: ' . $license_manager->get_current_tier() . '</li>';
+		echo '<li>Current Tier: ' . $license_manager->get_tier() . '</li>';
 		echo '</ul>';
 		
 		// Check available features

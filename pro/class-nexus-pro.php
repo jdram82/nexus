@@ -52,11 +52,21 @@ class Nexus_Pro {
 	 * Define Constants
 	 */
 	private function define_constants() {
-		define( 'NEXUS_PRO_VERSION', $this->version );
-		define( 'NEXUS_PRO_DIR', NEXUS_DIR . '/pro' );
-		define( 'NEXUS_PRO_URI', NEXUS_URI . '/pro' );
-		define( 'NEXUS_PRO_PATH', NEXUS_PRO_DIR . '/' );
-		define( 'NEXUS_PRO_URL', NEXUS_PRO_URI . '/' );
+		if ( ! defined( 'NEXUS_PRO_VERSION' ) ) {
+			define( 'NEXUS_PRO_VERSION', $this->version );
+		}
+		if ( ! defined( 'NEXUS_PRO_DIR' ) ) {
+			define( 'NEXUS_PRO_DIR', NEXUS_DIR . '/pro' );
+		}
+		if ( ! defined( 'NEXUS_PRO_URI' ) ) {
+			define( 'NEXUS_PRO_URI', NEXUS_URI . '/pro' );
+		}
+		if ( ! defined( 'NEXUS_PRO_PATH' ) ) {
+			define( 'NEXUS_PRO_PATH', NEXUS_PRO_DIR . '/' );
+		}
+		if ( ! defined( 'NEXUS_PRO_URL' ) ) {
+			define( 'NEXUS_PRO_URL', NEXUS_PRO_URI . '/' );
+		}
 	}
 
 	/**
