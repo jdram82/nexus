@@ -108,11 +108,28 @@ class Nexus_License_Manager {
 		
 		// Feature tier requirements
 		$feature_tiers = array(
+			// Pro Features
+			'cloud_storage' => self::TIER_PRO,
+			'template_sync' => self::TIER_PRO,
+			'payment_gateway' => self::TIER_PRO,
+			'credits_system' => self::TIER_PRO,
 			'plugin_harmony' => self::TIER_PRO,
 			'rest_api' => self::TIER_PRO,
+			// Advanced Features
 			'plugin_orchestrator' => self::TIER_ADVANCED,
 			'loop_builder' => self::TIER_ADVANCED,
+			'template_manager' => self::TIER_ADVANCED,
+			'ai_template_generator' => self::TIER_ADVANCED,
+			'theme_builder' => self::TIER_ADVANCED,
+			'popup_builder' => self::TIER_ADVANCED,
+			'advanced_controls' => self::TIER_ADVANCED,
+			'mega_menu' => self::TIER_ADVANCED,
+			'api_docs' => self::TIER_ADVANCED,
+			'circuit_simulator' => self::TIER_ADVANCED,
+			'performance_analytics' => self::TIER_ADVANCED,
 			'advanced_theme_builder' => self::TIER_ADVANCED,
+			// Agency Features
+			'ab_testing' => self::TIER_AGENCY,
 			'white_label' => self::TIER_AGENCY,
 		);
 		

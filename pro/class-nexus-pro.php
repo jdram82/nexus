@@ -149,6 +149,22 @@ class Nexus_Pro {
 		}
 	}
 
+	// Phase 4: Popup Builder (Advanced)
+	if ( $license_manager->has_feature( 'popup_builder' ) ) {
+		if ( file_exists( NEXUS_PRO_DIR . '/popup-builder/class-popup-builder.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/popup-builder/class-popup-builder.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/popup-builder/class-popup-triggers.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/popup-builder/class-popup-triggers.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/popup-builder/class-popup-targeting.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/popup-builder/class-popup-targeting.php';
+		}
+		if ( file_exists( NEXUS_PRO_DIR . '/popup-builder/class-popup-editor.php' ) ) {
+			require_once NEXUS_PRO_DIR . '/popup-builder/class-popup-editor.php';
+		}
+	}
+
 	// Phase 3: Advanced Controls (Advanced)
 	if ( $license_manager->has_feature( 'advanced_controls' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/controls/class-controls-manager.php' ) ) {
@@ -315,6 +331,11 @@ class Nexus_Pro {
 		}
 		if ( class_exists( 'Nexus_Form_Processor' ) ) {
 			Nexus_Form_Processor::instance();
+		}
+
+		// Popup Builder
+		if ( class_exists( 'Nexus_Popup_Builder' ) ) {
+			Nexus_Popup_Builder::get_instance();
 		}
 
 		// Admin

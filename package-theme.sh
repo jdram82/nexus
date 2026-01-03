@@ -1,13 +1,13 @@
 #!/bin/bash
 
 echo "======================================"
-echo "Nexus Theme v3.1.6 - Package Builder"
+echo "Nexus Theme v3.1.7 - Package Builder"
 echo "======================================"
 echo ""
 
 # Set variables
 THEME_NAME="nexus"
-VERSION="3.1.6"
+VERSION="3.1.7"
 CURRENT_DIR="$(pwd)"
 OUTPUT_DIR="${CURRENT_DIR}/dist"
 OUTPUT_FILE="nexus-${VERSION}.zip"

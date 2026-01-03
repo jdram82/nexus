@@ -95,13 +95,17 @@ class Nexus_Popup_Builder {
 	 * Load required files
 	 */
 	private function load_dependencies() {
-		require_once NEXUS_PRO_PATH . 'popup-builder/class-popup-triggers.php';
-		require_once NEXUS_PRO_PATH . 'popup-builder/class-popup-targeting.php';
-		require_once NEXUS_PRO_PATH . 'popup-builder/class-popup-editor.php';
-
-		$this->triggers = Nexus_Popup_Triggers::get_instance();
-		$this->targeting = Nexus_Popup_Targeting::get_instance();
-		$this->editor = Nexus_Popup_Editor::get_instance();
+		// Files are loaded by class-nexus-pro.php based on license tier
+		// Only instantiate if classes exist
+		if ( class_exists( 'Nexus_Popup_Triggers' ) ) {
+			$this->triggers = Nexus_Popup_Triggers::get_instance();
+		}
+		if ( class_exists( 'Nexus_Popup_Targeting' ) ) {
+			$this->targeting = Nexus_Popup_Targeting::get_instance();
+		}
+		if ( class_exists( 'Nexus_Popup_Editor' ) ) {
+			$this->editor = Nexus_Popup_Editor::get_instance();
+		}
 	}
 
 	/**
@@ -163,6 +167,16 @@ class Nexus_Popup_Builder {
 	 * Add admin menu
 	 */
 	public function add_admin_menu() {
+		// Check if license manager exists and has popup_builder feature
+		if ( ! class_exists( 'Nexus_License_Manager' ) ) {
+			return;
+		}
+
+		$license_manager = Nexus_License_Manager::instance();
+		if ( ! $license_manager || ! $license_manager->has_feature( 'popup_builder' ) ) {
+			return;
+		}
+
 		add_menu_page(
 			__( 'Popup Builder', 'nexus-pro' ),
 			__( 'Popups', 'nexus-pro' ),

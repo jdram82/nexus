@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Convert SVG to PNG</title>
+</head>
+<body>
+    <h2>Screenshot Converter</h2>
+    <p>Open browser console and run the conversion</p>
+    <img id="svg-img" style="display:none">
+    <canvas id="canvas" width="1200" height="900" style="border:1px solid #ccc"></canvas>
+    <br><br>
+    <button onclick="convertAndDownload()">Download PNG</button>
+    
+    <script>
+        function convertAndDownload() {
+            fetch('screenshot.svg')
+                .then(r => r.text())
+                .then(svgText => {
+                    const img = document.getElementById('svg-img');
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, 1200, 900);
+                        
+                        canvas.toBlob(function(blob) {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'screenshot.png';
+                            a.click();
+                            console.log('✅ PNG downloaded!');
+                        }, 'image/png');
+                    };
+                    
+                    const blob = new Blob([svgText], {type: 'image/svg+xml'});
+                    const url = URL.createObjectURL(blob);
+                    img.src = url;
+                });
+        }
+        
+        // Auto convert on load
+        setTimeout(convertAndDownload, 1000);
+    </script>
+</body>
+</html>
