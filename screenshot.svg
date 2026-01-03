@@ -1,0 +1,110 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#f8f9fa"/>
+  
+  <!-- Header Section -->
+  <rect width="1200" height="80" fill="#1e293b"/>
+  
+  <!-- Logo/Brand -->
+  <text x="40" y="52" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">NEXUS</text>
+  
+  <!-- Navigation Menu -->
+  <text x="800" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">Home</text>
+  <text x="880" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">Features</text>
+  <text x="980" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e2e8f0">Pricing</text>
+  <text x="1080" y="50" font-family="Arial, sans-serif" font-size="16" fill="#0066cc">Pro</text>
+  
+  <!-- Hero Section -->
+  <rect y="80" width="1200" height="300" fill="url(#heroGradient)"/>
+  <defs>
+    <linearGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Hero Content -->
+  <text x="600" y="200" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#ffffff" text-anchor="middle">Professional WordPress Theme</text>
+  <text x="600" y="250" font-family="Arial, sans-serif" font-size="24" fill="#e0e7ff" text-anchor="middle">Multi-Tier Features • Theme Builder • Popup System</text>
+  
+  <!-- CTA Button -->
+  <rect x="500" y="280" width="200" height="50" rx="8" fill="#ffffff"/>
+  <text x="600" y="313" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2563eb" text-anchor="middle">Get Started</text>
+  
+  <!-- Feature Cards Section -->
+  <!-- Card 1: Popup Builder -->
+  <rect x="40" y="420" width="340" height="200" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <circle cx="80" cy="460" r="24" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="80" y="470" font-family="Arial, sans-serif" font-size="24" fill="#2563eb" text-anchor="middle">⚡</text>
+  <text x="60" y="510" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1e293b">Popup Builder</text>
+  <text x="60" y="540" font-family="Arial, sans-serif" font-size="14" fill="#64748b">6 trigger types</text>
+  <text x="60" y="560" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Device targeting</text>
+  <text x="60" y="580" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Analytics ready</text>
+  <rect x="60" y="590" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3"/>
+  <rect x="60" y="590" width="80" height="6" rx="3" fill="#2563eb"/>
+  
+  <!-- Card 2: Theme Builder -->
+  <rect x="430" y="420" width="340" height="200" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <circle cx="470" cy="460" r="24" fill="#f0fdf4" stroke="#10b981" stroke-width="2"/>
+  <text x="470" y="470" font-family="Arial, sans-serif" font-size="24" fill="#10b981" text-anchor="middle">🎨</text>
+  <text x="450" y="510" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1e293b">Theme Builder</text>
+  <text x="450" y="540" font-family="Arial, sans-serif" font-size="14" fill="#64748b">20+ widgets</text>
+  <text x="450" y="560" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Custom headers</text>
+  <text x="450" y="580" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Visual editor</text>
+  <rect x="450" y="590" width="60" height="6" rx="3" fill="#10b981" opacity="0.3"/>
+  <rect x="450" y="590" width="38" height="6" rx="3" fill="#10b981"/>
+  
+  <!-- Card 3: Advanced Features -->
+  <rect x="820" y="420" width="340" height="200" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <circle cx="860" cy="460" r="24" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="860" y="470" font-family="Arial, sans-serif" font-size="24" fill="#f59e0b" text-anchor="middle">⚙️</text>
+  <text x="840" y="510" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1e293b">Pro Features</text>
+  <text x="840" y="540" font-family="Arial, sans-serif" font-size="14" fill="#64748b">Mega Menu</text>
+  <text x="840" y="560" font-family="Arial, sans-serif" font-size="14" fill="#64748b">API Docs</text>
+  <text x="840" y="580" font-family="Arial, sans-serif" font-size="14" fill="#64748b">A/B Testing</text>
+  <rect x="840" y="590" width="80" height="6" rx="3" fill="#f59e0b" opacity="0.3"/>
+  <rect x="840" y="590" width="64" height="6" rx="3" fill="#f59e0b"/>
+  
+  <!-- Stats Bar -->
+  <rect y="660" width="1200" height="100" fill="#1e293b"/>
+  
+  <!-- Stat 1 -->
+  <text x="200" y="705" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff" text-anchor="middle">100+</text>
+  <text x="200" y="735" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Templates</text>
+  
+  <!-- Stat 2 -->
+  <text x="450" y="705" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff" text-anchor="middle">20+</text>
+  <text x="450" y="735" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Widgets</text>
+  
+  <!-- Stat 3 -->
+  <text x="700" y="705" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+  <text x="700" y="735" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Pricing Tiers</text>
+  
+  <!-- Stat 4 -->
+  <text x="950" y="705" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff" text-anchor="middle">v3.1.6</text>
+  <text x="950" y="735" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Latest Version</text>
+  
+  <!-- Footer -->
+  <rect y="760" width="1200" height="140" fill="#0f172a"/>
+  
+  <!-- Footer Content -->
+  <text x="40" y="800" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ffffff">NEXUS</text>
+  <text x="40" y="825" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">Professional WordPress Theme</text>
+  <text x="40" y="845" font-family="Arial, sans-serif" font-size="12" fill="#94a3b8">by Jdsan Digitel</text>
+  
+  <!-- Tier Badges -->
+  <rect x="900" y="780" width="80" height="28" rx="14" fill="#22c55e" opacity="0.2"/>
+  <text x="940" y="799" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#22c55e" text-anchor="middle">FREE</text>
+  
+  <rect x="900" y="815" width="80" height="28" rx="14" fill="#2563eb" opacity="0.2"/>
+  <text x="940" y="834" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2563eb" text-anchor="middle">PRO</text>
+  
+  <rect x="995" y="780" width="100" height="28" rx="14" fill="#f59e0b" opacity="0.2"/>
+  <text x="1045" y="799" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#f59e0b" text-anchor="middle">ADVANCED</text>
+  
+  <rect x="995" y="815" width="100" height="28" rx="14" fill="#7c3aed" opacity="0.2"/>
+  <text x="1045" y="834" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#7c3aed" text-anchor="middle">AGENCY</text>
+  
+  <!-- Copyright -->
+  <text x="600" y="875" font-family="Arial, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">© 2026 Nexus Theme • GPL Licensed • WordPress 6.0+</text>
+</svg>
