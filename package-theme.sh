@@ -6,7 +6,7 @@ echo "======================================"
 echo ""
 
 # Set variables
-THEME_NAME="nexus-theme"
+THEME_NAME="nexus"
 VERSION="3.1.6"
 CURRENT_DIR="$(pwd)"
 OUTPUT_DIR="${CURRENT_DIR}/dist"
