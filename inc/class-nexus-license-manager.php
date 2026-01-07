@@ -55,6 +55,13 @@ class Nexus_License_Manager {
 	}
 	
 	/**
+	 * Get instance (alias for compatibility)
+	 */
+	public static function get_instance() {
+		return self::instance();
+	}
+	
+	/**
 	 * Constructor
 	 */
 	private function __construct() {
