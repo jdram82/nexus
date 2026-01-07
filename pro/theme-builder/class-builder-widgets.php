@@ -225,10 +225,17 @@ class Nexus_Builder_Widgets {
      * Load widget classes
      */
     private function load_widget_classes() {
+        // Load base class first
+        require_once NEXUS_PRO_PATH . 'theme-builder/widgets/class-widget-base.php';
+        
         $widget_files = glob( NEXUS_PRO_PATH . 'theme-builder/widgets/*.php' );
         
         if ( $widget_files ) {
             foreach ( $widget_files as $widget_file ) {
+                // Skip base class as it's already loaded
+                if ( strpos( $widget_file, 'class-widget-base.php' ) !== false ) {
+                    continue;
+                }
                 require_once $widget_file;
             }
         }
