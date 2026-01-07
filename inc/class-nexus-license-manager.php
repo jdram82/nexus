@@ -165,6 +165,26 @@ class Nexus_License_Manager {
 	}
 	
 	/**
+	 * Check if current tier is equal to or higher than specified tier
+	 * 
+	 * @param string $tier The tier to check against (free, pro, advanced, agency)
+	 * @return bool True if current tier is equal to or higher than specified tier
+	 */
+	public static function is_tier_or_higher( $tier ) {
+		$instance = self::instance();
+		$tiers = array( 'free', 'pro', 'advanced', 'agency' );
+		$current_index = array_search( $instance->get_tier(), $tiers, true );
+		$required_index = array_search( $tier, $tiers, true );
+		
+		// If tier not found, return false
+		if ( $current_index === false || $required_index === false ) {
+			return false;
+		}
+		
+		return $current_index >= $required_index;
+	}
+	
+	/**
 	 * Get license information for display
 	 * 
 	 * @return array License information
