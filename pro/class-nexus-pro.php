@@ -282,7 +282,8 @@ class Nexus_Pro {
 		if ( file_exists( NEXUS_PRO_DIR . '/admin/class-pro-admin.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/admin/class-pro-admin.php';
 		}
-		if ( file_exists( NEXUS_PRO_DIR . '/admin/class-license-manager.php' ) ) {
+		// License manager is loaded in main theme, skip if already exists
+		if ( ! class_exists( 'Nexus_License_Manager' ) && file_exists( NEXUS_PRO_DIR . '/admin/class-license-manager.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/admin/class-license-manager.php';
 		}
 	}
