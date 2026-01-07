@@ -99,7 +99,7 @@ class Nexus_Theme_Builder {
         require_once NEXUS_PRO_PATH . 'theme-builder/class-builder-widgets.php';
         require_once NEXUS_PRO_PATH . 'theme-builder/class-builder-templates.php';
 
-        $this->canvas = Nexus_Builder_Canvas::get_instance();
+        $this->canvas = new Nexus_Builder_Canvas();
         $this->widgets = Nexus_Builder_Widgets::get_instance();
     }
 
