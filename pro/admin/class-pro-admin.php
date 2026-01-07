@@ -60,14 +60,8 @@ class Nexus_Pro_Admin {
 			array( $this, 'submissions_page' )
 		);
 
-		add_submenu_page(
-			'nexus-pro',
-			__( 'License', 'nexus' ),
-			__( 'License', 'nexus' ),
-			'manage_options',
-			'nexus-pro-license',
-			array( $this, 'license_page' )
-		);
+		// License page removed - use unified license system in main Nexus menu
+		// Users should go to: Nexus > License instead
 	}
 
 	/**
