@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .link-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 30px;
+            text-align: center;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .link-card:hover {
+            border-color: #667eea;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .link-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .link-card h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .link-card p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        .categories-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #fbbf24;
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .category-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .category-item {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(10px);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .category-header h3 {
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        .article-count {
+            background: rgba(102, 126, 234, 0.3);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #667eea;
+        }
+
+        .articles-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .articles-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .articles-list li:last-child {
+            border-bottom: none;
+        }
+
+        .articles-list a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .articles-list a:hover {
+            color: #667eea;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 3rem;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255,255,255,0.15);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-card h4 {
+            color: #fef3c7;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card a {
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #10b981;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>How Can We Help?</h1>
+            <p>Find answers, guides, and support resources</p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="🔍 Search for help articles, tutorials, or topics..."
+                id="search-input"
+            >
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <a href="#getting-started" class="link-card">
+                <div class="link-icon">🚀</div>
+                <h3>Getting Started</h3>
+                <p>Installation guides, first steps, and basic tutorials</p>
+            </a>
+
+            <a href="#video-tutorials" class="link-card">
+                <div class="link-icon">🎥</div>
+                <h3>Video Tutorials</h3>
+                <p>Watch step-by-step video guides for common tasks</p>
+            </a>
+
+            <a href="/bug-report" class="link-card">
+                <div class="link-icon">🐛</div>
+                <h3>Report a Bug</h3>
+                <p>Found an issue? Help us improve by reporting it</p>
+            </a>
+
+            <a href="/feature-request" class="link-card">
+                <div class="link-icon">💡</div>
+                <h3>Request Feature</h3>
+                <p>Share your ideas and vote on upcoming features</p>
+            </a>
+        </div>
+
+        <!-- Knowledge Base Categories -->
+        <div class="categories-section">
+            <h2 class="section-title">📚 Knowledge Base</h2>
+            
+            <div class="category-grid">
+                <div class="category-item" onclick="toggleArticles('installation')">
+                    <div class="category-header">
+                        <h3>Installation & Setup</h3>
+                        <span class="article-count">8 articles</span>
+                    </div>
+                    <p style="color: #d1d5db; margin-bottom: 1rem;">Everything you need to install and configure the plugin</p>
+                    <ul class="articles-list" id="installation" style="display: none;">
+                        <li><a href="#">How to install on AutoCAD 2024-2026</a></li>
+                        <li><a href="#">Installing on BricsCAD V24+</a></li>
+                        <li><a href="#">License activation troubleshooting</a></li>
+                        <li><a href="#">Finding the toolbar after installation</a></li>
+                        <li><a href="#">Updating to the latest version</a></li>
+                        <li><a href="#">Uninstalling the plugin</a></li>
+                        <li><a href="#">System requirements explained</a></li>
+                        <li><a href="#">Network license configuration</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-item" onclick="toggleArticles('compliance')">
+                    <div class="category-header">
+                        <h3>Compliance Checking</h3>
+                        <span class="article-count">12 articles</span>
+                    </div>
+                    <p style="color: #d1d5db; margin-bottom: 1rem;">Understanding UL508A and NEC compliance rules</p>
+                    <ul class="articles-list" id="compliance" style="display: none;">
+                        <li><a href="#">Running your first compliance check</a></li>
+                        <li><a href="#">Understanding the 80 UL508A rules</a></li>
+                        <li><a href="#">What is SCCR and how is it calculated?</a></li>
+                        <li><a href="#">Wire gauge validation explained</a></li>
+                        <li><a href="#">Understanding error vs warning messages</a></li>
+                        <li><a href="#">How to fix common compliance errors</a></li>
+                        <li><a href="#">Customizing rule severity levels</a></li>
+                        <li><a href="#">NEC 2023 vs 2020 differences</a></li>
+                        <li><a href="#">Component library management</a></li>
+                        <li><a href="#">Adding custom components</a></li>
+                        <li><a href="#">Exporting compliance reports</a></li>
+                        <li><a href="#">Understanding the PDF report format</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-item" onclick="toggleArticles('features')">
+                    <div class="category-header">
+                        <h3>Features & Tools</h3>
+                        <span class="article-count">10 articles</span>
+                    </div>
+                    <p style="color: #d1d5db; margin-bottom: 1rem;">Make the most of advanced features</p>
+                    <ul class="articles-list" id="features" style="display: none;">
+                        <li><a href="#">Real-time validation as you draw</a></li>
+                        <li><a href="#">Using the SCCR calculator</a></li>
+                        <li><a href="#">Auto-generating bill of materials</a></li>
+                        <li><a href="#">Batch checking multiple drawings</a></li>
+                        <li><a href="#">Keyboard shortcuts reference</a></li>
+                        <li><a href="#">Customizing the toolbar</a></li>
+                        <li><a href="#">Integration with other CAD plugins</a></li>
+                        <li><a href="#">Template drawing setup</a></li>
+                        <li><a href="#">Import/export settings</a></li>
+                        <li><a href="#">Performance optimization tips</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-item" onclick="toggleArticles('billing')">
+                    <div class="category-header">
+                        <h3>Billing & Account</h3>
+                        <span class="article-count">6 articles</span>
+                    </div>
+                    <p style="color: #d1d5db; margin-bottom: 1rem;">Manage your subscription and account settings</p>
+                    <ul class="articles-list" id="billing" style="display: none;">
+                        <li><a href="#">Understanding beta tier pricing</a></li>
+                        <li><a href="#">How to update payment method</a></li>
+                        <li><a href="#">Viewing billing history and invoices</a></li>
+                        <li><a href="#">Upgrading or downgrading tiers</a></li>
+                        <li><a href="#">Cancellation and refund policy</a></li>
+                        <li><a href="#">Managing multiple licenses</a></li>
+                    </ul>
+                </div>
+
+                <div class="category-item" onclick="toggleArticles('troubleshooting')">
+                    <div class="category-header">
+                        <h3>Troubleshooting</h3>
+                        <span class="article-count">15 articles</span>
+                    </div>
+                    <p style="color: #d1d5db; margin-bottom: 1rem;">Common issues and solutions</p>
+                    <ul class="articles-list" id="troubleshooting" style="display: none;">
+                        <li><a href="#">Plugin not loading in AutoCAD</a></li>
+                        <li><a href="#">License activation failed</a></li>
+                        <li><a href="#">Toolbar disappeared after update</a></li>
+                        <li><a href="#">Compliance check runs very slowly</a></li>
+                        <li><a href="#">PDF export not working</a></li>
+                        <li><a href="#">Error: "Component not found in library"</a></li>
+                        <li><a href="#">SCCR calculation shows incorrect value</a></li>
+                        <li><a href="#">Plugin crashes when opening large drawings</a></li>
+                        <li><a href="#">Cannot connect to license server</a></li>
+                        <li><a href="#">Compatibility issues with other plugins</a></li>
+                        <li><a href="#">Installation error codes explained</a></li>
+                        <li><a href="#">Deactivating license on old computer</a></li>
+                        <li><a href="#">Resetting plugin settings to default</a></li>
+                        <li><a href="#">Contact support about a persistent issue</a></li>
+                        <li><a href="#">Reporting false positive compliance errors</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h2>Still Need Help?</h2>
+            <p>Our support team is here to assist you</p>
+            
+            <div class="contact-methods">
+                <div class="contact-card">
+                    <h4>📧 Email Support</h4>
+                    <a href="mailto:support@jdsancontrols.com">support@jdsancontrols.com</a>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">Response within 24-48 hours</p>
+                </div>
+
+                <div class="contact-card">
+                    <h4>💬 Live Chat</h4>
+                    <a href="#" onclick="openChat()">Start Chat</a>
+                    <div class="status-badge">● Online Now</div>
+                </div>
+
+                <div class="contact-card">
+                    <h4>📞 Phone Support</h4>
+                    <a href="tel:+1234567890">+1 (234) 567-890</a>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">Mon-Fri 9AM-5PM EST</p>
+                </div>
+
+                <div class="contact-card">
+                    <h4>🎫 Submit Ticket</h4>
+                    <a href="/support/ticket">Open Support Ticket</a>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">Track your request</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle article lists
+        function toggleArticles(categoryId) {
+            const articlesList = document.getElementById(categoryId);
+            if (articlesList.style.display === 'none') {
+                articlesList.style.display = 'block';
+            } else {
+                articlesList.style.display = 'none';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            // In production, this would call your search API
+            console.log('Searching for:', searchTerm);
+            
+            // Example: Filter visible articles
+            if (searchTerm.length > 2) {
+                // Show search results
+            }
+        });
+
+        // Open chat (integrate with your chat service)
+        function openChat() {
+            // Example: Intercom, Drift, or custom chat
+            console.log('Opening chat...');
+            alert('Chat feature would open here. Integrate with your preferred chat service.');
+        }
+    </script>
+</body>
+</html>

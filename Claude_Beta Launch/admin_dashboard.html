@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background: rgba(239, 68, 68, 0.1);
+            border-bottom: 2px solid #ef4444;
+            padding: 1.5rem 2rem;
+        }
+
+        .admin-header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-title h1 {
+            font-size: 2rem;
+            color: #ef4444;
+            margin-bottom: 0.3rem;
+        }
+
+        .admin-title p {
+            color: #d1d5db;
+            font-size: 0.9rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* Sidebar + Main Layout */
+        .admin-layout {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(255,255,255,0.03);
+            min-height: calc(100vh - 100px);
+            border-right: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .sidebar-nav {
+            padding: 2rem 1rem;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-section h3 {
+            color: #fbbf24;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: #d1d5db;
+            text-decoration: none;
+            border-radius: 15px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .sidebar-icon {
+            font-size: 1.5rem;
+            width: 30px;
+        }
+
+        .badge {
+            position: absolute;
+            right: 1rem;
+            background: #ef4444;
+            color: #fff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .admin-main {
+            flex: 1;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .trend-up {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .trend-down {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-details {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #d1d5db;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .chart-header {
+            margin-bottom: 2rem;
+        }
+
+        .chart-header h3 {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Tables */
+        .table-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .table-header h3 {
+            font-size: 1.5rem;
+            color: #fbbf24;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            color: #fff;
+            min-width: 300px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        .data-table thead {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 1rem;
+            color: #fbbf24;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .data-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .status-expired {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .tier-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        /* Quick Actions */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .quick-action-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            border-color: #667eea;
+        }
+
+        .quick-action-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-action-card h4 {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-action-card p {
+            color: #d1d5db;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1200px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                min-height: auto;
+                border-right: none;
+                border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            }
+
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                padding: 1rem;
+            }
+
+            .sidebar-section {
+                margin-bottom: 0;
+                margin-right: 2rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-input {
+                min-width: 200px;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="admin-header-content">
+            <div class="admin-title">
+                <h1>🛡 Admin Dashboard</h1>
+                <p>Beta Program Overview • Last updated: 2 minutes ago</p>
+            </div>
+            <div class="admin-actions">
+                <a href="/" class="btn btn-secondary">← Back to Site</a>
+                <button class="btn btn-danger" onclick="alert('Export functionality')">Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <nav class="sidebar-nav">
+                <div class="sidebar-section">
+                    <h3>Overview</h3>
+                    <a href="/admin" class="sidebar-link active">
+                        <span class="sidebar-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/admin/analytics" class="sidebar-link">
+                        <span class="sidebar-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>User Management</h3>
+                    <a href="/admin/users" class="sidebar-link">
+                        <span class="sidebar-icon">👥</span>
+                        <span>All Users</span>
+                        <span class="badge">147</span>
+                    </a>
+                    <a href="/admin/founders" class="sidebar-link">
+                        <span class="sidebar-icon">🏆</span>
+                        <span>Founders Tier</span>
+                        <span class="badge">22</span>
+                    </a>
+                    <a href="/admin/applications" class="sidebar-link">
+                        <span class="sidebar-icon">📝</span>
+                        <span>Applications</span>
+                        <span class="badge" style="background: #fbbf24; color: #000;">5</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Support</h3>
+                    <a href="/admin/bugs" class="sidebar-link">
+                        <span class="sidebar-icon">🐛</span>
+                        <span>Bug Reports</span>
+                        <span class="badge">8</span>
+                    </a>
+                    <a href="/admin/features" class="sidebar-link">
+                        <span class="sidebar-icon">💡</span>
+                        <span>Feature Requests</span>
+                        <span class="badge">12</span>
+                    </a>
+                    <a href="/admin/tickets" class="sidebar-link">
+                        <span class="sidebar-icon">🎫</span>
+                        <span>Support Tickets</span>
+                        <span class="badge">3</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Financial</h3>
+                    <a href="/admin/revenue" class="sidebar-link">
+                        <span class="sidebar-icon">💰</span>
+                        <span>Revenue</span>
+                    </a>
+                    <a href="/admin/subscriptions" class="sidebar-link">
+                        <span class="sidebar-icon">📋</span>
+                        <span>Subscriptions</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Settings</h3>
+                    <a href="/admin/email-templates" class="sidebar-link">
+                        <span class="sidebar-icon">📧</span>
+                        <span>Email Templates</span>
+                    </a>
+                    <a href="/admin/settings" class="sidebar-link">
+                        <span class="sidebar-icon">⚙️</span>
+                        <span>System Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Key Metrics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-trend trend-up">
+                            ↑ 12%
+                        </div>
+                    </div>
+                    <div class="stat-value">147</div>
+                    <div class="stat-label">Total Beta Users</div>
+                    <div class="stat-details">
+                        <span>Founders: 22</span>
+                        <span>Early: 68</span>
+                        <span>Beta: 57</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-trend trend-up">
+                            ↑ 24%
+                        </div>
+                    </div>
+                    <div class="stat-value">$18.9K</div>
+                    <div class="stat-label">Revenue This Month</div>
+                    <div class="stat-details">
+                        <span>Last: $15.2K</span>
+                        <span>Total: $33.6K</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-trend trend-up">
+                            ↑ 8%
+                        </div>
+                    </div>
+                    <div class="stat-value">72%</div>
+                    <div class="stat-label">Trial Conversion Rate</div>
+                    <div class="stat-details">
+                        <span>Active Trials: 34</span>
+                        <span>Target: 75%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-trend trend-down">
+                            ↓ 3
+                        </div>
+                    </div>
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Founders Spots Left</div>
+                    <div class="stat-details">
+                        <span>Total: 25</span>
+                        <span>Filled: 18</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Growth & Revenue</h3>
+                        <p style="color: #9ca3af; font-size: 0.9rem;">Last 30 days</p>
+                    </div>
+                    <div class="chart-placeholder">
+                        📊 Chart.js or Recharts integration here
+                        <br>(Line chart showing user signups and revenue over time)
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Tier Distribution</h3>
+                        <p style="color: #9ca3af; font-size: 0.9rem;">Current breakdown</p>
+                    </div>
+                    <div class="chart-placeholder">
+                        🥧 Pie chart here
+                        <br>(Founders: 15%, Early: 46%, Beta: 39%)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h2 style="color: #fbbf24; margin-bottom: 1.5rem; font-size: 1.8rem;">Quick Actions</h2>
+            <div class="quick-actions-grid">
+                <a href="/admin/applications" class="quick-action-card">
+                    <div class="quick-action-icon">📝</div>
+                    <h4>Review Applications</h4>
+                    <p>5 pending Founders applications</p>
+                </a>
+
+                <a href="/admin/bugs" class="quick-action-card">
+                    <div class="quick-action-icon">🐛</div>
+                    <h4>Triage Bugs</h4>
+                    <p>8 new bug reports to review</p>
+                </a>
+
+                <a href="/admin/email-blast" class="quick-action-card">
+                    <div class="quick-action-icon">📧</div>
+                    <h4>Send Email</h4>
+                    <p>Broadcast to all users</p>
+                </a>
+
+                <a href="/admin/create-user" class="quick-action-card">
+                    <div class="quick-action-icon">➕</div>
+                    <h4>Add User</h4>
+                    <p>Manually create account</p>
+                </a>
+            </div>
+
+            <!-- Recent Users Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Recent User Signups</h3>
+                    <div class="table-actions">
+                        <div class="search-box">
+                            <input type="text" class="search-input" placeholder="🔍 Search users...">
+                        </div>
+                        <button class="btn btn-secondary">Export CSV</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Tier</th>
+                                <th>Status</th>
+                                <th>Signed Up</th>
+                                <th>Progress</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>John Smith</strong></td>
+                                <td>john.smith@example.com</td>
+                                <td><span class="tier-badge">Founders</span></td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>Jan 16, 2026</td>
+                                <td>2/4 Complete</td>
+                                <td>
+                                    <button class="action-btn" onclick="viewUser('uuid-1')">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sarah Johnson</strong></td>
+                                <td>sarah.j@company.com</td>
+                                <td><span class="tier-badge" style="background: linear-gradient(135deg, #667eea, #764ba2);">Early Adopter</span></td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>Jan 15, 2026</td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn" onclick="viewUser('uuid-2')">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mike Davis</strong></td>
+                                <td>mdavis@engineering.com</td>
+                                <td><span class="tier-badge" style="background: #9ca3af; color: #000;">Beta Tester</span></td>
+                                <td><span class="status-badge status-pending">Trial</span></td>
+                                <td>Jan 14, 2026</td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn" onclick="viewUser('uuid-3')">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Emily Chen</strong></td>
+                                <td>echen@controls.io</td>
+                                <td><span class="tier-badge">Founders</span></td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>Jan 13, 2026</td>
+                                <td>4/4 Complete ✓</td>
+                                <td>
+                                    <button class="action-btn" onclick="viewUser('uuid-4')">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Robert Taylor</strong></td>
+                                <td>rtaylor@mfg.com</td>
+                                <td><span class="tier-badge" style="background: linear-gradient(135deg, #667eea, #764ba2);">Early Adopter</span></td>
+                                <td><span class="status-badge status-expired">Cancelled</span></td>
+                                <td>Jan 10, 2026</td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn" onclick="viewUser('uuid-5')">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="btn btn-secondary">Load More</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function viewUser(userId) {
+            window.location.href = `/admin/users/${userId}`;
+        }
+
+        // In production, load data from API
+        /*
+        fetch('/api/admin/dashboard/stats')
+            .then(res => res.json())
+            .then(data => {
+                // Update dashboard with real data
+            });
+        */
+    </script>
+</body>
+</html>

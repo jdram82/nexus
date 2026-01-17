@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-welcome h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-tier {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .dashboard-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .license-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2.5rem;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .license-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .license-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .license-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .license-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .license-item {
+            background: rgba(255,255,255,0.15);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .license-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .license-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .status-active {
+            color: #10b981;
+        }
+
+        .quick-actions {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .quick-actions h3 {
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .action-btn strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #fff;
+        }
+
+        .action-btn span {
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        .stats-section {
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            color: #d1d5db;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .stat-subtext {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+        }
+
+        .recent-activity {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .recent-activity h3 {
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-description {
+            color: #d1d5db;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .license-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .user-welcome h1 {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <div class="user-welcome">
+                <h1>Welcome back, John! 👋</h1>
+                <span class="user-tier">🏆 Founders Tier</span>
+            </div>
+            <div class="header-actions">
+                <a href="/download" class="btn btn-primary">Download Latest</a>
+                <a href="/settings" class="btn btn-secondary">Settings</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <!-- License & Quick Actions -->
+        <div class="dashboard-grid">
+            <div class="license-card">
+                <div class="license-content">
+                    <h2>Your License</h2>
+                    <div class="license-details">
+                        <div class="license-item">
+                            <div class="license-label">Tier</div>
+                            <div class="license-value">Founders</div>
+                        </div>
+                        <div class="license-item">
+                            <div class="license-label">Status</div>
+                            <div class="license-value status-active">● Active</div>
+                        </div>
+                        <div class="license-item">
+                            <div class="license-label">Valid Until</div>
+                            <div class="license-value">March 1, 2027</div>
+                        </div>
+                        <div class="license-item">
+                            <div class="license-label">License Key</div>
+                            <div class="license-value" style="font-size: 1rem; font-family: monospace;">ABC1-2DEF-3GHI-4JKL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <a href="/download" class="action-btn">
+                    <strong>⬇ Download Latest Version</strong>
+                    <span>Version 1.0 Beta | 98 MB</span>
+                </a>
+                <a href="/docs" class="action-btn">
+                    <strong>📚 View Documentation</strong>
+                    <span>Guides, tutorials & FAQs</span>
+                </a>
+                <a href="/support" class="action-btn">
+                    <strong>💬 Contact Support</strong>
+                    <span>Get help from our team</span>
+                </a>
+                <a href="/founders-progress" class="action-btn">
+                    <strong>🏆 Founders Progress</strong>
+                    <span>Track your requirements</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-label">Panels Validated</div>
+                    <div class="stat-value">47</div>
+                    <div class="stat-subtext">+12 this month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">⏱</div>
+                    <div class="stat-label">Time Saved</div>
+                    <div class="stat-value">23.5<span style="font-size: 1.2rem;"> hrs</span></div>
+                    <div class="stat-subtext">≈ $2,350 value</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🛡</div>
+                    <div class="stat-label">Errors Caught</div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-subtext">Prevented costly rework</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-label">Compliance Rate</div>
+                    <div class="stat-value">98<span style="font-size: 1.5rem;">%</span></div>
+                    <div class="stat-subtext">Excellent performance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <h3>Recent Activity</h3>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <div class="activity-time">2 hours ago</div>
+                    <div class="activity-description">Completed compliance check on <strong>Panel_Drawing_2024_03.dwg</strong> - 2 warnings found</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">Yesterday at 3:42 PM</div>
+                    <div class="activity-description">Exported PDF report for <strong>Client_Project_A.dwg</strong></div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">2 days ago</div>
+                    <div class="activity-description">Validated 3 panel drawings - All passed compliance</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">3 days ago</div>
+                    <div class="activity-description">Submitted bug report: <strong>SCCR calculation issue with 3-phase systems</strong></div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-time">January 10, 2026</div>
+                    <div class="activity-description">License activated successfully on <strong>WORKSTATION-01</strong></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // In production, fetch user data from API
+        // Example:
+        /*
+        fetch('/api/dashboard/stats')
+            .then(response => response.json())
+            .then(data => {
+                // Update stats with real data
+                document.querySelector('.stat-value').textContent = data.panelsValidated;
+                // etc...
+            });
+        */
+
+        // Simulate real-time updates
+        setInterval(() => {
+            console.log('Checking for updates...');
+            // Poll API for new activity, license status, etc.
+        }, 60000); // Every minute
+    </script>
+</body>
+</html>

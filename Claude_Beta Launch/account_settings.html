@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #d1d5db;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            color: #fbbf24;
+            border-bottom-color: #fbbf24;
+        }
+
+        .tab:hover {
+            color: #fff;
+        }
+
+        .section-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #d1d5db;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .license-activations {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .activation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .activation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            color: #d1d5db;
+            cursor: pointer;
+        }
+
+        .danger-zone {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .danger-zone h3 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .danger-zone p {
+            color: #d1d5db;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .activation-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Account Settings</h1>
+            <p style="color: #d1d5db; font-size: 1.1rem;">Manage your account preferences and settings</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('profile')">Profile</button>
+            <button class="tab" onclick="showTab('license')">License</button>
+            <button class="tab" onclick="showTab('notifications')">Notifications</button>
+            <button class="tab" onclick="showTab('security')">Security</button>
+            <button class="tab" onclick="showTab('danger')">Danger Zone</button>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile" class="tab-content active">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>👤 Profile Information</h2>
+                    <p>Update your personal and company information</p>
+                </div>
+
+                <form onsubmit="saveProfile(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" value="John Smith" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" value="john.smith@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" value="+1 (234) 567-8900">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" value="ABC Engineering Inc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" value="Senior Electrical Engineer">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Size</label>
+                        <select>
+                            <option>1-10 employees</option>
+                            <option selected>11-50 employees</option>
+                            <option>51-200 employees</option>
+                            <option>201-500 employees</option>
+                            <option>500+ employees</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- License Tab -->
+        <div id="license" class="tab-content">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>🔑 License Management</h2>
+                    <p>Manage your license activations and computer registrations</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 20px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Your License Key</h3>
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; font-family: monospace; font-size: 1.2rem; text-align: center;">
+                        ABC1-2DEF-3GHI-4JKL
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem;" onclick="copyLicenseKey()">📋 Copy Key</button>
+                </div>
+
+                <h3 style="color: #fbbf24; margin-bottom: 1rem;">Active Computers</h3>
+                <p style="color: #d1d5db; margin-bottom: 1.5rem;">You can activate your license on 1 computer at a time. Deactivate from an old computer to activate on a new one.</p>
+
+                <div class="license-activations">
+                    <div class="activation-item">
+                        <div>
+                            <strong>WORKSTATION-01</strong>
+                            <p style="color: #9ca3af; font-size: 0.9rem; margin-top: 0.3rem;">Activated: January 1, 2026</p>
+                            <p style="color: #9ca3af; font-size: 0.9rem;">Last Used: 2 hours ago</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="deactivateComputer('WORKSTATION-01')">Deactivate</button>
+                    </div>
+                </div>
+
+                <div style="background: rgba(251, 191, 36, 0.1); padding: 1.5rem; border-radius: 15px; margin-top: 1.5rem; border-left: 4px solid #fbbf24;">
+                    <strong style="color: #fbbf24;">💡 Tip:</strong>
+                    <p style="color: #d1d5db; margin-top: 0.5rem;">
+                        You can switch computers up to 3 times per year. If you need more activations, contact support.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notifications" class="tab-content">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>🔔 Email Preferences</h2>
+                    <p>Choose what emails you want to receive</p>
+                </div>
+
+                <form onsubmit="saveNotifications(event)">
+                    <h3 style="color: #fbbf24; margin-bottom: 1rem;">Product Updates</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="updates" checked>
+                        <label for="updates" class="checkbox-label">Product updates and new features</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="releases" checked>
+                        <label for="releases" class="checkbox-label">Release notes and bug fixes</label>
+                    </div>
+
+                    <h3 style="color: #fbbf24; margin: 2rem 0 1rem;">Account Notifications</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="billing" checked>
+                        <label for="billing" class="checkbox-label">Billing and payment notifications</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="security" checked>
+                        <label for="security" class="checkbox-label">Security alerts and login notifications</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="support">
+                        <label for="support" class="checkbox-label">Support ticket updates</label>
+                    </div>
+
+                    <h3 style="color: #fbbf24; margin: 2rem 0 1rem;">Beta Program</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="beta" checked>
+                        <label for="beta" class="checkbox-label">Beta announcements and early access</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="founders" checked>
+                        <label for="founders" class="checkbox-label">Founders tier reminders and progress updates</label>
+                    </div>
+
+                    <h3 style="color: #fbbf24; margin: 2rem 0 1rem;">Marketing</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="marketing">
+                        <label for="marketing" class="checkbox-label">Marketing emails and special offers</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter">
+                        <label for="newsletter" class="checkbox-label">Monthly newsletter</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: 2rem;">Save Preferences</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Security Tab -->
+        <div id="security" class="tab-content">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>🔒 Password & Security</h2>
+                    <p>Keep your account secure</p>
+                </div>
+
+                <form onsubmit="changePassword(event)">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>🛡 Two-Factor Authentication</h2>
+                    <p>Add an extra layer of security to your account</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 15px; text-align: center;">
+                    <p style="color: #d1d5db; margin-bottom: 1.5rem;">Two-factor authentication is currently <strong style="color: #ef4444;">disabled</strong></p>
+                    <button class="btn btn-primary" onclick="enable2FA()">Enable 2FA</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danger Zone Tab -->
+        <div id="danger" class="tab-content">
+            <div class="danger-zone">
+                <h3>⚠️ Delete Account</h3>
+                <p>
+                    Permanently delete your account and all associated data. This action cannot be undone.
+                </p>
+                <p>
+                    <strong>What will be deleted:</strong>
+                </p>
+                <ul style="margin: 1rem 0 1rem 2rem; color: #d1d5db;">
+                    <li>Your profile and account information</li>
+                    <li>License key and activations</li>
+                    <li>Billing history and invoices</li>
+                    <li>Bug reports and feature requests</li>
+                    <li>All saved preferences and settings</li>
+                </ul>
+                <p style="color: #fbbf24; font-weight: 600; margin-bottom: 1.5rem;">
+                    Note: As a Founders member, deleting your account means losing your FREE license and 50% lifetime discount forever.
+                </p>
+                <button class="btn btn-danger" onclick="deleteAccount()">Delete My Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            alert('✓ Profile updated successfully!');
+            // In production: API call to save profile
+        }
+
+        function saveNotifications(e) {
+            e.preventDefault();
+            alert('✓ Notification preferences saved!');
+            // In production: API call to save preferences
+        }
+
+        function changePassword(e) {
+            e.preventDefault();
+            alert('✓ Password changed successfully!');
+            // In production: API call to change password
+        }
+
+        function copyLicenseKey() {
+            navigator.clipboard.writeText('ABC1-2DEF-3GHI-4JKL');
+            alert('✓ License key copied to clipboard!');
+        }
+
+        function deactivateComputer(computerName) {
+            if (confirm(`Are you sure you want to deactivate ${computerName}?`)) {
+                alert(`✓ ${computerName} has been deactivated.`);
+                // In production: API call to deactivate
+            }
+        }
+
+        function enable2FA() {
+            alert('Opening 2FA setup...\n\nThis would show QR code for authenticator app.');
+            // In production: Show 2FA setup modal
+        }
+
+        function deleteAccount() {
+            const confirmation = confirm(
+                '⚠️ DELETE ACCOUNT\n\n' +
+                'This will permanently delete your account and:\n\n' +
+                '• Cancel your Founders Tier membership\n' +
+                '• Delete your license key\n' +
+                '• Remove all your data\n' +
+                '• You will lose 50% lifetime discount\n\n' +
+                'This action CANNOT be undone.\n\n' +
+                'Are you absolutely sure?'
+            );
+
+            if (confirmation) {
+                const confirmText = prompt('Type DELETE to confirm:');
+                if (confirmText === 'DELETE') {
+                    alert('Your account has been scheduled for deletion.\n\nYou will receive a confirmation email.');
+                    // In production: API call to delete account
+                }
+            }
+        }
+    </script>
+</body>
+</html>

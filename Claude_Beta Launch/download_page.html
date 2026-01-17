@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download UL/NEC Compliance Checker | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .license-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .license-key {
+            background: rgba(255,255,255,0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-btn {
+            background: #fff;
+            color: #667eea;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+        }
+
+        .download-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .download-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            padding: 2rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .download-info {
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 1rem;
+        }
+
+        .steps-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .steps-section h2 {
+            color: #fbbf24;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .step {
+            background: rgba(255,255,255,0.03);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        .resources-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .resource-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .resource-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+
+        .requirements-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .requirements-box h3 {
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .requirements-box ul {
+            list-style: none;
+        }
+
+        .requirements-box li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            color: #d1d5db;
+        }
+
+        .requirements-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .support-link {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 20px;
+            border: 2px solid #ef4444;
+        }
+
+        .support-link h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+
+        .support-link a {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+        }
+
+        .support-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .download-btn {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+            }
+
+            .license-key {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Download UL/NEC Compliance Checker</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Your software is ready to download</p>
+        </div>
+
+        <!-- License Key Section -->
+        <div class="license-box">
+            <h2 style="margin-bottom: 1rem;">Your License Key</h2>
+            <div class="license-key" id="license-key">XXXX-XXXX-XXXX-XXXX</div>
+            <button class="copy-btn" onclick="copyLicenseKey()">📋 Copy to Clipboard</button>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.9;">
+                Save this key - you'll need it during installation
+            </p>
+        </div>
+
+        <!-- Download Button -->
+        <div class="download-section">
+            <button class="download-btn" onclick="downloadInstaller()">
+                <span style="font-size: 2rem;">⬇</span>
+                Download for Windows 10/11
+            </button>
+            <div class="download-info">
+                <p>Version 1.0 Beta | 98 MB | .MSI Installer</p>
+                <p style="margin-top: 0.5rem;">Compatible with AutoCAD 2024-2026 & BricsCAD V24+</p>
+            </div>
+        </div>
+
+        <!-- Installation Steps -->
+        <div class="steps-section">
+            <h2>📦 Installation Steps</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Close AutoCAD/BricsCAD</h3>
+                    <p>Make sure all instances of AutoCAD or BricsCAD are completely closed before proceeding.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Run the Installer</h3>
+                    <p>Double-click the downloaded <strong>UL_NEC_Checker_Installer.msi</strong> file and follow the installation wizard.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Enter Your License Key</h3>
+                    <p>When prompted, paste your license key from above. The installer will verify your license automatically.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Launch AutoCAD</h3>
+                    <p>Open AutoCAD or BricsCAD. The UL/NEC Checker toolbar should appear automatically. If not, go to View → Toolbars → UL/NEC Compliance Checker.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Run Your First Check</h3>
+                    <p>Open an electrical panel drawing and click "Run Compliance Check" to validate against 80+ UL508A/NEC rules!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        <div class="resources-section">
+            <div class="resource-card">
+                <div class="resource-icon">🎥</div>
+                <h3>Video Tutorial</h3>
+                <p style="margin-bottom: 1rem; color: #d1d5db;">Watch the complete installation walkthrough</p>
+                <a href="/tutorials/installation-video">Watch Now →</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">📄</div>
+                <h3>Installation Guide</h3>
+                <p style="margin-bottom: 1rem; color: #d1d5db;">Detailed PDF with screenshots</p>
+                <a href="/docs/installation-guide.pdf">Download PDF →</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">🚀</div>
+                <h3>Quick Start Guide</h3>
+                <p style="margin-bottom: 1rem; color: #d1d5db;">Get productive in 5 minutes</p>
+                <a href="/docs/quick-start">Read Guide →</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">💬</div>
+                <h3>Knowledge Base</h3>
+                <p style="margin-bottom: 1rem; color: #d1d5db;">FAQs and troubleshooting</p>
+                <a href="/support">Browse Articles →</a>
+            </div>
+        </div>
+
+        <!-- System Requirements -->
+        <div class="requirements-box">
+            <h3>💻 System Requirements</h3>
+            <ul>
+                <li>AutoCAD 2024, 2025, or 2026 (or BricsCAD V24+)</li>
+                <li>Windows 10 (64-bit) or Windows 11</li>
+                <li>.NET 8.0 Runtime (automatically installed with plugin)</li>
+                <li>100 MB available disk space</li>
+                <li>Internet connection for license activation</li>
+                <li>Minimum 4GB RAM (8GB recommended)</li>
+            </ul>
+        </div>
+
+        <!-- Support Section -->
+        <div class="support-link">
+            <h3>Having Trouble?</h3>
+            <p style="color: #d1d5db; margin-bottom: 1rem;">
+                Our support team is here to help you get up and running.
+            </p>
+            <a href="/support">Contact Support →</a> | 
+            <a href="/support/troubleshooting">Troubleshooting Guide →</a>
+        </div>
+    </div>
+
+    <script>
+        // Replace with actual license key from your backend
+        const actualLicenseKey = "ABC123-DEF456-GHI789-JKL012";
+        document.getElementById('license-key').textContent = actualLicenseKey;
+
+        function copyLicenseKey() {
+            const licenseKey = document.getElementById('license-key').textContent;
+            navigator.clipboard.writeText(licenseKey).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.style.background = '#10b981';
+                btn.style.color = '#fff';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#fff';
+                    btn.style.color = '#667eea';
+                }, 2000);
+            });
+        }
+
+        function downloadInstaller() {
+            // Replace with your actual download URL
+            const downloadUrl = '/downloads/UL_NEC_Checker_Installer.msi';
+            
+            // Track download
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'download', {
+                    'event_category': 'installer',
+                    'event_label': 'UL_NEC_Checker_v1.0'
+                });
+            }
+            
+            // Trigger download
+            window.location.href = downloadUrl;
+            
+            // Show confirmation message
+            const btn = document.querySelector('.download-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span style="font-size: 2rem;">✓</span> Download Starting...';
+            btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 3000);
+        }
+
+        // In production, fetch license key from backend API
+        // fetch('/api/user/license-key')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         document.getElementById('license-key').textContent = data.licenseKey;
+        //     });
+    </script>
+</body>
+</html>

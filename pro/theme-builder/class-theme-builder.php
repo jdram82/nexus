@@ -328,10 +328,19 @@ class Nexus_Theme_Builder {
             self::VERSION
         );
 
+        // Enqueue Lottie library for Lottie Animation widget
+        wp_enqueue_script(
+            'lottie-player',
+            'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js',
+            array(),
+            '5.12.2',
+            true
+        );
+
         wp_enqueue_script(
             'nexus-builder-frontend',
             NEXUS_PRO_URL . 'assets/js/theme-builder-frontend.js',
-            array( 'jquery' ),
+            array( 'jquery', 'lottie-player' ),
             self::VERSION,
             true
         );

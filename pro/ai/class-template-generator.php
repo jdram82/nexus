@@ -325,6 +325,13 @@ class Nexus_AI_Template_Generator {
 		wp_send_json_success( array(
 			'template'          => $template,
 			'credits_available' => $credit_manager->get_available_credits(),
+		) );
+	}
+
+	public function refine_template_ajax() {
+		check_ajax_referer( 'nexus_ai_nonce', 'nonce' );
+		
+		if ( ! current_user_can( 'edit_posts' ) ) {
             wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
         }
         

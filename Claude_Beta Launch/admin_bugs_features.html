@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug & Feature Management - Admin | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #9ca3af;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            color: #d1d5db;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: #fbbf24;
+            border-bottom-color: #fbbf24;
+        }
+
+        .tab:hover {
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: #667eea;
+            color: #fff;
+        }
+
+        .search-box {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            color: #fff;
+            min-width: 300px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .items-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .item-id {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .item-title {
+            font-size: 1.3rem;
+            margin: 0.5rem 0;
+            color: #fff;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .severity-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .severity-major {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .severity-minor {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+        }
+
+        .status-new {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+        }
+
+        .status-in-progress {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .status-fixed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-closed {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af;
+        }
+
+        .item-description {
+            color: #d1d5db;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.assign {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .action-btn.close {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .vote-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1f3a, #0a0e27);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 3rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .modal-header {
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            color: #fbbf24;
+            font-size: 2rem;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #9ca3af;
+        }
+
+        .close-modal:hover {
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+            font-weight: 600;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/admin">Admin</a> / Bug & Feature Management
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('bugs')">
+                🐛 Bug Reports <span style="background: #ef4444; color: #fff; padding: 0.2rem 0.6rem; border-radius: 10px; margin-left: 0.5rem; font-size: 0.75rem;">8</span>
+            </button>
+            <button class="tab" onclick="showTab('features')">
+                💡 Feature Requests <span style="background: #fbbf24; color: #000; padding: 0.2rem 0.6rem; border-radius: 10px; margin-left: 0.5rem; font-size: 0.75rem;">12</span>
+            </button>
+        </div>
+
+        <!-- Bug Reports Tab -->
+        <div id="bugs" class="tab-content active">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterBugs('all')">All (8)</button>
+                    <button class="filter-btn" onclick="filterBugs('new')">New (3)</button>
+                    <button class="filter-btn" onclick="filterBugs('in-progress')">In Progress (2)</button>
+                    <button class="filter-btn" onclick="filterBugs('fixed')">Fixed (3)</button>
+                    <button class="filter-btn" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Critical (1)</button>
+                </div>
+                <input type="text" class="search-box" placeholder="🔍 Search bug reports...">
+            </div>
+
+            <!-- Bug Items -->
+            <div class="items-grid">
+                <!-- Bug 1 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-id">BUG-2026-042</div>
+                            <h3 class="item-title">SCCR calculation incorrect for 3-phase systems</h3>
+                        </div>
+                        <span class="badge severity-critical">🔴 Critical</span>
+                    </div>
+                    <p class="item-description">
+                        When calculating SCCR for 3-phase systems with multiple components, the plugin returns an incorrect value. Expected 65kA but showing 45kA. This affects compliance reports significantly.
+                    </p>
+                    <div class="item-meta">
+                        <span class="badge status-new">New</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.05);">AutoCAD 2025</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.05);">📎 2 attachments</span>
+                        <span style="color: #9ca3af; font-size: 0.85rem;">Reported 2 days ago</span>
+                    </div>
+                    <div class="item-footer">
+                        <div class="user-info">
+                            <div class="user-avatar">JS</div>
+                            <div>
+                                <strong>John Smith</strong>
+                                <div style="font-size: 0.85rem; color: #9ca3af;">Founders Tier</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn" onclick="viewBug('BUG-2026-042')">View Details</button>
+                            <button class="action-btn assign" onclick="assignBug('BUG-2026-042')">Assign</button>
+                            <button class="action-btn close" onclick="updateStatus('BUG-2026-042', 'in-progress')">Start Work</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bug 2 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-id">BUG-2026-041</div>
+                            <h3 class="item-title">PDF export fails on drawings with special characters</h3>
+                        </div>
+                        <span class="badge severity-major">🟠 Major</span>
+                    </div>
+                    <p class="item-description">
+                        When exporting compliance reports to PDF, if the drawing filename contains special characters (é, ñ, ü), the export fails with an error.
+                    </p>
+                    <div class="item-meta">
+                        <span class="badge status-in-progress">In Progress</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.05);">AutoCAD 2024</span>
+                        <span style="color: #9ca3af; font-size: 0.85rem;">Assigned to: Mike D.</span>
+                    </div>
+                    <div class="item-footer">
+                        <div class="user-info">
+                            <div class="user-avatar">SC</div>
+                            <div>
+                                <strong>Sarah Chen</strong>
+                                <div style="font-size: 0.85rem; color: #9ca3af;">Early Adopter</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn" onclick="viewBug('BUG-2026-041')">View Details</button>
+                            <button class="action-btn close" onclick="updateStatus('BUG-2026-041', 'fixed')">Mark Fixed</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bug 3 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-id">BUG-2026-038</div>
+                            <h3 class="item-title">Toolbar disappears after AutoCAD restart</h3>
+                        </div>
+                        <span class="badge severity-minor">🟡 Minor</span>
+                    </div>
+                    <p class="item-description">
+                        The UL/NEC Checker toolbar doesn't appear automatically after restarting AutoCAD. Need to manually enable it from View → Toolbars menu.
+                    </p>
+                    <div class="item-meta">
+                        <span class="badge status-fixed">Fixed ✓</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.05);">AutoCAD 2026</span>
+                        <span style="color: #9ca3af; font-size: 0.85rem;">Fixed in v1.0.1</span>
+                    </div>
+                    <div class="item-footer">
+                        <div class="user-info">
+                            <div class="user-avatar">RT</div>
+                            <div>
+                                <strong>Robert Taylor</strong>
+                                <div style="font-size: 0.85rem; color: #9ca3af;">Beta Tester</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn" onclick="viewBug('BUG-2026-038')">View Details</button>
+                            <button class="action-btn close" style="background: rgba(156, 163, 175, 0.2); color: #9ca3af;">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Requests Tab -->
+        <div id="features" class="tab-content">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterFeatures('all')">All (12)</button>
+                    <button class="filter-btn" onclick="filterFeatures('new')">New (5)</button>
+                    <button class="filter-btn" onclick="filterFeatures('planned')">Planned (4)</button>
+                    <button class="filter-btn" onclick="filterFeatures('completed')">Completed (3)</button>
+                    <button class="filter-btn" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">Top Voted</button>
+                </div>
+                <input type="text" class="search-box" placeholder="🔍 Search feature requests...">
+            </div>
+
+            <!-- Feature Items -->
+            <div class="items-grid">
+                <!-- Feature 1 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-id">FEAT-2026-089</div>
+                            <h3 class="item-title">Export compliance reports to Excel format</h3>
+                        </div>
+                        <div class="vote-count">
+                            ▲ 47 votes
+                        </div>
+                    </div>
+                    <p class="item-description">
+                        Add ability to export compliance reports as Excel spreadsheets (.xlsx) for easier data manipulation and integration with existing workflows.
+                    </p>
+                    <div class="item-meta">
+                        <span class="badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">Under Review</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.05);">Category: Export</span>
+                        <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">High Priority</span>
+                    </div>
+                    <div class="item-footer">
+                        <div class="user-info">
+                            <div class="user-avatar">EM</div>
+                            <div>
+                                <strong>Emily Martinez</strong>
+                                <div style="font-size: 0.85rem; color: #9ca3af;">Requested 5 days ago</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn" onclick="viewFeature('FEAT-2026-089')">View Details</button>
+                            <button class="action-btn close" onclick="updateFeatureStatus('FEAT-2026-089', 'planned')">Mark Planned</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-id">FEAT-2026-076</div>
+                            <h3 class="item-title">Batch processing mode for multiple drawings</h3>
+                        </div>
+                        <div class="vote-count">
+                            ▲ 24 votes
+                        </div>
+                    </div>
+                    <p class="item-description">
+                        Allow users to select multiple drawings and run compliance checks on all of them at once, generating a combined report.
+                    </p>
+                    <div class="item-meta">
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">Planned for v1.2</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.05);">Category: Features</span>
+                        <span style="color: #9ca3af; font-size: 0.85rem;">Target: Q2 2026</span>
+                    </div>
+                    <div class="item-footer">
+                        <div class="user-info">
+                            <div class="user-avatar">DL</div>
+                            <div>
+                                <strong>David Lee</strong>
+                                <div style="font-size: 0.85rem; color: #9ca3af;">Founders Tier</div>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="action-btn" onclick="viewFeature('FEAT-2026-076')">View Details</button>
+                            <button class="action-btn assign" onclick="assignFeature('FEAT-2026-076')">Assign Dev</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <h2 id="modal-title">Bug Details</h2>
+            </div>
+            <div id="modal-body">
+                <!-- Content loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function filterBugs(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            console.log('Filtering bugs:', filter);
+            // In production: filter the bug list
+        }
+
+        function filterFeatures(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            console.log('Filtering features:', filter);
+            // In production: filter the feature list
+        }
+
+        function viewBug(bugId) {
+            document.getElementById('modal-title').textContent = `Bug Report: ${bugId}`;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="form-group">
+                    <label>Status</label>
+                    <select>
+                        <option>New</option>
+                        <option>In Progress</option>
+                        <option>Fixed</option>
+                        <option>Closed</option>
+                        <option>Won't Fix</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Assign To</label>
+                    <select>
+                        <option value="">Unassigned</option>
+                        <option>Mike Developer</option>
+                        <option>Sarah Coder</option>
+                        <option>Tom Engineer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Internal Notes</label>
+                    <textarea placeholder="Add notes for the development team..."></textarea>
+                </div>
+                <button class="btn-primary">Save Changes</button>
+            `;
+            document.getElementById('detail-modal').classList.add('active');
+        }
+
+        function viewFeature(featureId) {
+            document.getElementById('modal-title').textContent = `Feature Request: ${featureId}`;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="form-group">
+                    <label>Status</label>
+                    <select>
+                        <option>New</option>
+                        <option>Under Review</option>
+                        <option>Planned</option>
+                        <option>In Progress</option>
+                        <option>Completed</option>
+                        <option>Declined</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Target Version</label>
+                    <select>
+                        <option>v1.1</option>
+                        <option>v1.2</option>
+                        <option>v2.0</option>
+                        <option>Backlog</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Response to User</label>
+                    <textarea placeholder="Write a response that will be emailed to the user..."></textarea>
+                </div>
+                <button class="btn-primary">Save & Notify User</button>
+            `;
+            document.getElementById('detail-modal').classList.add('active');
+        }
+
+        function assignBug(bugId) {
+            const developer = prompt('Assign to developer:');
+            if (developer) {
+                alert(`Bug ${bugId} assigned to ${developer}`);
+            }
+        }
+
+        function assignFeature(featureId) {
+            const developer = prompt('Assign to developer:');
+            if (developer) {
+                alert(`Feature ${featureId} assigned to ${developer}`);
+            }
+        }
+
+        function updateStatus(bugId, status) {
+            if (confirm(`Update ${bugId} to "${status}"?`)) {
+                alert('Status updated!');
+                // In production: API call
+            }
+        }
+
+        function updateFeatureStatus(featureId, status) {
+            if (confirm(`Update ${featureId} to "${status}"?`)) {
+                alert('Status updated!');
+                // In production: API call
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('detail-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

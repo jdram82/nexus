@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details - Admin | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #9ca3af;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+        }
+
+        .user-header {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .user-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-founders {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+        }
+
+        .badge-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            background: rgba(255,255,255,0.03);
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .info-label {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .founders-progress {
+            background: rgba(251, 191, 36, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            height: 30px;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: width 0.5s ease;
+        }
+
+        .requirement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1.5rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #667eea;
+        }
+
+        .timeline-time {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-content {
+            color: #d1d5db;
+        }
+
+        .action-history {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .danger-zone {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .danger-zone h3 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/admin">Admin</a> / <a href="/admin/users">Users</a> / John Smith
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="user-header">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <h1>John Smith</h1>
+                    <p style="color: #9ca3af;">john.smith@example.com</p>
+                    <div class="user-meta">
+                        <span class="badge badge-founders">🏆 Founders Tier</span>
+                        <span class="badge badge-active">● Active</span>
+                        <span class="badge" style="background: rgba(102, 126, 234, 0.2); color: #667eea;">Member since Jan 1, 2026</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="editUser()">✏️ Edit User</button>
+                <button class="btn btn-primary" onclick="sendEmail()">📧 Send Email</button>
+                <button class="btn btn-danger" onclick="suspendUser()">🚫 Suspend</button>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- User Information -->
+                <div class="card">
+                    <h2>User Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value">John Smith</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">john.smith@example.com</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">+1 (234) 567-8900</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Company</div>
+                            <div class="info-value">ABC Engineering Inc.</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Job Title</div>
+                            <div class="info-value">Senior Electrical Engineer</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Company Size</div>
+                            <div class="info-value">11-50 employees</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Founders Progress -->
+                <div class="card">
+                    <h2>🏆 Founders Tier Progress</h2>
+                    <div class="founders-progress">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <strong>Overall Progress</strong>
+                            <span>2 of 4 Complete (50%)</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;">50%</div>
+                        </div>
+                        <div style="text-align: center; margin-top: 0.5rem; color: #d1d5db;">
+                            Deadline: March 15, 2026 (42 days remaining)
+                        </div>
+                    </div>
+
+                    <div class="requirement-item">
+                        <div>
+                            <strong>✅ Bug Reports</strong>
+                            <div style="color: #9ca3af; font-size: 0.85rem;">3 submissions</div>
+                        </div>
+                        <span class="badge" style="background: #10b981;">Complete</span>
+                    </div>
+                    <div class="requirement-item">
+                        <div>
+                            <strong>⏳ Video Testimonial</strong>
+                            <div style="color: #9ca3af; font-size: 0.85rem;">Not submitted</div>
+                        </div>
+                        <span class="badge" style="background: #fbbf24; color: #000;">Pending</span>
+                    </div>
+                    <div class="requirement-item">
+                        <div>
+                            <strong>✅ Case Study</strong>
+                            <div style="color: #9ca3af; font-size: 0.85rem;">Approved Jan 14</div>
+                        </div>
+                        <span class="badge" style="background: #10b981;">Complete</span>
+                    </div>
+                    <div class="requirement-item">
+                        <div>
+                            <strong>⏳ LinkedIn Post</strong>
+                            <div style="color: #9ca3af; font-size: 0.85rem;">Not posted</div>
+                        </div>
+                        <span class="badge" style="background: #fbbf24; color: #000;">Pending</span>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="card">
+                    <h2>Activity Timeline</h2>
+                    <div class="action-history">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">2 hours ago</div>
+                                <div class="timeline-content">
+                                    <strong>Compliance Check</strong><br>
+                                    Validated Panel_Drawing_2024_03.dwg - 2 warnings found
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Yesterday at 3:42 PM</div>
+                                <div class="timeline-content">
+                                    <strong>PDF Export</strong><br>
+                                    Exported compliance report for Client_Project_A.dwg
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">2 days ago</div>
+                                <div class="timeline-content">
+                                    <strong>Bug Report Submitted</strong><br>
+                                    BUG-2026-042: SCCR calculation issue
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Jan 14, 2026</div>
+                                <div class="timeline-content">
+                                    <strong>Case Study Approved</strong><br>
+                                    Founders requirement completed
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Jan 10, 2026</div>
+                                <div class="timeline-content">
+                                    <strong>Bug Report Submitted</strong><br>
+                                    BUG-2026-038: Toolbar visibility issue - Fixed
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Jan 5, 2026</div>
+                                <div class="timeline-content">
+                                    <strong>Bug Report Submitted</strong><br>
+                                    BUG-2026-001: SCCR calculation for 3-phase - Fixed
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Jan 1, 2026</div>
+                                <div class="timeline-content">
+                                    <strong>License Activated</strong><br>
+                                    Computer: WORKSTATION-01
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Jan 1, 2026</div>
+                                <div class="timeline-content">
+                                    <strong>Founders Application Approved</strong><br>
+                                    Application ID: APP-2026-012
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Quick Stats -->
+                <div class="card">
+                    <h2>Usage Statistics</h2>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Panels Validated</div>
+                        <div class="info-value" style="font-size: 2rem; color: #fbbf24;">47</div>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Time Saved</div>
+                        <div class="info-value" style="font-size: 2rem; color: #10b981;">23.5 hrs</div>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Errors Caught</div>
+                        <div class="info-value" style="font-size: 2rem; color: #667eea;">156</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Last Active</div>
+                        <div class="info-value">2 hours ago</div>
+                    </div>
+                </div>
+
+                <!-- License Details -->
+                <div class="card">
+                    <h2>License Details</h2>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">License Key</div>
+                        <div class="info-value" style="font-family: monospace; font-size: 1rem;">ABC1-2DEF-3GHI-4JKL</div>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Tier</div>
+                        <div class="info-value">Founders (FREE first year)</div>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Activated On</div>
+                        <div class="info-value">WORKSTATION-01</div>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Expires</div>
+                        <div class="info-value">March 1, 2027</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Renewal Price</div>
+                        <div class="info-value">$149/year (50% discount)</div>
+                    </div>
+                </div>
+
+                <!-- Billing -->
+                <div class="card">
+                    <h2>Billing Information</h2>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Payment Method</div>
+                        <div class="info-value">Visa •••• 4242</div>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem;">
+                        <div class="info-label">Total Paid</div>
+                        <div class="info-value" style="color: #10b981;">$0.00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Next Payment</div>
+                        <div class="info-value">$149.00 on Mar 1, 2027</div>
+                    </div>
+                </div>
+
+                <!-- Admin Actions -->
+                <div class="card">
+                    <h2>Admin Actions</h2>
+                    <div class="form-group">
+                        <label>Change Tier</label>
+                        <select onchange="changeTier(this.value)">
+                            <option value="founders" selected>Founders Tier</option>
+                            <option value="early_adopter">Early Adopter</option>
+                            <option value="beta_tester">Beta Tester</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Extend License</label>
+                        <input type="date" value="2027-03-01">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Save Changes</button>
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="resetPassword()">Reset Password</button>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="danger-zone">
+                    <h3>⚠️ Danger Zone</h3>
+                    <p style="color: #d1d5db; margin-bottom: 1.5rem;">These actions cannot be undone</p>
+                    <button class="btn btn-danger" style="width: 100%; margin-bottom: 0.75rem;" onclick="suspendUser()">Suspend Account</button>
+                    <button class="btn btn-danger" style="width: 100%;" onclick="deleteUser()">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editUser() {
+            alert('Edit user functionality');
+        }
+
+        function sendEmail() {
+            const email = prompt('Send email to john.smith@example.com\n\nEnter message:');
+            if (email) {
+                alert('Email sent!');
+            }
+        }
+
+        function changeTier(tier) {
+            if (confirm(`Change tier to ${tier}?`)) {
+                alert(`Tier changed to ${tier}`);
+                // In production: API call to update tier
+            }
+        }
+
+        function resetPassword() {
+            if (confirm('Send password reset email to john.smith@example.com?')) {
+                alert('Password reset email sent!');
+            }
+        }
+
+        function suspendUser() {
+            const reason = prompt('Suspend this account?\n\nEnter reason:');
+            if (reason) {
+                alert('Account suspended');
+                // In production: API call
+            }
+        }
+
+        function deleteUser() {
+            const confirmation = prompt('Type DELETE to confirm account deletion:');
+            if (confirmation === 'DELETE') {
+                alert('Account deleted');
+                window.location.href = '/admin/users';
+            }
+        }
+    </script>
+</body>
+</html>

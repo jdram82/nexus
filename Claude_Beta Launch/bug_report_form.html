@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report a Bug | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .founders-note {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .founders-note strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #f3f4f6;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: #fca5a5;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.15);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #1a1f3a;
+            color: #fff;
+        }
+
+        .help-text {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            margin-top: 0.5rem;
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .severity-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .severity-option {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .severity-option input[type="radio"] {
+            display: none;
+        }
+
+        .severity-option:hover {
+            border-color: #667eea;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .severity-option input[type="radio"]:checked + label {
+            color: #fbbf24;
+        }
+
+        .severity-option.critical {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .severity-option.critical:hover,
+        .severity-option.critical input[type="radio"]:checked ~ .severity-option {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .severity-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .severity-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐛 Report a Bug</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9;">Help us improve the UL/NEC Compliance Checker</p>
+        </div>
+
+        <div class="founders-note">
+            <strong>🏆 Founders Tier Members:</strong>
+            This submission counts toward your 3 required bug reports/feature suggestions!
+        </div>
+
+        <div id="form-container" class="form-container">
+            <form id="bug-form" onsubmit="submitBug(event)">
+                <!-- Bug Title -->
+                <div class="form-group">
+                    <label>Bug Title <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        name="title" 
+                        placeholder="Brief description of the issue"
+                        required
+                    >
+                    <p class="help-text">Example: "SCCR calculation incorrect for 3-phase systems"</p>
+                </div>
+
+                <!-- Detailed Description -->
+                <div class="form-group">
+                    <label>Detailed Description <span class="required">*</span></label>
+                    <textarea 
+                        name="description" 
+                        placeholder="What happened? What did you expect to happen?"
+                        required
+                    ></textarea>
+                    <p class="help-text">Provide as much detail as possible</p>
+                </div>
+
+                <!-- Steps to Reproduce -->
+                <div class="form-group">
+                    <label>Steps to Reproduce <span class="required">*</span></label>
+                    <textarea 
+                        name="steps" 
+                        placeholder="1. Open a drawing&#10;2. Click on...&#10;3. See error"
+                        required
+                    ></textarea>
+                    <p class="help-text">List the exact steps to reproduce the bug</p>
+                </div>
+
+                <!-- Expected Behavior -->
+                <div class="form-group">
+                    <label>Expected Behavior <span class="required">*</span></label>
+                    <textarea 
+                        name="expected" 
+                        placeholder="What should have happened?"
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- Actual Behavior -->
+                <div class="form-group">
+                    <label>Actual Behavior <span class="required">*</span></label>
+                    <textarea 
+                        name="actual" 
+                        placeholder="What actually happened?"
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- Environment -->
+                <div class="form-group">
+                    <label>AutoCAD/BricsCAD Version <span class="required">*</span></label>
+                    <select name="cadVersion" required>
+                        <option value="">Select...</option>
+                        <option value="AutoCAD 2026">AutoCAD 2026</option>
+                        <option value="AutoCAD 2025">AutoCAD 2025</option>
+                        <option value="AutoCAD 2024">AutoCAD 2024</option>
+                        <option value="BricsCAD V24">BricsCAD V24</option>
+                        <option value="BricsCAD V25">BricsCAD V25</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Windows Version <span class="required">*</span></label>
+                    <select name="windowsVersion" required>
+                        <option value="">Select...</option>
+                        <option value="Windows 11">Windows 11</option>
+                        <option value="Windows 10">Windows 10</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Plugin Version</label>
+                    <input 
+                        type="text" 
+                        name="pluginVersion" 
+                        value="1.0 Beta" 
+                        readonly
+                        style="background: rgba(255,255,255,0.05);"
+                    >
+                    <p class="help-text">Automatically detected</p>
+                </div>
+
+                <!-- Severity -->
+                <div class="form-group">
+                    <label>Severity <span class="required">*</span></label>
+                    <div class="severity-options">
+                        <div class="severity-option critical">
+                            <input type="radio" name="severity" value="critical" id="critical" required>
+                            <label for="critical">
+                                <div class="severity-icon">🔴</div>
+                                <strong>Critical</strong>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #d1d5db;">Crashes, data loss</p>
+                            </label>
+                        </div>
+
+                        <div class="severity-option">
+                            <input type="radio" name="severity" value="major" id="major">
+                            <label for="major">
+                                <div class="severity-icon">🟠</div>
+                                <strong>Major</strong>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #d1d5db;">Can't complete task</p>
+                            </label>
+                        </div>
+
+                        <div class="severity-option">
+                            <input type="radio" name="severity" value="minor" id="minor">
+                            <label for="minor">
+                                <div class="severity-icon">🟡</div>
+                                <strong>Minor</strong>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #d1d5db;">Inconvenient</p>
+                            </label>
+                        </div>
+
+                        <div class="severity-option">
+                            <input type="radio" name="severity" value="enhancement" id="enhancement">
+                            <label for="enhancement">
+                                <div class="severity-icon">💡</div>
+                                <strong>Enhancement</strong>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #d1d5db;">Improvement idea</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="form-group">
+                    <label>Attachments (Optional)</label>
+                    <div class="file-upload" onclick="document.getElementById('file-input').click()">
+                        <input type="file" id="file-input" name="attachments" multiple accept=".png,.jpg,.jpeg,.dwg,.pdf,.txt">
+                        <p style="font-size: 2rem; margin-bottom: 0.5rem;">📎</p>
+                        <p style="color: #d1d5db;">Click to upload screenshots, drawings, or error logs</p>
+                        <p style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem;">Supported: PNG, JPG, DWG, PDF, TXT (Max 10MB each)</p>
+                    </div>
+                    <div id="file-list" style="margin-top: 1rem;"></div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="form-group">
+                    <label>Can we contact you for more details?</label>
+                    <div style="display: flex; gap: 2rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="contact" value="yes" checked>
+                            <span>Yes, please contact me</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="contact" value="no">
+                            <span>No, anonymous report</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Bug Report</button>
+            </form>
+        </div>
+
+        <div id="success-message" class="success-message">
+            <h2>✓ Bug Report Submitted!</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1rem;">Thank you for helping us improve!</p>
+            <p>We've received your report and will investigate it soon.</p>
+            <p style="margin-top: 2rem;">
+                <strong>Bug Report ID:</strong> <span id="bug-id" style="font-family: monospace;">BUG-2026-001</span>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.95rem; color: #e5e7eb;">
+                You'll receive email updates when we make progress on this issue.
+            </p>
+            <div style="margin-top: 2rem;">
+                <a href="/dashboard" style="display: inline-block; padding: 1rem 2rem; background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; border-radius: 50px; font-weight: 600;">Back to Dashboard</a>
+                <a href="/bug-report" style="display: inline-block; padding: 1rem 2rem; background: transparent; color: #fff; text-decoration: none; border-radius: 50px; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); margin-left: 1rem;" onclick="location.reload()">Report Another Bug</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File upload preview
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            
+            if (this.files.length > 0) {
+                const ul = document.createElement('ul');
+                ul.style.listStyle = 'none';
+                ul.style.padding = '0';
+                
+                Array.from(this.files).forEach(file => {
+                    const li = document.createElement('li');
+                    li.style.padding = '0.75rem';
+                    li.style.background = 'rgba(255,255,255,0.05)';
+                    li.style.borderRadius = '10px';
+                    li.style.marginBottom = '0.5rem';
+                    li.textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                    ul.appendChild(li);
+                });
+                
+                fileList.appendChild(ul);
+            }
+        });
+
+        // Handle severity selection
+        document.querySelectorAll('.severity-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Form submission
+        function submitBug(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // In production, send to backend API
+            console.log('Bug report submitted:', data);
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Generate bug ID
+                const bugId = 'BUG-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                document.getElementById('bug-id').textContent = bugId;
+                
+                // Hide form, show success
+                document.getElementById('form-container').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // In production:
+                /*
+                fetch('/api/bugs/submit', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    // Show success with actual bug ID
+                    document.getElementById('bug-id').textContent = result.bugId;
+                });
+                */
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

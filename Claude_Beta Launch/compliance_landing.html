@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UL/NEC Compliance Checker for AutoCAD | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero-product {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-product .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero-product h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        .trust-badges {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+            flex-wrap: wrap;
+        }
+
+        .trust-badges span {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 6rem 0;
+            background: #0f1729;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            font-weight: 700;
+        }
+
+        .problem-grid {
+            display: grid;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .problem-item {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 4px solid #ef4444;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .problem-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(10px);
+        }
+
+        .problem-item::before {
+            content: '❌';
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .solution-card {
+            background: rgba(255,255,255,0.1);
+            padding: 3rem 2rem;
+            border-radius: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .solution-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #fbbf24;
+        }
+
+        .solution-card ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .solution-card li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .solution-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 6rem 0;
+            background: #0a0e27;
+        }
+
+        .pricing-special {
+            text-align: center;
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem 2rem;
+            border-radius: 30px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .pricing-card.featured {
+            border-color: #fbbf24;
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(251, 191, 36, 0.3);
+        }
+
+        .pricing-card.featured::before {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            height: 8px;
+        }
+
+        .pricing-card:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.08);
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #fbbf24;
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 2rem 0;
+            color: #fff;
+        }
+
+        .price-old {
+            font-size: 1.5rem;
+            text-decoration: line-through;
+            opacity: 0.5;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: #fbbf24;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .features-list li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .requirements-list {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 3px solid #fbbf24;
+        }
+
+        .requirements-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .requirements-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .pricing-card .btn-primary {
+            margin-top: 2rem;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .pricing-card.featured .btn-primary {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* Counter Section */
+        .counter-section {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            padding: 2rem 0;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .counter-section span {
+            color: #fef3c7;
+        }
+
+        /* System Requirements */
+        .requirements-section {
+            padding: 6rem 0;
+            background: #0f1729;
+        }
+
+        .requirements-box {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 30px;
+            max-width: 800px;
+            margin: 3rem auto;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .requirements-box ul {
+            list-style: none;
+        }
+
+        .requirements-box li {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.1rem;
+        }
+
+        .requirements-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .final-cta .btn-primary {
+            font-size: 1.5rem;
+            padding: 1.5rem 4rem;
+            background: #fff;
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .hero-product h1 {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-product">
+        <div class="container">
+            <h1>⚡ UL/NEC Compliance Checker for AutoCAD</h1>
+            <p class="tagline">Validate electrical panel designs instantly</p>
+            
+            <div class="cta-buttons">
+                <a href="#pricing" class="btn-primary">
+                    Start 30-Day Free Trial
+                </a>
+                <a href="#demo" class="btn-secondary">
+                    Watch 3-Min Demo
+                </a>
+            </div>
+            
+            <div class="trust-badges">
+                <span>✓ No credit card required</span>
+                <span>✓ Full features enabled</span>
+                <span>✓ Windows 10/11 compatible</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <h2 class="section-title">The Challenge Electrical Engineers Face</h2>
+            <div class="problem-grid">
+                <div class="problem-item">Manual UL508A compliance checking takes 4-6 hours</div>
+                <div class="problem-item">Easy to miss critical NEC violations</div>
+                <div class="problem-item">Rework costs $5,000-$50,000 after panel production</div>
+                <div class="problem-item">Component SCCR ratings scattered across datasheets</div>
+                <div class="problem-item">No automated validation in AutoCAD</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section">
+        <div class="container">
+            <h2 class="section-title">Your Complete Compliance Solution</h2>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <h3>✅ VALIDATE</h3>
+                    <ul>
+                        <li>80 UL508A/NEC rules</li>
+                        <li>Checked in seconds</li>
+                        <li>SCCR calculation</li>
+                        <li>Wire gauge check</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <h3>✅ DETECT</h3>
+                    <ul>
+                        <li>Real-time checking</li>
+                        <li>As you draw</li>
+                        <li>Visual highlights</li>
+                        <li>Error prevention</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <h3>✅ REPORT</h3>
+                    <ul>
+                        <li>PDF documentation</li>
+                        <li>Auto-export</li>
+                        <li>Professional</li>
+                        <li>Compliance ready</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Counter Section -->
+    <section class="counter-section">
+        <div class="container">
+            ⚡ <span id="spots-remaining">Only 25 FREE Licenses Available</span> | ⏰ <span>Offer Expires: March 31, 2026</span>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="pricing-special">🎯 EXCLUSIVE BETA LAUNCH TIERS</div>
+            <h2 class="section-title">Choose Your Beta Tier</h2>
+            
+            <div class="pricing-grid">
+                <!-- Tier 1: Free -->
+                <div class="pricing-card featured">
+                    <span class="badge">🏆 Most Exclusive</span>
+                    <h3>FOUNDERS TIER</h3>
+                    <div class="price">FREE<span style="font-size: 1.5rem;"> Forever</span></div>
+                    <p class="price-note">First 25 Beta Testers Only</p>
+                    
+                    <ul class="features-list">
+                        <li>FREE 1-year license ($299 value)</li>
+                        <li>50% OFF lifetime renewals</li>
+                        <li>Founders badge on Hall of Fame</li>
+                        <li>Direct access to dev team</li>
+                        <li>Name in release notes</li>
+                    </ul>
+
+                    <p style="font-size: 0.9rem; margin: 1.5rem 0; color: #fbbf24; font-weight: 600;">
+                        To qualify, you must:
+                    </p>
+                    <ul class="requirements-list">
+                        <li>Submit 3+ bug reports or features</li>
+                        <li>Provide 30-sec video testimonial</li>
+                        <li>Allow case study creation</li>
+                        <li>Post about product on LinkedIn</li>
+                    </ul>
+                    
+                    <a href="#download" class="btn-primary">Claim Founders Spot</a>
+                </div>
+
+                <!-- Tier 2: 50% Off -->
+                <div class="pricing-card">
+                    <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2);">⭐ Best Value</span>
+                    <h3>EARLY ADOPTER</h3>
+                    <span class="price-old">$299/year</span>
+                    <div class="price">$149<span style="font-size: 1.5rem;">/year</span></div>
+                    <p class="price-note">Beta Testers 26-100</p>
+                    
+                    <ul class="features-list">
+                        <li>50% OFF first year</li>
+                        <li>All premium features</li>
+                        <li>Priority email support</li>
+                        <li>Feature voting rights</li>
+                        <li>Early access to updates</li>
+                        <li>Free lifetime bug fixes</li>
+                    </ul>
+                    
+                    <a href="#purchase" class="btn-primary">Join Early Adopters</a>
+                </div>
+
+                <!-- Tier 3: 25% Off -->
+                <div class="pricing-card">
+                    <h3>BETA TESTER</h3>
+                    <span class="price-old">$299/year</span>
+                    <div class="price">$224<span style="font-size: 1.5rem;">/year</span></div>
+                    <p class="price-note">After First 100</p>
+                    
+                    <ul class="features-list">
+                        <li>25% OFF first year</li>
+                        <li>All premium features</li>
+                        <li>Standard support</li>
+                        <li>Product updates</li>
+                        <li>Bug fix priority</li>
+                    </ul>
+                    
+                    <a href="#purchase" class="btn-primary">Get Beta Access</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; font-size: 1.1rem;">
+                <p style="margin-bottom: 1rem;">✓ All tiers include 30-day free trial</p>
+                <p style="margin-bottom: 1rem;">✓ No credit card required for trial</p>
+                <p style="color: #fbbf24; font-weight: 600;">✓ Limited time offer expires: March 31, 2026</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Requirements -->
+    <section class="requirements-section">
+        <div class="container">
+            <h2 class="section-title">System Requirements</h2>
+            <div class="requirements-box">
+                <ul>
+                    <li>AutoCAD 2024, 2025, or 2026 (or BricsCAD V24+)</li>
+                    <li>Windows 10 or Windows 11</li>
+                    <li>.NET 8.0 Runtime (included in installer)</li>
+                    <li>100MB disk space</li>
+                    <li>Internet connection for license activation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to Transform Your Workflow?</h2>
+            <a href="#download" class="btn-primary">Start Your Free 30-Day Trial</a>
+            <p>Join the exclusive beta community and save hours on every project</p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="requirements-section" style="background: #0a0e27;">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3 class="faq-question">How do I qualify for the FREE Founders Tier?</h3>
+                    <div class="faq-answer">
+                        <p>To earn a FREE lifetime license, you must complete all four requirements within 60 days of installing the beta:</p>
+                        <ul>
+                            <li>Submit at least 3 bug reports or feature suggestions</li>
+                            <li>Record a 30-second video testimonial about your experience</li>
+                            <li>Allow us to create a case study featuring your company (with approval rights)</li>
+                            <li>Post about the product on LinkedIn (we'll provide talking points)</li>
+                        </ul>
+                        <p>If you complete these requirements, your license becomes FREE forever with 50% off all renewals.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What happens if I start as Founders Tier but don't complete requirements?</h3>
+                    <div class="faq-answer">
+                        <p>No problem! You'll automatically be moved to the Early Adopter tier at $149/year. You keep all your trial data and settings. We'll send you reminders at 30 and 45 days to help you complete the requirements if you want the free license.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I upgrade from Beta Tester tier to Early Adopter tier?</h3>
+                    <div class="faq-answer">
+                        <p>Unfortunately no - the tier you join at is locked in. That's why we encourage you to join as early as possible to get the best pricing. Once all 25 Founders spots are filled, Early Adopter ($149/year) is the best available tier.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What's included in the 30-day free trial?</h3>
+                    <div class="faq-answer">
+                        <p>Everything! You get full access to all 80 UL508A/NEC compliance rules, SCCR calculations, real-time validation, PDF report generation, and priority support. No features are locked. No credit card required. Just download, install, and start validating your designs immediately.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Does this work with BricsCAD or only AutoCAD?</h3>
+                    <div class="faq-answer">
+                        <p>Yes! The plugin works with AutoCAD 2024-2026 AND BricsCAD V24+. Both platforms are fully supported with identical features and performance.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What happens after the beta period ends?</h3>
+                    <div class="faq-answer">
+                        <p>Your locked-in beta pricing continues forever! Founders Tier stays FREE with 50% off renewals. Early Adopters keep their $149/year pricing. Beta Testers keep $224/year. Once we exit beta (estimated Q3 2026), the standard price will be $299/year, so your savings continue for life.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can multiple team members use one license?</h3>
+                    <div class="faq-answer">
+                        <p>Each license is for one user/one computer. However, we offer volume discounts for teams: 3-5 licenses get 15% off, 6-10 licenses get 25% off, 10+ licenses get 35% off. Beta pricing applies to all team licenses purchased during the beta period.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What kind of support do I get as a beta tester?</h3>
+                    <div class="faq-answer">
+                        <p>Founders Tier gets direct Slack/email access to our dev team (response within 24 hours). Early Adopters get priority email support (response within 48 hours). All beta testers get access to our knowledge base, video tutorials, and community forum. We also offer optional 1-on-1 onboarding calls for teams of 3+.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Is my company information kept confidential in case studies?</h3>
+                    <div class="faq-answer">
+                        <p>Absolutely. For Founders Tier case studies, you have full approval rights over what we publish. We'll draft the case study and send it to you for review. You can request any changes, redact sensitive information, or use a pseudonym for your company. Many of our case studies are "Company X, a mid-size manufacturing firm in the Midwest..." format to protect confidentiality.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I switch from Windows 10 to Windows 11 mid-license?</h3>
+                    <div class="faq-answer">
+                        <p>Yes! Your license is tied to your email, not your computer. You can reinstall on any Windows 10/11 machine. Just deactivate on the old machine and activate on the new one. You can switch computers up to 3 times per year.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Real-time counter for Founders Tier spots
+        // In production, this would fetch from your backend API
+        let foundersSpotsTaken = 0; // Update this from your database
+        const totalFoundersSpots = 25;
+        const spotsRemaining = totalFoundersSpots - foundersSpotsTaken;
+
+        function updateCounter() {
+            const counterElement = document.getElementById('spots-remaining');
+            if (spotsRemaining > 0) {
+                counterElement.textContent = `Only ${spotsRemaining} of 25 FREE Licenses Remaining`;
+                if (spotsRemaining <= 5) {
+                    counterElement.style.color = '#fef3c7';
+                    counterElement.style.animation = 'blink 1s infinite';
+                }
+            } else {
+                counterElement.textContent = 'Founders Tier SOLD OUT - Early Adopter Available';
+            }
+        }
+
+        // Call on page load
+        updateCounter();
+
+        // In production, poll your API every 30 seconds to update the counter
+        // setInterval(() => {
+        //     fetch('/api/founders-spots-remaining')
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             foundersSpotsTaken = data.spotsTaken;
+        //             updateCounter();
+        //         });
+        // }, 30000);
+
+        // FAQ Accordion functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                    });
+                    
+                    // Toggle current item
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 1.5rem;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .faq-item.active {
+            border-color: #667eea;
+        }
+
+        .faq-question {
+            padding: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            margin: 0;
+        }
+
+        .faq-question::after {
+            content: '+';
+            position: absolute;
+            right: 2rem;
+            font-size: 2rem;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            padding: 0 2rem;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            padding: 0 2rem 2rem 2rem;
+        }
+
+        .faq-answer p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .faq-answer ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.75rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .faq-answer li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+    </style>

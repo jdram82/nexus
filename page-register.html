@@ -1,0 +1,288 @@
+<!-- REGISTER PAGE - Copy this entire content into WordPress Page Editor -->
+
+<div class="register-container">
+    <h2>Create Your Account</h2>
+    
+    <?php
+    if (!is_user_logged_in()) {
+        // Handle registration form submission
+        if (isset($_POST['register_user'])) {
+            $username = sanitize_user($_POST['username']);
+            $email = sanitize_email($_POST['email']);
+            $password = $_POST['password'];
+            
+            // Create WordPress user
+            $user_id = wp_create_user($username, $password, $email);
+            
+            if (!is_wp_error($user_id)) {
+                // Auto-login after registration
+                wp_set_current_user($user_id);
+                wp_set_auth_cookie($user_id);
+                
+                echo '<div class="success-message">';
+                echo '<p>✅ Registration successful!</p>';
+                echo '<p>Redirecting to your dashboard...</p>';
+                echo '</div>';
+                echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/dashboard') . '"; }, 2000);</script>';
+            } else {
+                echo '<div class="error-message">';
+                echo '<p>❌ Error: ' . $user_id->get_error_message() . '</p>';
+                echo '</div>';
+            }
+        }
+        
+        // Show registration form if not submitting
+        if (!isset($_POST['register_user']) || is_wp_error($user_id)) {
+    ?>
+    
+    <form method="post" action="" id="registration-form">
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" required 
+                   placeholder="Choose a username" minlength="3">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required 
+                   placeholder="your.email@example.com">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" required 
+                   minlength="8" placeholder="At least 8 characters">
+            <small>Must be at least 8 characters long</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password *</label>
+            <input type="password" id="confirm_password" name="confirm_password" 
+                   required minlength="8" placeholder="Re-enter your password">
+        </div>
+        
+        <div class="form-group checkbox-group">
+            <label>
+                <input type="checkbox" required>
+                I agree to the <a href="/terms" target="_blank">Terms of Service</a> and 
+                <a href="/privacy" target="_blank">Privacy Policy</a>
+            </label>
+        </div>
+        
+        <button type="submit" name="register_user" class="submit-button">
+            Create Account
+        </button>
+    </form>
+    
+    <p class="login-link">Already have an account? <a href="<?php echo home_url('/login'); ?>">Login here</a></p>
+    
+    <?php
+        }
+    } else {
+        echo '<div class="already-registered">';
+        echo '<p>✅ You are already registered!</p>';
+        echo '<p><a href="' . home_url('/dashboard') . '" class="dashboard-button">Go to Dashboard</a></p>';
+        echo '</div>';
+    }
+    ?>
+</div>
+
+<style>
+.register-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #34495e;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #FF6B35;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #95a5a6;
+    font-size: 12px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: flex-start;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.checkbox-group a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.checkbox-group a:hover {
+    text-decoration: underline;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.success-message {
+    background: #d4edda;
+    border: 2px solid #28a745;
+    color: #155724;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.success-message p {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+.error-message {
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.already-registered {
+    text-align: center;
+    padding: 30px;
+}
+
+.already-registered p {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.dashboard-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #667eea;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.dashboard-button:hover {
+    background: #5568d3;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .register-container {
+        margin: 20px;
+        padding: 25px;
+    }
+    
+    .register-container h2 {
+        font-size: 24px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registration-form');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            
+            if (password !== confirm) {
+                e.preventDefault();
+                alert('❌ Passwords do not match! Please try again.');
+                document.getElementById('confirm_password').focus();
+                return false;
+            }
+            
+            if (password.length < 8) {
+                e.preventDefault();
+                alert('❌ Password must be at least 8 characters long!');
+                document.getElementById('password').focus();
+                return false;
+            }
+        });
+    }
+});
+</script>

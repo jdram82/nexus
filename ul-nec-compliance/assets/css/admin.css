@@ -1,0 +1,20 @@
+/* UL-NEC Admin Styles */
+
+.ulnec-status {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+.ulnec-status h2 {
+    margin-top: 0;
+}
+
+.ulnec-admin-card {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    border-radius: 5px;
+}

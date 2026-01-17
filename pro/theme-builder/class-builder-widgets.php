@@ -154,6 +154,149 @@ class Nexus_Builder_Widgets {
             'category' => 'content',
         ) );
 
+        // Phase 4 Content widgets
+        $this->register_widget( array(
+            'type'     => 'star-rating',
+            'title'    => __( 'Star Rating', 'nexus-pro' ),
+            'icon'     => 'dashicons-star-filled',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'gallery',
+            'title'    => __( 'Gallery', 'nexus-pro' ),
+            'icon'     => 'dashicons-format-gallery',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'icon-list',
+            'title'    => __( 'Icon List', 'nexus-pro' ),
+            'icon'     => 'dashicons-editor-ul',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'toggle',
+            'title'    => __( 'Toggle', 'nexus-pro' ),
+            'icon'     => 'dashicons-arrow-down-alt2',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'social-icons',
+            'title'    => __( 'Social Icons', 'nexus-pro' ),
+            'icon'     => 'dashicons-share',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'image-carousel',
+            'title'    => __( 'Image Carousel', 'nexus-pro' ),
+            'icon'     => 'dashicons-images-alt2',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'alert',
+            'title'    => __( 'Alert', 'nexus-pro' ),
+            'icon'     => 'dashicons-warning',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'google-maps',
+            'title'    => __( 'Google Maps', 'nexus-pro' ),
+            'icon'     => 'dashicons-location-alt',
+            'category' => 'content',
+        ) );
+
+        // Phase 4.2 - Medium Priority Widgets
+        $this->register_widget( array(
+            'type'     => 'animated-headline',
+            'title'    => __( 'Animated Headline', 'nexus-pro' ),
+            'icon'     => 'dashicons-editor-textcolor',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'price-list',
+            'title'    => __( 'Price List', 'nexus-pro' ),
+            'icon'     => 'dashicons-list-view',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'price-table',
+            'title'    => __( 'Price Table', 'nexus-pro' ),
+            'icon'     => 'dashicons-table-col-before',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'flip-box',
+            'title'    => __( 'Flip Box', 'nexus-pro' ),
+            'icon'     => 'dashicons-image-flip-horizontal',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'media-carousel',
+            'title'    => __( 'Media Carousel', 'nexus-pro' ),
+            'icon'     => 'dashicons-images-alt2',
+            'category' => 'media',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'countdown',
+            'title'    => __( 'Countdown Timer', 'nexus-pro' ),
+            'icon'     => 'dashicons-clock',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'testimonial-carousel',
+            'title'    => __( 'Testimonial Carousel', 'nexus-pro' ),
+            'icon'     => 'dashicons-format-quote',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'share-buttons',
+            'title'    => __( 'Share Buttons', 'nexus-pro' ),
+            'icon'     => 'dashicons-share',
+            'category' => 'content',
+        ) );
+
+        // Phase 4.2 - Lower Priority Widgets
+        $this->register_widget( array(
+            'type'     => 'blockquote',
+            'title'    => __( 'Blockquote', 'nexus-pro' ),
+            'icon'     => 'dashicons-editor-quote',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'video-playlist',
+            'title'    => __( 'Video Playlist', 'nexus-pro' ),
+            'icon'     => 'dashicons-video-alt3',
+            'category' => 'media',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'progress-tracker',
+            'title'    => __( 'Progress Tracker', 'nexus-pro' ),
+            'icon'     => 'dashicons-arrow-right-alt',
+            'category' => 'content',
+        ) );
+
+        $this->register_widget( array(
+            'type'     => 'lottie',
+            'title'    => __( 'Lottie Animation', 'nexus-pro' ),
+            'icon'     => 'dashicons-format-video',
+            'category' => 'media',
+        ) );
+
         // Form widgets
         $this->register_widget( array(
             'type'     => 'form',
@@ -320,6 +463,30 @@ class Nexus_Builder_Widgets {
                 break;
             case 'specifications':
                 $this->render_specifications( $settings );
+                break;
+            case 'star-rating':
+                $this->render_star_rating_widget( $settings );
+                break;
+            case 'gallery':
+                $this->render_gallery_widget( $settings );
+                break;
+            case 'icon-list':
+                $this->render_icon_list_widget( $settings );
+                break;
+            case 'toggle':
+                $this->render_toggle_widget( $settings );
+                break;
+            case 'social-icons':
+                $this->render_social_icons_widget( $settings );
+                break;
+            case 'image-carousel':
+                $this->render_image_carousel_widget( $settings );
+                break;
+            case 'alert':
+                $this->render_alert_widget( $settings );
+                break;
+            case 'google-maps':
+                $this->render_google_maps_widget( $settings );
                 break;
             default:
                 do_action( 'nexus_render_widget_' . $type, $settings );
@@ -559,6 +726,110 @@ class Nexus_Builder_Widgets {
                 </table>
             </div>
             <?php
+        }
+    }
+
+    /**
+     * Render star rating widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_star_rating_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Star_Rating_Widget' ) ) {
+            $widget = new Nexus_Star_Rating_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render gallery widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_gallery_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Gallery_Widget' ) ) {
+            $widget = new Nexus_Gallery_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render icon list widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_icon_list_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Icon_List_Widget' ) ) {
+            $widget = new Nexus_Icon_List_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render toggle widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_toggle_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Toggle_Widget' ) ) {
+            $widget = new Nexus_Toggle_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render social icons widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_social_icons_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Social_Icons_Widget' ) ) {
+            $widget = new Nexus_Social_Icons_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render image carousel widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_image_carousel_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Image_Carousel_Widget' ) ) {
+            $widget = new Nexus_Image_Carousel_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render alert widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_alert_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Alert_Widget' ) ) {
+            $widget = new Nexus_Alert_Widget( $settings );
+            $widget->render_widget();
+        }
+    }
+
+    /**
+     * Render google maps widget
+     *
+     * @param array $settings Widget settings.
+     */
+    private function render_google_maps_widget( $settings ) {
+        // Create widget instance and render
+        if ( class_exists( 'Nexus_Google_Maps_Widget' ) ) {
+            $widget = new Nexus_Google_Maps_Widget( $settings );
+            $widget->render_widget();
         }
     }
 }

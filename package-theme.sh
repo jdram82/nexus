@@ -1,13 +1,13 @@
 #!/bin/bash
 
 echo "======================================"
-echo "Nexus Theme v3.1.8 - Package Builder"
+echo "Nexus Theme v3.2.1 - Package Builder"
 echo "======================================"
 echo ""
 
 # Set variables
 THEME_NAME="nexus"
-VERSION="3.1.8"
+VERSION="3.2.1"
 CURRENT_DIR="$(pwd)"
 OUTPUT_DIR="${CURRENT_DIR}/dist"
 OUTPUT_FILE="nexus-${VERSION}.zip"
@@ -72,7 +72,7 @@ cp "${CURRENT_DIR}/LICENSE" "${TEMP_DIR}/" 2>/dev/null || true
 
 # Create a production-ready README
 cat > "${TEMP_DIR}/README.md" << 'READMEEOF'
-# Nexus Theme v3.0.0
+# Nexus Theme v3.2.0
 
 Professional WordPress theme for technical businesses with multi-tier licensing.
 

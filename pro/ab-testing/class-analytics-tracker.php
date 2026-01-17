@@ -7,157 +7,172 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-exit;
+	exit;
 }
 
 class Nexus_Analytics_Tracker {
-private static $instance = null;
-private $table_name;
+	private static $instance = null;
+	private $table_name;
 
-public static function get_instance() {
-ull === self::$instance ) {
-stance = new self();
- self::$instance;
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	private function __construct() {
+		global $wpdb;
+		$this->table_name = $wpdb->prefix . 'nexus_ab_analytics';
+		$this->maybe_create_table();
+	}
+
+	private function maybe_create_table() {
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE IF NOT EXISTS {$this->table_name} (
+			id bigint(20) NOT NULL AUTO_INCREMENT,
+			test_id bigint(20) NOT NULL,
+			variant_id bigint(20) NOT NULL,
+			event_type varchar(50) DEFAULT 'view',
+			conversion_value decimal(10,2) DEFAULT 0,
+			user_id bigint(20) NOT NULL,
+			created_at datetime DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY  (id),
+			KEY test_id (test_id),
+			KEY variant_id (variant_id),
+			KEY event_type (event_type)
+		) $charset_collate;";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql );
+	}
+
+	public function track_event( $test_id, $variant_id, $event_type = 'view', $value = 0 ) {
+		global $wpdb;
+
+		$wpdb->insert(
+			$this->table_name,
+			array(
+				'test_id' => $test_id,
+				'variant_id' => $variant_id,
+				'event_type' => $event_type,
+				'conversion_value' => $value,
+				'user_id' => get_current_user_id(),
+			),
+			array( '%d', '%d', '%s', '%f', '%d' )
+		);
+
+		return $wpdb->insert_id;
+	}
+
+	public function get_test_stats( $test_id ) {
+		global $wpdb;
+
+		$stats = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT 
+					variant_id,
+					event_type,
+					COUNT(*) as count,
+					SUM(conversion_value) as total_value
+				FROM {$this->table_name}
+				WHERE test_id = %d
+				GROUP BY variant_id, event_type",
+				$test_id
+			),
+			ARRAY_A
+		);
+
+		return $stats;
+	}
+
+	public function get_variant_stats( $test_id, $variant_id ) {
+		global $wpdb;
+
+		$stats = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT 
+					event_type,
+					COUNT(*) as count,
+					SUM(conversion_value) as total_value
+				FROM {$this->table_name}
+				WHERE test_id = %d AND variant_id = %d
+				GROUP BY event_type",
+				$test_id,
+				$variant_id
+			),
+			ARRAY_A
+		);
+
+		return $stats;
+	}
+
+	public function calculate_conversion_rate( $test_id, $variant_id ) {
+		global $wpdb;
+
+		$views = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$this->table_name} 
+				WHERE test_id = %d AND variant_id = %d AND event_type = 'view'",
+				$test_id,
+				$variant_id
+			)
+		);
+
+		$conversions = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$this->table_name} 
+				WHERE test_id = %d AND variant_id = %d AND event_type = 'conversion'",
+				$test_id,
+				$variant_id
+			)
+		);
+
+		if ( $views == 0 ) {
+			return 0;
+		}
+
+		return ( $conversions / $views ) * 100;
+	}
+
+	public function get_winning_variant( $test_id ) {
+		global $wpdb;
+
+		$variants = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT 
+					variant_id,
+					SUM(CASE WHEN event_type = 'view' THEN 1 ELSE 0 END) as views,
+					SUM(CASE WHEN event_type = 'conversion' THEN 1 ELSE 0 END) as conversions
+				FROM {$this->table_name}
+				WHERE test_id = %d
+				GROUP BY variant_id",
+				$test_id
+			),
+			ARRAY_A
+		);
+
+		$best_variant = null;
+		$best_rate = 0;
+
+		foreach ( $variants as $variant ) {
+			if ( $variant['views'] == 0 ) {
+				continue;
+			}
+
+			$rate = ( $variant['conversions'] / $variant['views'] ) * 100;
+
+			if ( $rate > $best_rate ) {
+				$best_rate = $rate;
+				$best_variant = $variant['variant_id'];
+			}
+		}
+
+		return array(
+			'variant_id' => $best_variant,
+			'conversion_rate' => $best_rate,
+		);
+	}
 }
-
-private function __construct() {
-ame = $wpdb->prefix . 'nexus_ab_analytics';
-function maybe_create_table() {
-$wpdb->get_charset_collate();
-
-l = "CREATE TABLE IF NOT EXISTS {$this->table_name} (
-t(20) NOT NULL AUTO_INCREMENT,
-t(20) NOT NULL,
-t_id bigint(20) NOT NULL,
-t_type varchar(50) DEFAULT 'view',
-version_value decimal(10,2) DEFAULT 0,
-OT NULL,
-CURRENT_TIMESTAMP,
- (id),
-(test_id),
-t_id (variant_id),
-t_type (event_type)
-uire_once ABSPATH . 'wp-admin/includes/upgrade.php';
-l );
-}
-
-public function track_conversion( $test_id, $variant_id, $value = 1 ) {
-= $this->get_user_hash();
-
-duplicate conversion
-g = $wpdb->get_var(
-{$this->table_name} WHERE test_id = %d AND variant_id = %d AND user_hash = %s AND event_type = 'conversion'",
-t_id,
-$existing ) {
- false;
- $wpdb->insert(
-ame,
-$test_id,
-t_id' => $variant_id,
-t_type' => 'conversion',
-version_value' => $value,
-'%d', '%s', '%f', '%s' )
-ction track_view( $test_id, $variant_id ) {
- $wpdb->insert(
-ame,
-$test_id,
-t_id' => $variant_id,
-t_type' => 'view',
-'%d', '%s', '%s' )
-ction get_test_results( $test_id ) {
-ts = $wpdb->get_results(
-t_id,
-T(DISTINCT CASE WHEN event_type = 'view' THEN user_hash END) as visitors,
-T(DISTINCT CASE WHEN event_type = 'conversion' THEN user_hash END) as conversions,
- event_type = 'conversion' THEN conversion_value ELSE 0 END) as total_value
-ame}
-%d
-variant_id",
-= array(
-ts' => array(),
-ner' => null,
-fidence' => 0,
-$variants as $variant ) {
-version_rate = $variant['visitors'] > 0 ? ( $variant['conversions'] / $variant['visitors'] ) * 100 : 0;
-
-ts'][] = array(
-t_id' => $variant['variant_id'],
-t) $variant['visitors'],
-versions' => (int) $variant['conversions'],
-version_rate' => round( $conversion_rate, 2 ),
-$variant['total_value'],
-e winner
-t( $results['variants'] ) >= 2 ) {
-ts'], function( $a, $b ) {
- $b['conversion_rate'] <=> $a['conversion_rate'];
-ner = $results['variants'][0];
-trol = $results['variants'][1];
-
-significance
-fidence = $this->calculate_confidence( 
-ner['conversions'], 
-ner['visitors'],
-trol['conversions'],
-trol['visitors']
-ner'] = $winner;
-fidence'] = round( $confidence, 2 );
-t'] = $control['conversion_rate'] > 0 
-$winner['conversion_rate'] - $control['conversion_rate'] ) / $control['conversion_rate'] ) * 100
- $results;
-}
-
-public function get_overview_stats() {
-= $wpdb->get_row(
-T(DISTINCT user_hash) as total_visitors,
- event_type = 'conversion' THEN 1 ELSE 0 END) as total_conversions,
- event_type = 'conversion' THEN conversion_value ELSE 0 END) as avg_conversion_value
-ame}",
-= $wpdb->get_var(
-T(*) FROM {$this->table_name} WHERE event_type = 'view'"
-version_rate = $total_views > 0 
-versions'] / $total_views ) * 100
- array(
-t) ( $stats['total_visitors'] ?? 0 ),
-versions' => (int) ( $stats['total_conversions'] ?? 0 ),
-version_rate' => round( $avg_conversion_rate, 2 ),
-version_value' => round( $stats['avg_conversion_value'] ?? 0, 2 ),
-ction calculate_confidence( $conversions_a, $visitors_a, $conversions_b, $visitors_b ) {
-< 30 || $visitors_b < 30 ) {
- 0;
-$conversions_a / $visitors_a;
-versions_b / $visitors_b;
-
-rt( ( $rate_a * ( 1 - $rate_a ) ) / $visitors_a );
-rt( ( $rate_b * ( 1 - $rate_b ) ) / $visitors_b );
-rt( $se_a * $se_a + $se_b * $se_b );
-
-== 0 ) {
- 0;
-abs( $rate_a - $rate_b ) / $se_diff;
-
-vert z-score to confidence level (simplified)
->= 2.58 ) {
- 99;
-$z_score >= 1.96 ) {
- 95;
-$z_score >= 1.645 ) {
- 90;
-$z_score >= 1.28 ) {
- 80;
- min( 75, $z_score * 30 );
-}
-
-private function get_user_hash() {
-t_user_id();
-?? '';
-T'] ?? '';
-
- md5( $user_id . $ip . $ua );
-}
-
-public function clear_test_data( $test_id ) {
- $wpdb->delete(
-ame,
-=> $test_id ),
-)
-exus_Analytics_Tracker::get_instance();

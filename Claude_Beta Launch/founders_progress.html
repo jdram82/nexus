@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founders Progress Tracker | JDS Controls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .founders-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .countdown-box {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            padding: 2rem;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .countdown-label {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.95;
+        }
+
+        .countdown-value {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .deadline-date {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .progress-overview {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-header {
+            margin-bottom: 2rem;
+        }
+
+        .progress-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.1);
+            height: 40px;
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #d1d5db;
+            font-size: 1.1rem;
+        }
+
+        .requirements-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .requirement-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .requirement-card.completed {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .requirement-card.pending {
+            border-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .requirement-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .requirement-title h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .status-completed {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .status-pending {
+            background: #fbbf24;
+            color: #000;
+        }
+
+        .requirement-description {
+            color: #d1d5db;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .requirement-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .submission-details {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+        }
+
+        .submission-details h4 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            color: #9ca3af;
+        }
+
+        .detail-value {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .warning-box h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+
+        .warning-box p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+
+            .requirement-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="founders-badge">🏆 Founders Member #12</span>
+            <h1>Your Founders Progress</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9;">Complete all 4 requirements to earn your FREE lifetime license</p>
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown-box">
+            <div class="countdown-label">Time Remaining</div>
+            <div class="countdown-value">42 Days</div>
+            <div class="deadline-date">Deadline: March 15, 2026</div>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+            <div class="progress-header">
+                <h2>Overall Progress</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 50%;">
+                        50%
+                    </div>
+                </div>
+                <div class="progress-text">2 of 4 Requirements Complete</div>
+            </div>
+        </div>
+
+        <!-- Requirements -->
+        <div class="requirements-grid">
+            <!-- Requirement 1: Bug Reports -->
+            <div class="requirement-card completed">
+                <div class="requirement-header">
+                    <div class="status-icon">✅</div>
+                    <div class="requirement-title">
+                        <h3>Bug Reports & Feature Suggestions</h3>
+                        <span class="status-badge status-completed">✓ Completed</span>
+                    </div>
+                </div>
+                <div class="requirement-description">
+                    Submit at least 3 bug reports or feature suggestions to help us improve the product.
+                </div>
+                <div class="submission-details">
+                    <h4>Your Submissions (3)</h4>
+                    <div class="detail-item">
+                        <span class="detail-label">Bug Report #1</span>
+                        <span class="detail-value">SCCR calculation issue - Fixed ✓</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Feature Request #1</span>
+                        <span class="detail-value">Excel export - Under review</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Bug Report #2</span>
+                        <span class="detail-value">Toolbar visibility - Fixed ✓</span>
+                    </div>
+                </div>
+                <div class="requirement-actions" style="margin-top: 1.5rem;">
+                    <a href="/bug-report" class="btn btn-secondary">Submit Another</a>
+                    <a href="/my-submissions" class="btn btn-secondary">View All</a>
+                </div>
+            </div>
+
+            <!-- Requirement 2: Video Testimonial -->
+            <div class="requirement-card pending">
+                <div class="requirement-header">
+                    <div class="status-icon">⏳</div>
+                    <div class="requirement-title">
+                        <h3>Video Testimonial</h3>
+                        <span class="status-badge status-pending">⏳ Pending</span>
+                    </div>
+                </div>
+                <div class="requirement-description">
+                    Record a 30-second video about your experience with the plugin. Just answer: "What problem does this solve for you?"
+                </div>
+                <div style="background: rgba(251, 191, 36, 0.1); padding: 1.5rem; border-radius: 15px; margin: 1rem 0; border-left: 4px solid #fbbf24;">
+                    <strong style="color: #fbbf24;">Tips for Your Video:</strong>
+                    <ul style="margin-top: 0.75rem; margin-left: 1.5rem; color: #d1d5db;">
+                        <li>Use your phone - no fancy equipment needed</li>
+                        <li>Good lighting and quiet background</li>
+                        <li>30 seconds maximum</li>
+                        <li>Be natural and authentic</li>
+                    </ul>
+                </div>
+                <div class="requirement-actions">
+                    <a href="/upload-video" class="btn btn-primary">Upload Video</a>
+                    <a href="/video-guidelines" class="btn btn-secondary">View Guidelines</a>
+                    <a href="/video-template" class="btn btn-secondary">Download Template</a>
+                </div>
+            </div>
+
+            <!-- Requirement 3: Case Study -->
+            <div class="requirement-card completed">
+                <div class="requirement-header">
+                    <div class="status-icon">✅</div>
+                    <div class="requirement-title">
+                        <h3>Case Study Approval</h3>
+                        <span class="status-badge status-completed">✓ Completed</span>
+                    </div>
+                </div>
+                <div class="requirement-description">
+                    Participate in a 15-minute interview and approve the case study we create featuring your experience.
+                </div>
+                <div class="submission-details">
+                    <h4>Case Study Details</h4>
+                    <div class="detail-item">
+                        <span class="detail-label">Interview Date</span>
+                        <span class="detail-value">January 5, 2026</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Draft Sent</span>
+                        <span class="detail-value">January 12, 2026</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Approved</span>
+                        <span class="detail-value">January 14, 2026 ✓</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Published</span>
+                        <span class="detail-value">Live Now</span>
+                    </div>
+                </div>
+                <div class="requirement-actions" style="margin-top: 1.5rem;">
+                    <a href="/case-studies/john-smith" class="btn btn-success">View Published Case Study</a>
+                </div>
+            </div>
+
+            <!-- Requirement 4: LinkedIn Post -->
+            <div class="requirement-card pending">
+                <div class="requirement-header">
+                    <div class="status-icon">⏳</div>
+                    <div class="requirement-title">
+                        <h3>LinkedIn Post</h3>
+                        <span class="status-badge status-pending">⏳ Pending</span>
+                    </div>
+                </div>
+                <div class="requirement-description">
+                    Share your experience with the plugin on LinkedIn. We'll provide a template and talking points.
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px; margin: 1rem 0;">
+                    <strong style="color: #fbbf24;">Suggested Post Template:</strong>
+                    <p style="margin-top: 1rem; color: #d1d5db; font-style: italic; line-height: 1.6;">
+                        "I'm excited to be one of 25 founding members of the UL/NEC Compliance Checker for AutoCAD by @JDSControls!<br><br>
+                        
+                        As an electrical engineer, compliance checking used to take 4-6 hours per panel. Now it takes seconds.<br><br>
+                        
+                        If you work with UL508A or NEC compliance, this tool is a game-changer. Beta spots still available!<br><br>
+                        
+                        #ElectricalEngineering #AutoCAD #UL508A #IndustrialAutomation"
+                    </p>
+                </div>
+                <div class="requirement-actions">
+                    <button class="btn btn-primary" onclick="copyTemplate()">📋 Copy Template</button>
+                    <a href="https://linkedin.com" target="_blank" class="btn btn-primary">Post on LinkedIn</a>
+                    <button class="btn btn-secondary" onclick="markComplete()">Mark as Complete</button>
+                </div>
+                <div style="margin-top: 1rem; color: #9ca3af; font-size: 0.9rem;">
+                    After posting, click "Mark as Complete" and paste your LinkedIn post URL
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <h3>⚠️ Important Reminder</h3>
+            <p>
+                If all 4 requirements are not completed by <strong>March 15, 2026</strong>, 
+                your account will be automatically moved to the Early Adopter tier at $149/year.
+            </p>
+            <p style="margin-top: 1rem;">
+                Don't lose your FREE license! Complete the remaining items today.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Copy LinkedIn template
+        function copyTemplate() {
+            const template = `I'm excited to be one of 25 founding members of the UL/NEC Compliance Checker for AutoCAD by @JDSControls!
+
+As an electrical engineer, compliance checking used to take 4-6 hours per panel. Now it takes seconds.
+
+If you work with UL508A or NEC compliance, this tool is a game-changer. Beta spots still available!
+
+#ElectricalEngineering #AutoCAD #UL508A #IndustrialAutomation`;
+
+            navigator.clipboard.writeText(template).then(() => {
+                alert('✓ Template copied to clipboard! Now paste it in LinkedIn.');
+            });
+        }
+
+        // Mark LinkedIn post as complete
+        function markComplete() {
+            const postUrl = prompt('Please paste your LinkedIn post URL:');
+            if (postUrl && postUrl.includes('linkedin.com')) {
+                // In production, send to backend API
+                alert('✓ Thank you! We\'ll verify your post within 24 hours.');
+                // Update UI
+                // location.reload();
+            } else if (postUrl) {
+                alert('❌ Please provide a valid LinkedIn URL');
+            }
+        }
+
+        // Update countdown in real-time
+        function updateCountdown() {
+            const deadline = new Date('2026-03-15');
+            const now = new Date();
+            const daysLeft = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+            
+            document.querySelector('.countdown-value').textContent = `${daysLeft} Days`;
+        }
+
+        // Update every hour
+        updateCountdown();
+        setInterval(updateCountdown, 3600000);
+
+        // In production, fetch progress from API
+        /*
+        fetch('/api/founders/progress')
+            .then(response => response.json())
+            .then(data => {
+                // Update progress bars and requirements status
+                document.querySelector('.progress-bar-fill').style.width = data.progressPercent + '%';
+                // etc...
+            });
+        */
+    </script>
+</body>
+</html>

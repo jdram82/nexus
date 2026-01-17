@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founders Tier Application | UL/NEC Compliance Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .benefits-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid #fbbf24;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .benefits-box h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .benefits-box ul {
+            list-style: none;
+        }
+
+        .benefits-box li {
+            margin-bottom: 0.75rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .benefits-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .form-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.15);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 0.2rem;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .requirements-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .requirements-box h4 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+
+        .requirements-box ul {
+            list-style: none;
+        }
+
+        .requirements-box li {
+            margin-bottom: 0.75rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .requirements-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #000;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(251, 191, 36, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .help-text {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="badge">🏆 Only 25 Spots Available</span>
+            <h1>Founders Tier Application</h1>
+            <p>Join our exclusive founding members and get FREE lifetime access</p>
+        </div>
+
+        <div class="benefits-box">
+            <h3>What You'll Get as a Founder:</h3>
+            <ul>
+                <li>FREE 1-year license (worth $299)</li>
+                <li>50% OFF lifetime renewals ($149/year instead of $299)</li>
+                <li>Exclusive Founders badge on our Hall of Fame</li>
+                <li>Direct access to development team via Slack</li>
+                <li>Name credited in all release notes</li>
+                <li>Early access to all new features</li>
+            </ul>
+        </div>
+
+        <div id="application-form" class="form-container">
+            <form id="founders-form">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h3>1. Your Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" name="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" name="email" required>
+                        <p class="help-text">We'll send your license key and updates to this email</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number <span class="required">*</span></label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+
+                <!-- Company Information -->
+                <div class="form-section">
+                    <h3>2. Company Details</h3>
+                    
+                    <div class="form-group">
+                        <label>Company Name <span class="required">*</span></label>
+                        <input type="text" name="companyName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Job Title <span class="required">*</span></label>
+                        <input type="text" name="jobTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Size <span class="required">*</span></label>
+                        <select name="companySize" required>
+                            <option value="">Select...</option>
+                            <option value="1-10">1-10 employees</option>
+                            <option value="11-50">11-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="500+">500+ employees</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Industry <span class="required">*</span></label>
+                        <select name="industry" required>
+                            <option value="">Select...</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="automation">Industrial Automation</option>
+                            <option value="engineering">Engineering Consulting</option>
+                            <option value="construction">Construction/Electrical</option>
+                            <option value="oem">OEM/Machine Builder</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Usage Information -->
+                <div class="form-section">
+                    <h3>3. Your Use Case</h3>
+                    
+                    <div class="form-group">
+                        <label>How many electrical panels do you design per month? <span class="required">*</span></label>
+                        <select name="panelsPerMonth" required>
+                            <option value="">Select...</option>
+                            <option value="1-5">1-5 panels</option>
+                            <option value="6-15">6-15 panels</option>
+                            <option value="16-30">16-30 panels</option>
+                            <option value="30+">30+ panels</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What AutoCAD/BricsCAD version do you use? <span class="required">*</span></label>
+                        <select name="cadVersion" required>
+                            <option value="">Select...</option>
+                            <option value="AutoCAD 2026">AutoCAD 2026</option>
+                            <option value="AutoCAD 2025">AutoCAD 2025</option>
+                            <option value="AutoCAD 2024">AutoCAD 2024</option>
+                            <option value="BricsCAD V24+">BricsCAD V24+</option>
+                            <option value="Other">Other (please specify below)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Describe your biggest UL508A/NEC compliance challenge <span class="required">*</span></label>
+                        <textarea name="challenge" required placeholder="e.g., Time-consuming SCCR calculations, missing wire gauge errors, manual rule checking..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="form-section">
+                    <h3>4. Social Media</h3>
+                    
+                    <div class="form-group">
+                        <label>LinkedIn Profile URL <span class="required">*</span></label>
+                        <input type="url" name="linkedinUrl" required placeholder="https://linkedin.com/in/yourname">
+                        <p class="help-text">Required for the LinkedIn post requirement</p>
+                    </div>
+                </div>
+
+                <!-- Requirements Acknowledgment -->
+                <div class="form-section">
+                    <div class="requirements-box">
+                        <h4>⚠️ To Maintain Your FREE Founders License, You Must Complete:</h4>
+                        <ul>
+                            <li>Submit 3+ bug reports or feature suggestions (within 60 days)</li>
+                            <li>Record a 30-second video testimonial (we'll send instructions)</li>
+                            <li>Allow us to create a case study (you get approval rights)</li>
+                            <li>Post about the product on LinkedIn (we'll provide talking points)</li>
+                        </ul>
+                        <p style="margin-top: 1rem; color: #fbbf24;">If not completed within 60 days, you'll be moved to Early Adopter tier at $149/year.</p>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agree-requirements" name="agreeRequirements" required>
+                        <label for="agree-requirements">
+                            I understand and agree to complete all four requirements within 60 days to maintain my FREE Founders license <span class="required">*</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agree-terms" name="agreeTerms" required>
+                        <label for="agree-terms">
+                            I agree to the Terms of Service and Privacy Policy <span class="required">*</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agree-marketing" name="agreeMarketing">
+                        <label for="agree-marketing">
+                            I'd like to receive product updates and beta testing opportunities (optional)
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+        </div>
+
+        <div id="success-message" class="success-message">
+            <h2>🎉 Application Submitted Successfully!</h2>
+            <p>Thank you for applying to be a Founding Member!</p>
+            <p>We'll review your application within 24 hours and send your download link to <strong id="submitted-email"></strong></p>
+            <p style="margin-top: 2rem; font-size: 1rem;">
+                Check your email for:
+            </p>
+            <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
+                <li>Download instructions</li>
+                <li>Installation guide</li>
+                <li>Founders Tier requirements checklist</li>
+                <li>Slack community invite</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('founders-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // In production, send to your backend API
+            console.log('Form submitted:', data);
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Show success message
+                document.getElementById('application-form').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+                document.getElementById('submitted-email').textContent = data.email;
+                
+                // In production, you would:
+                // 1. Send data to your backend
+                // 2. Send confirmation email
+                // 3. Add to CRM/database
+                // 4. Send Slack notification to your team
+                // 5. Trigger download link email
+                
+                // Example API call:
+                /*
+                fetch('/api/founders-application', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    // Handle success
+                })
+                .catch(error => {
+                    // Handle error
+                });
+                */
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

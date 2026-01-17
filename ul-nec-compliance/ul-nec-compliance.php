@@ -1,0 +1,242 @@
+<?php
+/**
+ * Plugin Name: UL-NEC Compliance AutoCAD Plugin Manager
+ * Plugin URI: https://jdsancontrols.com
+ * Description: Complete management system for UL-NEC Compliance AutoCAD Plugin - handles users, licensing, downloads, payments, and support.
+ * Version: 1.0.4
+ * Author: JDS & N Controls
+ * Author URI: https://jdsancontrols.com
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: ulnec
+ * Domain Path: /languages
+ * Requires at least: 5.8
+ * Requires PHP: 7.4
+ */
+
+// Exit if accessed directly
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Plugin constants
+define('ULNEC_VERSION', '1.0.4');
+define('ULNEC_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('ULNEC_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('ULNEC_PLUGIN_BASENAME', plugin_basename(__FILE__));
+
+/**
+ * Main UL-NEC Compliance Plugin Class
+ */
+final class ULNEC_Plugin {
+    
+    /**
+     * Plugin instance
+     */
+    private static $instance = null;
+    
+    /**
+     * Supabase instance
+     */
+    public $supabase = null;
+    
+    /**
+     * Auth instance
+     */
+    public $auth = null;
+    
+    /**
+     * License instance
+     */
+    public $license = null;
+    
+    /**
+     * Download instance
+     */
+    public $download = null;
+    
+    /**
+     * Payment instance
+     */
+    public $payment = null;
+    
+    /**
+     * Get plugin instance
+     */
+    public static function instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+    
+    /**
+     * Constructor
+     */
+    private function __construct() {
+        $this->load_dependencies();
+        $this->init_hooks();
+    }
+    
+    /**
+     * Load required files
+     */
+    private function load_dependencies() {
+        // Core classes
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-supabase.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-auth.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-license.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-download.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-payment.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-admin.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-frontend.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-frontend-pages.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-shortcodes.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-ajax.php';
+    }
+    
+    /**
+     * Initialize hooks
+     */
+    private function init_hooks() {
+        // Initialize plugin
+        add_action('plugins_loaded', [$this, 'init'], 10);
+        
+        // Activation/Deactivation hooks
+        register_activation_hook(__FILE__, [$this, 'activate']);
+        register_deactivation_hook(__FILE__, [$this, 'deactivate']);
+        
+        // Enqueue assets
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+    }
+    
+    /**
+     * Initialize plugin components
+     */
+    public function init() {
+        // Initialize Supabase connection
+        $this->supabase = new ULNEC_Supabase();
+        
+        // Initialize other components
+        $this->auth = new ULNEC_Auth($this->supabase);
+        $this->license = new ULNEC_License($this->supabase);
+        $this->download = new ULNEC_Download($this->supabase);
+        $this->payment = new ULNEC_Payment($this->supabase);
+        
+        // Initialize admin interface
+        if (is_admin()) {
+            new ULNEC_Admin($this->supabase);
+        }
+        
+        // Initialize frontend
+        new ULNEC_Frontend($this->supabase);
+        
+        // Initialize frontend pages (bug report, feature request, support)
+        new ULNEC_Frontend_Pages($this->supabase);
+        
+        // Initialize shortcodes
+        new ULNEC_Shortcodes($this->supabase);
+        
+        // Initialize AJAX handlers
+        new ULNEC_Ajax($this->supabase);
+        
+        // Load text domain
+        load_plugin_textdomain('ulnec', false, dirname(ULNEC_PLUGIN_BASENAME) . '/languages');
+    }
+    
+    /**
+     * Plugin activation
+     */
+    public function activate() {
+        // Create necessary options
+        add_option('ulnec_version', ULNEC_VERSION);
+        add_option('ulnec_activated', current_time('mysql'));
+        
+        // Flush rewrite rules
+        flush_rewrite_rules();
+    }
+    
+    /**
+     * Plugin deactivation
+     */
+    public function deactivate() {
+        // Flush rewrite rules
+        flush_rewrite_rules();
+    }
+    
+    /**
+     * Enqueue frontend assets
+     */
+    public function enqueue_frontend_assets() {
+        // CSS
+        wp_enqueue_style(
+            'ulnec-frontend',
+            ULNEC_PLUGIN_URL . 'assets/css/frontend.css',
+            [],
+            ULNEC_VERSION
+        );
+        
+        // JavaScript
+        wp_enqueue_script(
+            'ulnec-frontend',
+            ULNEC_PLUGIN_URL . 'assets/js/frontend.js',
+            ['jquery'],
+            ULNEC_VERSION,
+            true
+        );
+        
+        // Localize script
+        wp_localize_script('ulnec-frontend', 'ulnecData', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('ulnec_nonce'),
+            'strings' => [
+                'error' => __('An error occurred. Please try again.', 'ulnec'),
+                'success' => __('Success!', 'ulnec'),
+            ]
+        ]);
+    }
+    
+    /**
+     * Enqueue admin assets
+     */
+    public function enqueue_admin_assets($hook) {
+        // Only load on plugin pages
+        if (strpos($hook, 'ulnec') === false) {
+            return;
+        }
+        
+        // CSS
+        wp_enqueue_style(
+            'ulnec-admin',
+            ULNEC_PLUGIN_URL . 'assets/css/admin.css',
+            [],
+            ULNEC_VERSION
+        );
+        
+        // JavaScript
+        wp_enqueue_script(
+            'ulnec-admin',
+            ULNEC_PLUGIN_URL . 'assets/js/admin.js',
+            ['jquery'],
+            ULNEC_VERSION,
+            true
+        );
+        
+        // Localize script
+        wp_localize_script('ulnec-admin', 'ulnecAdmin', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('ulnec_admin_nonce'),
+        ]);
+    }
+}
+
+/**
+ * Initialize the plugin
+ */
+function ulnec() {
+    return ULNEC_Plugin::instance();
+}
+
+// Start the plugin
+ulnec();

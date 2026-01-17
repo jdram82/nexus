@@ -1,0 +1,679 @@
+<!-- DASHBOARD PAGE - Copy this entire content into WordPress Page Editor -->
+
+<?php
+// Redirect to login if not logged in
+if (!is_user_logged_in()) {
+    echo '<div class="login-required">';
+    echo '<h2>Access Denied</h2>';
+    echo '<p>Please <a href="' . home_url('/login') . '">login</a> to access your dashboard.</p>';
+    echo '</div>';
+    return;
+}
+
+// Get current user info
+$current_user = wp_get_current_user();
+
+// Get Supabase connection
+$supabase = new ULNEC_Supabase();
+$supabase_user = $supabase->get_user_by_wordpress_id($current_user->ID);
+?>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-container">
+        
+        <!-- Welcome Header -->
+        <div class="dashboard-header">
+            <h1>Welcome back, <?php echo esc_html($current_user->display_name); ?>! 👋</h1>
+            <p class="subtitle">Manage your UL-NEC Compliance Plugin</p>
+        </div>
+        
+        <!-- Account Information Card -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>👤 Account Information</h2>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value"><?php echo esc_html($current_user->user_email); ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Username:</span>
+                    <span class="info-value"><?php echo esc_html($current_user->user_login); ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Account Type:</span>
+                    <span class="info-value tier-badge tier-<?php echo esc_attr($supabase_user['tier'] ?? 'free'); ?>">
+                        <?php echo esc_html(ucfirst($supabase_user['tier'] ?? 'Free')); ?>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Member Since:</span>
+                    <span class="info-value"><?php echo date('F j, Y', strtotime($current_user->user_registered)); ?></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- License Keys Card -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>🔑 Your License Keys</h2>
+            </div>
+            <div class="card-body">
+                <?php
+                if ($supabase_user && !is_wp_error($supabase_user)) {
+                    $licenses = $supabase->get_user_licenses($supabase_user['id']);
+                    
+                    if (!empty($licenses) && !is_wp_error($licenses)) {
+                        foreach ($licenses as $license) {
+                            $is_active = $license['status'] === 'active' && (empty($license['expires_at']) || strtotime($license['expires_at']) > time());
+                            ?>
+                            <div class="license-item <?php echo $is_active ? 'active' : 'inactive'; ?>">
+                                <div class="license-header">
+                                    <h3><?php echo ucfirst($license['tier']); ?> License</h3>
+                                    <span class="status-badge status-<?php echo $license['status']; ?>">
+                                        <?php echo ucfirst($license['status']); ?>
+                                    </span>
+                                </div>
+                                
+                                <div class="license-key-container">
+                                    <code class="license-key"><?php echo esc_html($license['license_key']); ?></code>
+                                    <button class="copy-btn" onclick="copyLicense('<?php echo esc_js($license['license_key']); ?>')">
+                                        📋 Copy
+                                    </button>
+                                </div>
+                                
+                                <div class="license-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Expires:</span>
+                                        <span class="detail-value">
+                                            <?php 
+                                            if ($license['expires_at']) {
+                                                echo date('F j, Y', strtotime($license['expires_at']));
+                                            } else {
+                                                echo '♾️ Never (Lifetime)';
+                                            }
+                                            ?>
+                                        </span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Activations:</span>
+                                        <span class="detail-value">
+                                            <?php echo $license['activation_count']; ?> / <?php echo $license['max_activations']; ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                        <div class="no-licenses">
+                            <p>⚠️ You don't have any licenses yet.</p>
+                            <a href="<?php echo home_url('/pricing'); ?>" class="primary-button">
+                                View Pricing Plans
+                            </a>
+                        </div>
+                        <?php
+                    }
+                } else {
+                    echo '<p class="error-message">Unable to load license information. Please refresh the page.</p>';
+                }
+                ?>
+            </div>
+        </div>
+        
+        <!-- Download Plugin Card -->
+        <div class="dashboard-card highlight-card">
+            <div class="card-header">
+                <h2>⬇️ Download Plugin</h2>
+            </div>
+            <div class="card-body">
+                <?php
+                $auth = new ULNEC_Auth($supabase);
+                if ($auth->user_has_active_license()) {
+                    $download = new ULNEC_Download($supabase);
+                    $download_url = $download->get_download_link();
+                    ?>
+                    <div class="download-ready">
+                        <p class="success-text">✅ You have an active license!</p>
+                        <a href="<?php echo esc_url($download_url); ?>" class="download-button">
+                            <span class="download-icon">⬇️</span>
+                            <span class="download-text">
+                                <strong>Download UL-NEC Plugin</strong>
+                                <small>Latest Version</small>
+                            </span>
+                        </a>
+                        <p class="file-info">
+                            📦 File: UL-NEC-Compliance-Plugin-Latest.msi (~50 MB)<br>
+                            🔒 Secure download link (expires in 5 minutes)
+                        </p>
+                    </div>
+                    <?php
+                } else {
+                    ?>
+                    <div class="download-locked">
+                        <p class="warning-text">⚠️ An active license is required to download the plugin.</p>
+                        <a href="<?php echo home_url('/pricing'); ?>" class="primary-button">
+                            Get a License
+                        </a>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+        
+        <!-- Download History Card -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>📊 Download History</h2>
+            </div>
+            <div class="card-body">
+                <?php
+                if ($supabase_user) {
+                    $download_manager = new ULNEC_Download($supabase);
+                    $downloads = $download_manager->get_user_download_history();
+                    
+                    if (!empty($downloads)) {
+                        ?>
+                        <div class="table-responsive">
+                            <table class="download-table">
+                                <thead>
+                                    <tr>
+                                        <th>Version</th>
+                                        <th>Date & Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($downloads as $dl): ?>
+                                    <tr>
+                                        <td><strong><?php echo esc_html($dl['version']); ?></strong></td>
+                                        <td><?php echo date('F j, Y @ g:i A', strtotime($dl['downloaded_at'])); ?></td>
+                                        <td><span class="success-badge">✅ Complete</span></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php
+                    } else {
+                        echo '<p class="no-data">No downloads yet. Download the plugin above to get started!</p>';
+                    }
+                } else {
+                    echo '<p class="no-data">Unable to load download history.</p>';
+                }
+                ?>
+            </div>
+        </div>
+        
+        <!-- Quick Actions Card -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>⚡ Quick Actions</h2>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions-grid">
+                    <a href="<?php echo home_url('/support'); ?>" class="action-item">
+                        <span class="action-icon">📧</span>
+                        <span class="action-text">Contact Support</span>
+                    </a>
+                    <a href="<?php echo home_url('/docs'); ?>" class="action-item">
+                        <span class="action-icon">📖</span>
+                        <span class="action-text">Documentation</span>
+                    </a>
+                    <a href="<?php echo home_url('/bug-report'); ?>" class="action-item">
+                        <span class="action-icon">🐛</span>
+                        <span class="action-text">Report a Bug</span>
+                    </a>
+                    <a href="<?php echo home_url('/feature-request'); ?>" class="action-item">
+                        <span class="action-icon">💡</span>
+                        <span class="action-text">Request Feature</span>
+                    </a>
+                    <a href="<?php echo wp_edit_profile_url(); ?>" class="action-item">
+                        <span class="action-icon">⚙️</span>
+                        <span class="action-text">Edit Profile</span>
+                    </a>
+                    <a href="<?php echo wp_logout_url(home_url()); ?>" class="action-item logout">
+                        <span class="action-icon">🚪</span>
+                        <span class="action-text">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+.login-required {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.dashboard-wrapper {
+    background: #f5f7fa;
+    min-height: 100vh;
+    padding: 30px 20px;
+}
+
+.dashboard-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+    font-size: 32px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.dashboard-header .subtitle {
+    font-size: 16px;
+    color: #7f8c8d;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.dashboard-card.highlight-card {
+    border: 2px solid #FF6B35;
+}
+
+.card-header {
+    padding: 20px 25px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.card-header h2 {
+    font-size: 20px;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #5a6c7d;
+}
+
+.info-value {
+    color: #2c3e50;
+}
+
+.tier-badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.tier-free {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.tier-beta {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.tier-pro {
+    background: #d4edda;
+    color: #155724;
+}
+
+.tier-enterprise {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.license-item {
+    background: #f8f9fa;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ddd;
+}
+
+.license-item.active {
+    border-left-color: #28a745;
+}
+
+.license-item.inactive {
+    opacity: 0.7;
+    border-left-color: #dc3545;
+}
+
+.license-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.license-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-expired {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.license-key-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border: 2px dashed #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.license-key {
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.copy-btn {
+    padding: 8px 16px;
+    background: #FF6B35;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #E55A2B;
+}
+
+.license-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.no-licenses {
+    text-align: center;
+    padding: 30px;
+}
+
+.download-ready,
+.download-locked {
+    text-align: center;
+    padding: 20px;
+}
+
+.success-text {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.warning-text {
+    color: #856404;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.download-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 35px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 18px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin: 20px 0;
+}
+
+.download-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.download-icon {
+    font-size: 28px;
+}
+
+.download-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.download-text strong {
+    font-size: 18px;
+}
+
+.download-text small {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.file-info {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin-top: 15px;
+    line-height: 1.8;
+}
+
+.primary-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #FF6B35;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.primary-button:hover {
+    background: #E55A2B;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.download-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.download-table th,
+.download-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.download-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #5a6c7d;
+    font-size: 14px;
+}
+
+.download-table td {
+    color: #2c3e50;
+}
+
+.success-badge {
+    padding: 5px 12px;
+    background: #d4edda;
+    color: #155724;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.no-data {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 30px;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2c3e50;
+    transition: all 0.3s;
+}
+
+.action-item:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.action-item.logout:hover {
+    background: #dc3545;
+}
+
+.action-icon {
+    font-size: 32px;
+}
+
+.action-text {
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+}
+
+.error-message {
+    color: #dc3545;
+    padding: 15px;
+    background: #f8d7da;
+    border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        padding: 20px 10px;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 24px;
+    }
+    
+    .license-details {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .download-button {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .download-text {
+        align-items: center;
+    }
+}
+</style>
+
+<script>
+function copyLicense(key) {
+    navigator.clipboard.writeText(key).then(function() {
+        alert('✅ License key copied to clipboard!\n\n' + key);
+    }, function(err) {
+        prompt('Copy this license key:', key);
+    });
+}
+</script>

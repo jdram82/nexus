@@ -622,4 +622,515 @@
         NexusBuilder.init();
     });
 
+    /**
+     * Widget-specific JavaScript
+     */
+
+    // Image Carousel Widget
+    function initCarousel(element) {
+        const $carousel = $(element);
+        const config = $carousel.data('carousel');
+        const $track = $carousel.find('.carousel-track');
+        const $slides = $carousel.find('.carousel-slide');
+        const $dots = $carousel.find('.carousel-dot');
+        const $prevBtn = $carousel.find('.carousel-prev');
+        const $nextBtn = $carousel.find('.carousel-next');
+        
+        let currentSlide = 0;
+        let autoplayInterval;
+        const slideCount = $slides.length;
+        const slideWidth = 100 / config.slidesToShow;
+        
+        // Set slide widths
+        $slides.css('flex-basis', slideWidth + '%');
+        
+        function goToSlide(index) {
+            if (index < 0) {
+                currentSlide = config.infinite ? slideCount - 1 : 0;
+            } else if (index >= slideCount) {
+                currentSlide = config.infinite ? 0 : slideCount - 1;
+            } else {
+                currentSlide = index;
+            }
+            
+            const offset = -(currentSlide * slideWidth);
+            $track.css('transform', 'translateX(' + offset + '%)');
+            
+            $dots.removeClass('active');
+            $dots.eq(currentSlide).addClass('active');
+        }
+        
+        function nextSlide() {
+            goToSlide(currentSlide + config.slidesToScroll);
+        }
+        
+        function prevSlide() {
+            goToSlide(currentSlide - config.slidesToScroll);
+        }
+        
+        function startAutoplay() {
+            if (config.autoplay) {
+                autoplayInterval = setInterval(nextSlide, config.autoplaySpeed);
+            }
+        }
+        
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+        }
+        
+        // Event handlers
+        $nextBtn.on('click', function() {
+            nextSlide();
+            stopAutoplay();
+            if (config.autoplay) startAutoplay();
+        });
+        
+        $prevBtn.on('click', function() {
+            prevSlide();
+            stopAutoplay();
+            if (config.autoplay) startAutoplay();
+        });
+        
+        $dots.on('click', function() {
+            const index = $(this).data('slide');
+            goToSlide(index);
+            stopAutoplay();
+            if (config.autoplay) startAutoplay();
+        });
+        
+        if (config.pauseOnHover) {
+            $carousel.on('mouseenter', stopAutoplay);
+            $carousel.on('mouseleave', startAutoplay);
+        }
+        
+        // Start autoplay
+        startAutoplay();
+        
+        // Mark as loaded
+        $carousel.find('.map-container').addClass('loaded');
+    }
+    
+    // Initialize all carousels
+    $(document).ready(function() {
+        $('.nexus-image-carousel').each(function() {
+            initCarousel(this);
+        });
+    });
+    
+    // Google Maps Widget (placeholder for API integration)
+    function initGoogleMaps(element) {
+        const $map = $(element);
+        const $container = $map.find('.map-container');
+        const config = $container.data('map-config');
+        
+        // Mark as loaded
+        $container.addClass('loaded');
+        
+        // Note: Actual Google Maps implementation would require API key
+        // This is a placeholder that shows a link to Google Maps
+        if (!window.google || !window.google.maps) {
+            $container.html(
+                '<div class="map-fallback">' +
+                '<p>Google Maps API not loaded. Add your API key in theme settings.</p>' +
+                '<a href="https://www.google.com/maps/search/?api=1&query=' + 
+                encodeURIComponent(config.address) + 
+                '" target="_blank" rel="noopener noreferrer">View on Google Maps</a>' +
+                '</div>'
+            );
+            return;
+        }
+        
+        // Actual Google Maps implementation would go here
+        console.log('Google Maps widget configuration:', config);
+    }
+    
+    // Initialize all maps
+    $(document).ready(function() {
+        $('.nexus-google-maps').each(function() {
+            initGoogleMaps(this);
+        });
+    });
+
+    /* ========================================
+       PHASE 4.2 WIDGET SCRIPTS
+       ======================================== */
+
+    // Animated Headline Widget
+    function initAnimatedHeadline(element) {
+        const $headline = $(element);
+        const $rotatingWords = $headline.find('.rotating-word');
+        const speed = parseInt($headline.data('speed')) || 3000;
+        const pause = parseInt($headline.data('pause')) || 1000;
+        let currentIndex = 0;
+
+        if ($rotatingWords.length <= 1) return;
+
+        function rotateWord() {
+            $rotatingWords.eq(currentIndex).removeClass('active');
+            currentIndex = (currentIndex + 1) % $rotatingWords.length;
+            $rotatingWords.eq(currentIndex).addClass('active');
+        }
+
+        // Initial display
+        $rotatingWords.eq(0).addClass('active');
+
+        // Start rotation
+        setInterval(rotateWord, speed + pause);
+    }
+
+    // Media Carousel Widget
+    function initMediaCarousel(element) {
+        const $carousel = $(element);
+        const $slides = $carousel.find('.media-carousel-slides');
+        const $items = $carousel.find('.media-carousel-slide');
+        const $thumbnails = $carousel.find('.media-thumbnail');
+        const $prevBtn = $carousel.find('.carousel-prev');
+        const $nextBtn = $carousel.find('.carousel-next');
+        const autoplay = $carousel.data('autoplay');
+        const speed = parseInt($carousel.data('speed')) || 3000;
+        let currentSlide = 0;
+        let autoplayInterval;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            $slides.css('transform', `translateX(-${currentSlide * 100}%)`);
+            $thumbnails.removeClass('active');
+            $thumbnails.eq(currentSlide).addClass('active');
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % $items.length;
+            goToSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = currentSlide === 0 ? $items.length - 1 : currentSlide - 1;
+            goToSlide(prevIndex);
+        }
+
+        // Thumbnail clicks
+        $thumbnails.on('click', function() {
+            const index = $(this).index();
+            goToSlide(index);
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        // Arrow clicks
+        $nextBtn.on('click', function() {
+            nextSlide();
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        $prevBtn.on('click', function() {
+            prevSlide();
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        // Autoplay
+        function startAutoplay() {
+            if (autoplay) {
+                autoplayInterval = setInterval(nextSlide, speed);
+            }
+        }
+
+        // Initialize
+        goToSlide(0);
+        startAutoplay();
+
+        // Pause on hover
+        $carousel.on('mouseenter', function() {
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+            }
+        }).on('mouseleave', function() {
+            startAutoplay();
+        });
+    }
+
+    // Countdown Widget
+    function initCountdown(element) {
+        const $countdown = $(element);
+        const config = $countdown.data('config');
+        
+        if (!config) return;
+
+        const targetTime = new Date(config.targetTime).getTime();
+        const $boxes = $countdown.find('.countdown-box');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetTime - now;
+
+            if (distance < 0) {
+                handleExpire();
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            $boxes.eq(0).find('.countdown-digit').text(days);
+            $boxes.eq(1).find('.countdown-digit').text(hours);
+            $boxes.eq(2).find('.countdown-digit').text(minutes);
+            $boxes.eq(3).find('.countdown-digit').text(seconds);
+        }
+
+        function handleExpire() {
+            clearInterval(countdownInterval);
+            
+            if (config.expireAction === 'hide') {
+                $countdown.hide();
+            } else if (config.expireAction === 'message') {
+                $countdown.html('<div class="countdown-expired">' + config.expireMessage + '</div>');
+            } else if (config.expireAction === 'redirect' && config.redirectUrl) {
+                window.location.href = config.redirectUrl;
+            }
+        }
+
+        // Update every second
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // Testimonial Carousel Widget
+    function initTestimonialCarousel(element) {
+        const $carousel = $(element);
+        const $slides = $carousel.find('.testimonial-slides');
+        const $items = $carousel.find('.testimonial-slide');
+        const $prevBtn = $carousel.find('.carousel-prev');
+        const $nextBtn = $carousel.find('.carousel-next');
+        const $dots = $carousel.find('.carousel-dot');
+        const slidesToShow = parseInt($carousel.data('slides-to-show')) || 1;
+        const autoplay = $carousel.data('autoplay');
+        const speed = parseInt($carousel.data('speed')) || 3000;
+        let currentSlide = 0;
+        let autoplayInterval;
+        const totalSlides = Math.ceil($items.length / slidesToShow);
+
+        function goToSlide(index) {
+            currentSlide = index;
+            const offset = currentSlide * (100 / slidesToShow);
+            $slides.css('transform', `translateX(-${offset}%)`);
+            $dots.removeClass('active');
+            $dots.eq(currentSlide).addClass('active');
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % totalSlides;
+            goToSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1;
+            goToSlide(prevIndex);
+        }
+
+        // Arrow clicks
+        $nextBtn.on('click', function() {
+            nextSlide();
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        $prevBtn.on('click', function() {
+            prevSlide();
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        // Dot clicks
+        $dots.on('click', function() {
+            const index = $(this).index();
+            goToSlide(index);
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        // Autoplay
+        function startAutoplay() {
+            if (autoplay) {
+                autoplayInterval = setInterval(nextSlide, speed);
+            }
+        }
+
+        // Initialize
+        goToSlide(0);
+        startAutoplay();
+
+        // Pause on hover
+        $carousel.on('mouseenter', function() {
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+            }
+        }).on('mouseleave', function() {
+            startAutoplay();
+        });
+    }
+
+    // Video Playlist Widget
+    function initVideoPlaylist(element) {
+        const $playlist = $(element);
+        const $player = $playlist.find('.video-player iframe');
+        const $items = $playlist.find('.playlist-item');
+
+        $items.on('click', function() {
+            const videoUrl = $(this).data('video-url');
+            
+            if (videoUrl) {
+                $player.attr('src', videoUrl);
+                $items.removeClass('active');
+                $(this).addClass('active');
+            }
+        });
+
+        // Set first video as active
+        $items.eq(0).addClass('active');
+    }
+
+    // Lottie Animation Widget
+    function initLottie(element) {
+        const $lottie = $(element);
+        const $container = $lottie.find('.lottie-animation')[0];
+        const config = $lottie.data('config');
+        
+        if (!config || !window.lottie) {
+            console.error('Lottie library not loaded or config missing');
+            return;
+        }
+
+        let animation;
+
+        function loadAnimation() {
+            const params = {
+                container: $container,
+                renderer: config.renderer || 'svg',
+                loop: config.loop !== false,
+                autoplay: config.trigger === 'autoplay',
+                path: config.source
+            };
+
+            // If source is inline JSON
+            if (config.sourceType === 'code' && config.animationData) {
+                params.animationData = config.animationData;
+                delete params.path;
+            }
+
+            animation = window.lottie.loadAnimation(params);
+
+            // Set speed
+            if (config.speed) {
+                animation.setSpeed(config.speed);
+            }
+
+            // Set direction
+            if (config.reverse) {
+                animation.setDirection(-1);
+            }
+
+            // Set start/end points
+            if (config.startPoint || config.endPoint) {
+                const totalFrames = animation.totalFrames;
+                const start = config.startPoint || 0;
+                const end = config.endPoint || 100;
+                animation.playSegments([
+                    (start / 100) * totalFrames,
+                    (end / 100) * totalFrames
+                ], true);
+            }
+        }
+
+        // Handle different triggers
+        if (config.trigger === 'autoplay') {
+            loadAnimation();
+        } else if (config.trigger === 'viewport') {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        if (!animation) {
+                            loadAnimation();
+                        } else {
+                            animation.play();
+                        }
+                    } else if (animation) {
+                        animation.pause();
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe($container);
+        } else if (config.trigger === 'hover') {
+            $lottie.on('mouseenter', function() {
+                if (!animation) {
+                    loadAnimation();
+                } else {
+                    animation.play();
+                }
+            }).on('mouseleave', function() {
+                if (animation) {
+                    animation.pause();
+                }
+            });
+        } else if (config.trigger === 'click') {
+            let isPlaying = false;
+            $lottie.on('click', function() {
+                if (!animation) {
+                    loadAnimation();
+                    isPlaying = true;
+                } else {
+                    if (isPlaying) {
+                        animation.pause();
+                        isPlaying = false;
+                    } else {
+                        animation.play();
+                        isPlaying = true;
+                    }
+                }
+            });
+        }
+    }
+
+    // Initialize all Phase 4.2 widgets
+    $(document).ready(function() {
+        $('.nexus-animated-headline').each(function() {
+            initAnimatedHeadline(this);
+        });
+
+        $('.nexus-media-carousel').each(function() {
+            initMediaCarousel(this);
+        });
+
+        $('.nexus-countdown').each(function() {
+            initCountdown(this);
+        });
+
+        $('.nexus-testimonial-carousel').each(function() {
+            initTestimonialCarousel(this);
+        });
+
+        $('.nexus-video-playlist').each(function() {
+            initVideoPlaylist(this);
+        });
+
+        $('.nexus-lottie').each(function() {
+            initLottie(this);
+        });
+    });
+
 })(jQuery);

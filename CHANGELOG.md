@@ -5,6 +5,27 @@ All notable changes to Nexus Theme will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-01-08
+
+### Fixed
+- **Popup Builder View Files Missing** - Fixed PHP warnings for missing analytics.php and templates.php
+
+### Added
+- `pro/popup-builder/views/templates.php` - Template selection interface with 5 pre-designed popup templates
+- `pro/popup-builder/views/analytics.php` - Comprehensive analytics dashboard with performance metrics
+- Popup template categories: Marketing, Newsletter, Exit Intent, Announcement, Video, Coupon
+- Analytics summary cards: Total Impressions, Conversions, Conversion Rate, Active Popups
+- Per-popup performance table with color-coded conversion rates
+- Reset statistics functionality with AJAX
+- Template preview functionality (placeholder)
+
+### Technical
+- Added proper WordPress security checks (ABSPATH) in view files
+- Implemented nonce verification for AJAX actions
+- Proper internationalization with 'nexus-pro' text domain
+- Escaped output for security compliance
+- Responsive grid layouts for templates and analytics
+
 ## [1.8.1] - 2025-12-27
 
 ### Fixed
