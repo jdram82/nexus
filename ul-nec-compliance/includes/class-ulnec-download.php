@@ -68,7 +68,7 @@ class ULNEC_Download {
         
         // Get download file
         $version = sanitize_text_field($_GET['version'] ?? 'latest');
-        $file_name = $this->get_file_path($version);
+        $file_name = 'UL-NEC-Compliance-Plugin-Latest.msi';
         
         if (!$file_name) {
             wp_die('File not found', 'Download Error', ['response' => 404]);

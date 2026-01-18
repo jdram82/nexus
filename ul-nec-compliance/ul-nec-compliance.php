@@ -3,7 +3,7 @@
  * Plugin Name: UL-NEC Compliance AutoCAD Plugin Manager
  * Plugin URI: https://jdsancontrols.com
  * Description: Complete management system for UL-NEC Compliance AutoCAD Plugin - handles users, licensing, downloads, payments, and support.
- * Version: 1.0.4
+ * Version: 1.3.0
  * Author: JDS & N Controls
  * Author URI: https://jdsancontrols.com
  * License: GPL v2 or later
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('ULNEC_VERSION', '1.0.4');
+define('ULNEC_VERSION', '1.3.0');
 define('ULNEC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ULNEC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ULNEC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -128,6 +128,28 @@ final class ULNEC_Plugin {
         if (is_admin()) {
             new ULNEC_Admin($this->supabase);
         }
+    }
+    
+    /**
+     * Check if current user is a SaaS admin (Supabase-based)
+     * This is separate from WordPress admin capabilities
+     */
+    public function is_saas_admin() {
+        if (!is_user_logged_in()) {
+            return false;
+        }
+        
+        $current_user = wp_get_current_user();
+        $email = $current_user->user_email;
+        
+        // Check Supabase for is_admin flag
+        $response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($email) . '&select=is_admin');
+        
+        if (is_wp_error($response) || empty($response)) {
+            return false;
+        }
+        
+        return isset($response[0]['is_admin']) && $response[0]['is_admin'] === true;
         
         // Initialize frontend
         new ULNEC_Frontend($this->supabase);

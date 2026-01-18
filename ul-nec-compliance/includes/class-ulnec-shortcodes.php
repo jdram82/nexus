@@ -414,7 +414,10 @@ class ULNEC_Shortcodes {
                 // Try to get user from Supabase by WordPress ID
                 $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?wordpress_user_id=eq.' . $current_user->ID);
                 
-                if (!is_wp_error($supabase_user_response) && is_array($supabase_user_response) && count($supabase_user_response) > 0) {
+                // Check if response is valid and not an error
+                if (is_wp_error($supabase_user_response)) {
+                    error_log('Dashboard: User lookup by WP ID failed: ' . $supabase_user_response->get_error_message());
+                } elseif (is_array($supabase_user_response) && !empty($supabase_user_response)) {
                     $supabase_user = $supabase_user_response[0];
                     
                     // Get licenses
@@ -430,11 +433,15 @@ class ULNEC_Shortcodes {
                             }
                         }
                     }
-                } else {
-                    // If user not in Supabase, try to find by email
+                }
+                
+                // If user not found by WP ID, try to find by email
+                if (!$supabase_user) {
                     $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
                     
-                    if (!is_wp_error($supabase_user_response) && is_array($supabase_user_response) && count($supabase_user_response) > 0) {
+                    if (is_wp_error($supabase_user_response)) {
+                        error_log('Dashboard: User lookup by email failed: ' . $supabase_user_response->get_error_message());
+                    } elseif (is_array($supabase_user_response) && !empty($supabase_user_response)) {
                         $supabase_user = $supabase_user_response[0];
                         
                         // Get licenses

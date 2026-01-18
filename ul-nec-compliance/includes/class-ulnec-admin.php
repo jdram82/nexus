@@ -21,10 +21,18 @@ class ULNEC_Admin {
      * Add admin menu
      */
     public function add_admin_menu() {
+        // Check if user is SaaS admin (Supabase-based check)
+        $is_saas_admin = $this->is_saas_admin();
+        
+        // Only add menu if user is SaaS admin OR WordPress admin (for initial setup)
+        if (!$is_saas_admin && !current_user_can('manage_options')) {
+            return;
+        }
+        
         add_menu_page(
             'UL-NEC Manager',
             'UL-NEC',
-            'manage_options',
+            'read', // Minimal capability - actual check is in is_saas_admin()
             'ulnec-dashboard',
             [$this, 'dashboard_page'],
             'dashicons-shield',
@@ -32,23 +40,59 @@ class ULNEC_Admin {
         );
         
         // Main sections
-        add_submenu_page('ulnec-dashboard', 'Dashboard', 'Dashboard', 'manage_options', 'ulnec-dashboard', [$this, 'dashboard_page']);
-        add_submenu_page('ulnec-dashboard', 'Users', 'Users', 'manage_options', 'ulnec-users', [$this, 'users_page']);
-        add_submenu_page('ulnec-dashboard', 'Licenses', 'Licenses', 'manage_options', 'ulnec-licenses', [$this, 'licenses_page']);
-        add_submenu_page('ulnec-dashboard', 'Downloads', 'Downloads', 'manage_options', 'ulnec-downloads', [$this, 'downloads_page']);
+        add_submenu_page('ulnec-dashboard', 'Dashboard', 'Dashboard', 'read', 'ulnec-dashboard', [$this, 'dashboard_page']);
+        add_submenu_page('ulnec-dashboard', 'Users', 'Users', 'read', 'ulnec-users', [$this, 'users_page']);
+        add_submenu_page('ulnec-dashboard', 'Licenses', 'Licenses', 'read', 'ulnec-licenses', [$this, 'licenses_page']);
+        add_submenu_page('ulnec-dashboard', 'Downloads', 'Downloads', 'read', 'ulnec-downloads', [$this, 'downloads_page']);
         
         // New Beta Management Pages
-        add_submenu_page('ulnec-dashboard', 'Bugs & Features', 'Bugs & Features', 'manage_options', 'ulnec-bugs-features', [$this, 'bugs_features_page']);
-        add_submenu_page('ulnec-dashboard', 'Founders Program', 'Founders Program', 'manage_options', 'ulnec-founders', [$this, 'founders_page']);
-        add_submenu_page('ulnec-dashboard', 'Beta Analytics', 'Beta Analytics', 'manage_options', 'ulnec-analytics', [$this, 'analytics_page']);
+        add_submenu_page('ulnec-dashboard', 'Bugs & Features', 'Bugs & Features', 'read', 'ulnec-bugs-features', [$this, 'bugs_features_page']);
+        add_submenu_page('ulnec-dashboard', 'Founders Program', 'Founders Program', 'read', 'ulnec-founders', [$this, 'founders_page']);
+        add_submenu_page('ulnec-dashboard', 'Beta Analytics', 'Beta Analytics', 'read', 'ulnec-analytics', [$this, 'analytics_page']);
         
-        add_submenu_page('ulnec-dashboard', 'Settings', 'Settings', 'manage_options', 'ulnec-settings', [$this, 'settings_page']);
+        add_submenu_page('ulnec-dashboard', 'Settings', 'Settings', 'read', 'ulnec-settings', [$this, 'settings_page']);
+    }
+    
+    /**
+     * Check if current user is a SaaS admin
+     */
+    private function is_saas_admin() {
+        if (!is_user_logged_in()) {
+            return false;
+        }
+        
+        $current_user = wp_get_current_user();
+        $email = $current_user->user_email;
+        
+        // Check Supabase for is_admin flag
+        $response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($email) . '&select=is_admin');
+        
+        if (is_wp_error($response) || empty($response)) {
+            return false;
+        }
+        
+        return isset($response[0]['is_admin']) && $response[0]['is_admin'] === true;
+    }
+    
+    /**
+     * Check access and redirect if not authorized
+     */
+    private function check_access() {
+        if (!$this->is_saas_admin() && !current_user_can('manage_options')) {
+            wp_die(
+                '<h1>Access Denied</h1><p>You do not have permission to access this page.</p>',
+                'Access Denied',
+                ['response' => 403]
+            );
+        }
     }
     
     /**
      * Dashboard page
      */
     public function dashboard_page() {
+        $this->check_access();
+        
         $connected = $this->supabase->test_connection();
         ?>
         <div class="wrap">
@@ -71,6 +115,8 @@ class ULNEC_Admin {
      * Users page
      */
     public function users_page() {
+        $this->check_access();
+        
         // Get users from Supabase
         $users = $this->supabase->request('GET', 'ulnec_users?order=created_at.desc&limit=100');
         
@@ -147,6 +193,8 @@ class ULNEC_Admin {
      * Licenses page
      */
     public function licenses_page() {
+        $this->check_access();
+        
         // Get licenses with user info from Supabase
         $licenses_query = 'ulnec_licenses?select=*,ulnec_users(name,email)&order=created_at.desc&limit=100';
         $licenses = $this->supabase->request('GET', $licenses_query);
@@ -233,6 +281,8 @@ class ULNEC_Admin {
      * Downloads page
      */
     public function downloads_page() {
+        $this->check_access();
+        
         $downloads = $this->supabase->request('GET', 'ulnec_downloads?select=*,ulnec_users(name,email)&order=downloaded_at.desc&limit=100');
         
         ?>
@@ -287,8 +337,23 @@ class ULNEC_Admin {
      * Bugs & Features page
      */
     public function bugs_features_page() {
+        $this->check_access();
+        
         $bugs = $this->supabase->request('GET', 'ulnec_bugs?order=created_at.desc&limit=50');
         $features = $this->supabase->request('GET', 'ulnec_features?order=created_at.desc&limit=50');
+        
+        // Debug logging
+        error_log('Admin - Bugs query result: ' . json_encode([
+            'is_error' => is_wp_error($bugs),
+            'is_empty' => empty($bugs),
+            'is_array' => is_array($bugs),
+            'count' => is_array($bugs) ? count($bugs) : 0,
+            'data' => $bugs
+        ]));
+        
+        if (is_wp_error($bugs)) {
+            error_log('Admin - Bugs ERROR: ' . $bugs->get_error_message() . ' | Data: ' . json_encode($bugs->get_error_data()));
+        }
         
         ?>
         <div class="wrap">
@@ -300,12 +365,15 @@ class ULNEC_Admin {
                     <h2>🐛 Bug Reports</h2>
                     <?php if (is_wp_error($bugs) || empty($bugs)): ?>
                         <p>No bugs reported yet.</p>
+                        <?php if (is_wp_error($bugs)): ?>
+                            <p style="color: red;"><strong>Error:</strong> <?php echo esc_html($bugs->get_error_message()); ?></p>
+                        <?php endif; ?>
                     <?php else: ?>
                         <table class="wp-list-table widefat fixed striped">
                             <thead>
                                 <tr>
                                     <th>Title</th>
-                                    <th>Priority</th>
+                                    <th>Severity</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                 </tr>
@@ -315,8 +383,8 @@ class ULNEC_Admin {
                                     <tr>
                                         <td><strong><?php echo esc_html($bug['title']); ?></strong></td>
                                         <td>
-                                            <span class="priority-<?php echo esc_attr($bug['priority']); ?>">
-                                                <?php echo esc_html(ucfirst($bug['priority'])); ?>
+                                            <span class="severity-<?php echo esc_attr($bug['severity'] ?? 'medium'); ?>">
+                                                <?php echo esc_html(ucfirst($bug['severity'] ?? 'medium')); ?>
                                             </span>
                                         </td>
                                         <td><?php echo esc_html(ucfirst($bug['status'])); ?></td>
@@ -365,6 +433,8 @@ class ULNEC_Admin {
      * Founders Program page
      */
     public function founders_page() {
+        $this->check_access();
+        
         $founders = $this->supabase->request('GET', 'ulnec_founders?select=*,ulnec_users(name,email)&order=created_at.desc');
         
         ?>
@@ -424,6 +494,8 @@ class ULNEC_Admin {
      * Analytics page
      */
     public function analytics_page() {
+        $this->check_access();
+        
         // Get summary stats
         $total_users = $this->supabase->request('GET', 'ulnec_users?select=count');
         $total_licenses = $this->supabase->request('GET', 'ulnec_licenses?select=count');
@@ -483,6 +555,8 @@ class ULNEC_Admin {
      * Settings page
      */
     public function settings_page() {
+        $this->check_access();
+        
         if (isset($_POST['ulnec_save_settings'])) {
             check_admin_referer('ulnec_settings');
             
