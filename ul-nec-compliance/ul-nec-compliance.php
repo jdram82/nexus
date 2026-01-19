@@ -128,8 +128,7 @@ final class ULNEC_Plugin {
         if (is_admin()) {
             new ULNEC_Admin($this->supabase);
         }
-    }
-    
+        
         // Initialize frontend
         new ULNEC_Frontend($this->supabase);
         
