@@ -130,6 +130,22 @@ final class ULNEC_Plugin {
         }
     }
     
+        // Initialize frontend
+        new ULNEC_Frontend($this->supabase);
+        
+        // Initialize frontend pages (bug report, feature request, support)
+        new ULNEC_Frontend_Pages($this->supabase);
+        
+        // Initialize shortcodes
+        new ULNEC_Shortcodes($this->supabase);
+        
+        // Initialize AJAX handlers
+        new ULNEC_Ajax($this->supabase);
+        
+        // Load text domain
+        load_plugin_textdomain('ulnec', false, dirname(ULNEC_PLUGIN_BASENAME) . '/languages');
+    }
+    
     /**
      * Check if current user is a SaaS admin (Supabase-based)
      * This is separate from WordPress admin capabilities
@@ -150,21 +166,6 @@ final class ULNEC_Plugin {
         }
         
         return isset($response[0]['is_admin']) && $response[0]['is_admin'] === true;
-        
-        // Initialize frontend
-        new ULNEC_Frontend($this->supabase);
-        
-        // Initialize frontend pages (bug report, feature request, support)
-        new ULNEC_Frontend_Pages($this->supabase);
-        
-        // Initialize shortcodes
-        new ULNEC_Shortcodes($this->supabase);
-        
-        // Initialize AJAX handlers
-        new ULNEC_Ajax($this->supabase);
-        
-        // Load text domain
-        load_plugin_textdomain('ulnec', false, dirname(ULNEC_PLUGIN_BASENAME) . '/languages');
     }
     
     /**
