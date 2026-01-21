@@ -1,5 +1,55 @@
 /* UL-NEC Frontend Styles */
 
+/* Dark Background for All ULNEC Pages */
+body.ulnec-page,
+body.page-template,
+body.single,
+body {
+    background: #1a1f3a !important;
+    min-height: 100vh;
+}
+
+/* Hide theme navigation and empty list elements */
+body nav:not(.ulnec-nav),
+body .menu:not(.ulnec-menu),
+body header nav,
+body header ul:not(.ulnec-list),
+body header ol:not(.ulnec-list),
+body nav ul:not(.ulnec-list),
+body nav ol:not(.ulnec-list),
+body nav li:not(.ulnec-list li),
+body .menu li:not(.ulnec-list li),
+body ul:empty:not(.ulnec-list),
+body ol:empty:not(.ulnec-list),
+body li:empty:not(.ulnec-list li) {
+    display: none !important;
+}
+
+/* Reset list styles to prevent bullets */
+body.ulnec-page ul:not(.ulnec-list),
+body.ulnec-page ol:not(.ulnec-list) {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.ulnec-page li:not(.ulnec-list li) {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Update text colors for dark background */
+.ulnec-bug-header h1,
+.ulnec-feature-header h1 {
+    color: #ffffff !important;
+}
+
+.ulnec-bug-header p,
+.ulnec-feature-header p {
+    color: #c7d2fe !important;
+}
+
 .ulnec-dashboard {
     padding: 20px;
     background: #fff;

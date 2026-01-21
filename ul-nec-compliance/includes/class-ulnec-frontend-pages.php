@@ -125,6 +125,33 @@ class ULNEC_Frontend_Pages {
         ob_start();
         ?>
         <style>
+            /* Hide all theme navigation and list elements */
+            nav, .menu, header nav, header ul, header ol,
+            nav ul, nav ol, nav li, .menu li,
+            ul:not(.ulnec-form-group ul):not(.ulnec-list):empty,
+            ol:not(.ulnec-form-group ol):not(.ulnec-list):empty,
+            li:empty {
+                display: none !important;
+            }
+            
+            /* Reset list styles for theme elements */
+            body ul:not(.ulnec-list),
+            body ol:not(.ulnec-list) {
+                list-style: none !important;
+            }
+            
+            body li:not(.ulnec-list li) {
+                list-style: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* Dark Background */
+            body {
+                background: #1a1f3a !important;
+                min-height: 100vh;
+            }
+            
             .ulnec-bug-container {
                 max-width: 900px;
                 margin: 0 auto;
@@ -139,12 +166,12 @@ class ULNEC_Frontend_Pages {
             .ulnec-bug-header h1 {
                 font-size: 2.5rem;
                 margin-bottom: 1rem;
-                color: #1a1f3a;
+                color: #ffffff;
             }
             
             .ulnec-bug-header p {
                 font-size: 1.1rem;
-                color: #6b7280;
+                color: #c7d2fe;
             }
             
             .ulnec-founders-note {
@@ -171,14 +198,16 @@ class ULNEC_Frontend_Pages {
             
             .ulnec-form-group {
                 margin-bottom: 2rem;
+                clear: both;
             }
             
             .ulnec-form-group label {
                 display: block;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.75rem;
                 color: #1a1f3a;
                 font-weight: 600;
                 font-size: 1rem;
+                line-height: 1.5;
             }
             
             .ulnec-required {
@@ -189,6 +218,7 @@ class ULNEC_Frontend_Pages {
             .ulnec-form-group textarea,
             .ulnec-form-group select {
                 width: 100%;
+                max-width: 100%;
                 padding: 1rem;
                 background: #f9fafb;
                 border: 2px solid #e5e7eb;
@@ -197,6 +227,8 @@ class ULNEC_Frontend_Pages {
                 font-size: 1rem;
                 font-family: inherit;
                 transition: all 0.3s ease;
+                box-sizing: border-box;
+                display: block;
             }
             
             .ulnec-form-group input:focus,
@@ -209,13 +241,24 @@ class ULNEC_Frontend_Pages {
             
             .ulnec-form-group textarea {
                 min-height: 120px;
+                max-height: 300px;
                 resize: vertical;
+                line-height: 1.6;
+            }
+            
+            .ulnec-form-group select {
+                cursor: pointer;
+                appearance: auto;
+                -webkit-appearance: menulist;
+                -moz-appearance: menulist;
             }
             
             .ulnec-help-text {
                 font-size: 0.9rem;
                 color: #9ca3af;
                 margin-top: 0.5rem;
+                margin-bottom: 0;
+                line-height: 1.5;
             }
             
             .ulnec-severity-grid {
@@ -554,14 +597,24 @@ class ULNEC_Frontend_Pages {
                 } else {
                     $supabase_user = $supabase_user_response[0];
                     
-                    // Submit feature request
+                    // Submit feature request with proper field mapping
+                    // Note: Category is included in description since table doesn't have category field
+                    $full_description = "**Category:** " . ucfirst($category) . "\n\n" . $description;
+                    if (!empty($importance)) {
+                        $full_description .= "\n\n**Why Important:** " . $importance;
+                    }
+                    if (!empty($workaround)) {
+                        $full_description .= "\n\n**Current Workaround:** " . $workaround;
+                    }
+                    
                     $feature_data = [
                         'user_id' => $supabase_user['id'],
                         'title' => $title,
-                        'description' => $description,
-                        'category' => $category,
+                        'description' => $full_description,
+                        'use_case' => !empty($usecase) ? $usecase : null,
                         'status' => 'submitted',
-                        'vote_count' => 1
+                        'priority' => !empty($priority) ? $priority : 'medium',
+                        'votes' => 1
                     ];
                     
                     error_log('Feature Request - Submitting to Supabase: ' . json_encode($feature_data));
@@ -569,8 +622,23 @@ class ULNEC_Frontend_Pages {
                     $result = $this->supabase->request('POST', '/ulnec_features', $feature_data);
                     
                     if (is_wp_error($result)) {
-                        error_log('Feature Request - Submission failed: ' . $result->get_error_message());
-                        $error_message = 'Failed to submit feature request. Please try again.';
+                        $error_details = $result->get_error_data();
+                        $full_error = $result->get_error_message();
+                        if (is_array($error_details)) {
+                            if (isset($error_details['body'])) {
+                                $decoded_body = json_decode($error_details['body'], true);
+                                if ($decoded_body) {
+                                    $full_error .= ' | Details: ' . json_encode($decoded_body);
+                                } else {
+                                    $full_error .= ' | Body: ' . $error_details['body'];
+                                }
+                            }
+                            if (isset($error_details['code'])) {
+                                $full_error .= ' | HTTP Code: ' . $error_details['code'];
+                            }
+                        }
+                        error_log('Feature Request - Submission failed: ' . $full_error);
+                        $error_message = 'Failed to submit feature request. Please try again. (Check error logs for details)';
                     } else {
                         error_log('Feature Request - Success! Result: ' . json_encode($result));
                         $success_message = 'Feature request submitted successfully!';
@@ -588,6 +656,33 @@ class ULNEC_Frontend_Pages {
         ob_start();
         ?>
         <style>
+            /* Hide all theme navigation and list elements */
+            nav, .menu, header nav, header ul, header ol,
+            nav ul, nav ol, nav li, .menu li,
+            ul:not(.ulnec-form-group ul):not(.ulnec-list):empty,
+            ol:not(.ulnec-form-group ol):not(.ulnec-list):empty,
+            li:empty {
+                display: none !important;
+            }
+            
+            /* Reset list styles for theme elements */
+            body ul:not(.ulnec-list),
+            body ol:not(.ulnec-list) {
+                list-style: none !important;
+            }
+            
+            body li:not(.ulnec-list li) {
+                list-style: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* Dark Background */
+            body {
+                background: #1a1f3a !important;
+                min-height: 100vh;
+            }
+            
             .ulnec-feature-container {
                 max-width: 900px;
                 margin: 0 auto;
@@ -600,13 +695,14 @@ class ULNEC_Frontend_Pages {
             .ulnec-feature-header h1 {
                 font-size: 2.5rem;
                 margin-bottom: 1rem;
-                color: #1a1f3a;
+                color: #ffffff;
             }
             .ulnec-category-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
                 gap: 1rem;
-                margin-top: 1rem;
+                margin-top: 0.5rem;
+                margin-bottom: 0;
             }
             .ulnec-category-option {
                 background: #f9fafb;
@@ -616,6 +712,11 @@ class ULNEC_Frontend_Pages {
                 cursor: pointer;
                 transition: all 0.3s ease;
                 text-align: center;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
             .ulnec-category-option:hover {
                 border-color: #667eea;
@@ -624,21 +725,166 @@ class ULNEC_Frontend_Pages {
             .ulnec-category-option input[type="radio"] {
                 position: absolute;
                 opacity: 0;
+                width: 0;
+                height: 0;
             }
             .ulnec-category-option input[type="radio"]:checked ~ span {
                 color: #667eea;
-                font-weight: 700;
+                font-weight: 600;
+            }
+            .ulnec-category-option input[type="radio"]:checked + .ulnec-category-icon + span {
+                color: #667eea;
+            }
+            .ulnec-category-option input[type="radio"]:checked ~ .ulnec-category-icon {
+                transform: scale(1.1);
             }
             .ulnec-category-icon {
                 font-size: 2rem;
                 margin-bottom: 0.5rem;
+                line-height: 1;
+                transition: transform 0.3s ease;
+            }
+            .ulnec-category-option span {
+                display: block;
+                font-size: 0.9rem;
+                color: #1a1f3a;
+                font-weight: 600;
+                line-height: 1.4;
+            }
+            
+            /* Form Container & Groups */
+            .ulnec-bug-form-container {
+                background: #fff;
+                padding: 3rem;
+                border-radius: 20px;
+                box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+            }
+            
+            .ulnec-form-group {
+                margin-bottom: 2rem;
+                clear: both;
+            }
+            
+            .ulnec-form-group label {
+                display: block;
+                margin-bottom: 0.75rem;
+                color: #1a1f3a;
+                font-weight: 600;
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+            
+            .ulnec-required {
+                color: #ef4444;
+            }
+            
+            /* Form Inputs */
+            .ulnec-form-group input[type="text"],
+            .ulnec-form-group textarea,
+            .ulnec-form-group select {
+                width: 100%;
+                max-width: 100%;
+                padding: 1rem;
+                background: #f9fafb;
+                border: 2px solid #e5e7eb;
+                border-radius: 10px;
+                color: #1a1f3a;
+                font-size: 1rem;
+                font-family: inherit;
+                transition: all 0.3s ease;
+                box-sizing: border-box;
+                display: block;
+            }
+            
+            .ulnec-form-group input:focus,
+            .ulnec-form-group textarea:focus,
+            .ulnec-form-group select:focus {
+                outline: none;
+                border-color: #667eea;
+                background: #fff;
+            }
+            
+            .ulnec-form-group textarea {
+                min-height: 120px;
+                max-height: 300px;
+                resize: vertical;
+                line-height: 1.6;
+            }
+            
+            .ulnec-form-group select {
+                cursor: pointer;
+                appearance: auto;
+                -webkit-appearance: menulist;
+                -moz-appearance: menulist;
+            }
+            
+            .ulnec-help-text {
+                font-size: 0.9rem;
+                color: #9ca3af;
+                margin-top: 0.5rem;
+                margin-bottom: 0;
+                line-height: 1.5;
+            }
+            
+            /* Submit Button */
+            .ulnec-submit-btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: #fff;
+                padding: 1rem 2.5rem;
+                border: none;
+                border-radius: 10px;
+                font-size: 1.1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            }
+            
+            .ulnec-submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            }
+            
+            /* Success/Error Messages */
+            .ulnec-error {
+                background: #fee2e2;
+                color: #991b1b;
+                padding: 1.5rem;
+                border-radius: 15px;
+                margin-bottom: 2rem;
+                border: 2px solid #fca5a5;
+            }
+            
+            .ulnec-success-container {
+                background: #d1fae5;
+                color: #065f46;
+                padding: 3rem;
+                border-radius: 20px;
+                text-align: center;
+                border: 2px solid #6ee7b7;
+            }
+            
+            /* Founders Note */
+            .ulnec-founders-note {
+                background: linear-gradient(135deg, #fbbf24, #f59e0b);
+                color: #000;
+                padding: 1.5rem;
+                border-radius: 20px;
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+            
+            .ulnec-founders-note strong {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-size: 1.1rem;
             }
         </style>
         
         <div class="ulnec-feature-container">
             <div class="ulnec-feature-header">
                 <h1>💡 Request a Feature</h1>
-                <p style="font-size: 1.1rem; color: #6b7280;">Help shape the future of UL/NEC Compliance Checker</p>
+                <p style="font-size: 1.1rem; color: #c7d2fe;">Help shape the future of UL/NEC Compliance Checker</p>
             </div>
             
             <div class="ulnec-founders-note">
@@ -801,10 +1047,16 @@ class ULNEC_Frontend_Pages {
             
             ob_start();
             ?>
+            <style>
+                body {
+                    background: #1a1f3a !important;
+                    min-height: 100vh;
+                }
+            </style>
             <div class="ulnec-bug-container">
                 <div class="ulnec-bug-header">
-                    <h1>🏆 Founders Tier Progress</h1>
-                    <p style="font-size: 1.1rem; color: #6b7280;">Track your progress toward Founders Tier benefits</p>
+                    <h1 style="color: #ffffff;">🏆 Founders Tier Progress</h1>
+                    <p style="font-size: 1.1rem; color: #c7d2fe;">Track your progress toward Founders Tier benefits</p>
                 </div>
                 
                 <div class="ulnec-bug-form-container">
@@ -880,6 +1132,7 @@ class ULNEC_Frontend_Pages {
         if (isset($_POST['update_profile']) && wp_verify_nonce($_POST['profile_nonce'], 'ulnec_update_profile')) {
             $name = sanitize_text_field($_POST['user_name']);
             $company = sanitize_text_field($_POST['user_company']);
+            $phone = sanitize_text_field($_POST['user_phone']);
             
             $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
             
@@ -888,29 +1141,51 @@ class ULNEC_Frontend_Pages {
                 
                 $update_data = [
                     'name' => $name,
-                    'company' => $company
+                    'company' => $company,
+                    'phone' => $phone
                 ];
                 
                 $result = $this->supabase->request('PATCH', 'ulnec_users?id=eq.' . $supabase_user['id'], $update_data);
                 
                 if (!is_wp_error($result)) {
                     $success_message = 'Profile updated successfully!';
+                    // Refresh user data
+                    $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
+                    $user_data = !is_wp_error($supabase_user_response) && !empty($supabase_user_response) ? $supabase_user_response[0] : null;
                 } else {
+                    error_log('Account Settings - Update failed: ' . $result->get_error_message());
                     $error_message = 'Failed to update profile.';
                 }
+            } else {
+                $error_message = 'User account not found in system.';
             }
         }
         
         // Get user data
-        $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
-        $user_data = !is_wp_error($supabase_user_response) && !empty($supabase_user_response) ? $supabase_user_response[0] : null;
+        if (!isset($user_data)) {
+            $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
+            $user_data = !is_wp_error($supabase_user_response) && !empty($supabase_user_response) ? $supabase_user_response[0] : null;
+            
+            // Debug logging
+            if ($user_data) {
+                error_log('Account Settings - User data loaded: ' . json_encode($user_data));
+            } else {
+                error_log('Account Settings - No user data found for: ' . $current_user->user_email);
+            }
+        }
         
         ob_start();
         ?>
+        <style>
+            body {
+                background: #1a1f3a !important;
+                min-height: 100vh;
+            }
+        </style>
         <div class="ulnec-bug-container">
             <div class="ulnec-bug-header">
-                <h1>⚙️ Account Settings</h1>
-                <p style="font-size: 1.1rem; color: #6b7280;">Manage your profile and preferences</p>
+                <h1 style="color: #ffffff;">⚙️ Account Settings</h1>
+                <p style="font-size: 1.1rem; color: #c7d2fe;">Manage your profile and preferences</p>
             </div>
             
             <?php if ($success_message): ?>
@@ -926,33 +1201,47 @@ class ULNEC_Frontend_Pages {
             <div class="ulnec-bug-form-container">
                 <h2 style="color: #667eea; margin-bottom: 2rem;">Profile Information</h2>
                 
+                <?php if (!$user_data): ?>
+                    <div style="background: #fef3c7; color: #92400e; padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem; border: 2px solid #fcd34d;">
+                        <strong>⚠️ Account Not Synced</strong><br>
+                        Your account hasn't been synced with our system yet. Please contact support.
+                    </div>
+                <?php endif; ?>
+                
                 <form method="post">
                     <?php wp_nonce_field('ulnec_update_profile', 'profile_nonce'); ?>
                     
                     <div class="ulnec-form-group">
                         <label>Full Name</label>
-                        <input type="text" name="user_name" value="<?php echo esc_attr($user_data['name'] ?? $current_user->display_name); ?>">
+                        <input type="text" name="user_name" value="<?php echo esc_attr($user_data['name'] ?? $current_user->display_name); ?>" required>
                     </div>
                     
                     <div class="ulnec-form-group">
-                        <label>Email</label>
-                        <input type="email" value="<?php echo esc_attr($current_user->user_email); ?>" disabled style="background: #f3f4f6;">
+                        <label>Email Address</label>
+                        <input type="email" value="<?php echo esc_attr($current_user->user_email); ?>" disabled style="background: #e5e7eb; cursor: not-allowed;">
                         <p class="ulnec-help-text">Email cannot be changed. Contact support if needed.</p>
                     </div>
                     
                     <div class="ulnec-form-group">
-                        <label>Company</label>
+                        <label>Phone Number</label>
+                        <input type="tel" name="user_phone" value="<?php echo esc_attr($user_data['phone'] ?? ''); ?>" placeholder="+1 (234) 567-8900">
+                        <p class="ulnec-help-text">Optional - for important account notifications</p>
+                    </div>
+                    
+                    <div class="ulnec-form-group">
+                        <label>Company Name</label>
                         <input type="text" name="user_company" value="<?php echo esc_attr($user_data['company'] ?? ''); ?>" placeholder="Your company name">
                     </div>
                     
                     <div class="ulnec-form-group">
-                        <label>Account Type</label>
-                        <input type="text" value="<?php echo esc_attr(ucfirst($user_data['role'] ?? 'user')); ?>" disabled style="background: #f3f4f6;">
+                        <label>Account Tier</label>
+                        <input type="text" value="<?php echo esc_attr(ucfirst($user_data['tier'] ?? 'Free')); ?>" disabled style="background: #e5e7eb; cursor: not-allowed;">
+                        <p class="ulnec-help-text">Current subscription level</p>
                     </div>
                     
                     <div class="ulnec-form-group">
                         <label>Member Since</label>
-                        <input type="text" value="<?php echo esc_attr(date('F j, Y', strtotime($user_data['created_at'] ?? 'now'))); ?>" disabled style="background: #f3f4f6;">
+                        <input type="text" value="<?php echo esc_attr($user_data ? date('F j, Y', strtotime($user_data['created_at'])) : date('F j, Y')); ?>" disabled style="background: #e5e7eb; cursor: not-allowed;">
                     </div>
                     
                     <button type="submit" name="update_profile" class="ulnec-submit-btn">Update Profile</button>
@@ -986,18 +1275,81 @@ class ULNEC_Frontend_Pages {
             
             ob_start();
             ?>
+            <style>
+                body {
+                    background: #1a1f3a !important;
+                    min-height: 100vh;
+                }
+                .ulnec-tabs {
+                    display: flex;
+                    gap: 0.5rem;
+                    margin-bottom: 2rem;
+                    border-bottom: 2px solid #e5e7eb;
+                }
+                .ulnec-tab {
+                    padding: 1rem 2rem;
+                    background: transparent;
+                    border: none;
+                    color: #c7d2fe;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    border-bottom: 3px solid transparent;
+                    transition: all 0.3s ease;
+                }
+                .ulnec-tab:hover {
+                    color: #ffffff;
+                    border-bottom-color: #667eea;
+                }
+                .ulnec-tab.active {
+                    color: #ffffff;
+                    border-bottom-color: #667eea;
+                }
+                .ulnec-tab-content {
+                    display: none;
+                }
+                .ulnec-tab-content.active {
+                    display: block;
+                }
+            </style>
+            
+            <script>
+                function switchTab(tabName) {
+                    // Hide all tabs
+                    document.querySelectorAll('.ulnec-tab-content').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelectorAll('.ulnec-tab').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Show selected tab
+                    document.getElementById(tabName).classList.add('active');
+                    document.querySelector('[onclick="switchTab(\'' + tabName + '\')"]').classList.add('active');
+                }
+            </script>
+            
             <div class="ulnec-bug-container">
                 <div class="ulnec-bug-header">
-                    <h1>💳 Billing & Subscriptions</h1>
-                    <p style="font-size: 1.1rem; color: #6b7280;">Manage your licenses and payment history</p>
+                    <h1 style="color: #ffffff;">💳 Billing & Subscriptions</h1>
+                    <p style="font-size: 1.1rem; color: #c7d2fe;">Manage your licenses and payment history</p>
                 </div>
                 
                 <div class="ulnec-bug-form-container">
-                    <h2 style="color: #667eea; margin-bottom: 2rem;">Active Licenses</h2>
+                    <!-- Tabs Navigation -->
+                    <div class="ulnec-tabs">
+                        <button class="ulnec-tab active" onclick="switchTab('licenses')">Licenses</button>
+                        <button class="ulnec-tab" onclick="switchTab('transactions')">Transactions</button>
+                        <button class="ulnec-tab" onclick="switchTab('payment-settings')">Payment Settings</button>
+                    </div>
+                    
+                    <!-- Licenses Tab -->
+                    <div id="licenses" class="ulnec-tab-content active">
+                        <h2 style="color: #ffffff; margin-bottom: 2rem; font-size: 1.5rem;">Active Licenses</h2>
                     
                     <?php if (empty($licenses)): ?>
                         <div style="background: #f9fafb; padding: 2rem; border-radius: 15px; text-align: center; margin-bottom: 2rem;">
-                            <p style="color: #6b7280; margin-bottom: 1rem;">No active licenses found.</p>
+                            <p style="color: #6b7280; margin-bottom: 1rem; font-size: 1.1rem;">No active licenses found.</p>
                             <a href="<?php echo home_url('/pricing'); ?>" class="ulnec-submit-btn" style="display: inline-block; text-decoration: none;">View Pricing</a>
                         </div>
                     <?php else: ?>
@@ -1005,46 +1357,49 @@ class ULNEC_Frontend_Pages {
                             <div style="background: #f9fafb; padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem; border-left: 4px solid <?php echo $license['status'] === 'active' ? '#10b981' : '#6b7280'; ?>;">
                                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                                     <div>
-                                        <h3 style="color: #1a1f3a; margin-bottom: 0.5rem;"><?php echo esc_html(ucfirst($license['tier'])); ?> License</h3>
-                                        <p style="color: #6b7280; font-size: 0.9rem;">License Key: <code style="background: #fff; padding: 0.25rem 0.5rem; border-radius: 5px;"><?php echo esc_html($license['license_key']); ?></code></p>
+                                        <h3 style="color: #1a1f3a; margin-bottom: 0.5rem; font-size: 1.3rem;"><?php echo esc_html(ucfirst($license['tier'])); ?> License</h3>
+                                        <p style="color: #6b7280; font-size: 0.9rem; margin: 0;">License Key: <code style="background: #fff; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.85rem;"><?php echo esc_html($license['license_key']); ?></code></p>
                                     </div>
-                                    <span style="background: <?php echo $license['status'] === 'active' ? '#d1fae5' : '#f3f4f6'; ?>; color: <?php echo $license['status'] === 'active' ? '#065f46' : '#6b7280'; ?>; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600;">
+                                    <span style="background: <?php echo $license['status'] === 'active' ? '#d1fae5' : '#f3f4f6'; ?>; color: <?php echo $license['status'] === 'active' ? '#065f46' : '#6b7280'; ?>; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">
                                         <?php echo esc_html(ucfirst($license['status'])); ?>
                                     </span>
                                 </div>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; color: #6b7280;">
-                                    <div>Activated: <?php echo date('M d, Y', strtotime($license['activated_at'])); ?></div>
-                                    <div>Expires: <?php echo $license['expires_at'] ? date('M d, Y', strtotime($license['expires_at'])) : 'Never'; ?></div>
+                                    <div><strong style="color: #1a1f3a;">Activated:</strong> <?php echo date('M d, Y', strtotime($license['activated_at'])); ?></div>
+                                    <div><strong style="color: #1a1f3a;">Expires:</strong> <?php echo $license['expires_at'] ? date('M d, Y', strtotime($license['expires_at'])) : 'Never'; ?></div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
+                    </div>
                     
-                    <h2 style="color: #667eea; margin-top: 3rem; margin-bottom: 2rem;">Transaction History</h2>
+                    <!-- Transactions Tab -->
+                    <div id="transactions" class="ulnec-tab-content">
+                    <h2 style="color: #ffffff; margin-bottom: 2rem; font-size: 1.5rem;">Transaction History</h2>
                     
                     <?php if (empty($transactions)): ?>
                         <div style="background: #f9fafb; padding: 2rem; border-radius: 15px; text-align: center;">
-                            <p style="color: #6b7280;">No transactions found.</p>
+                            <p style="color: #6b7280; font-size: 1.1rem;">No transactions found.</p>
                         </div>
                     <?php else: ?>
                         <div style="overflow-x: auto;">
                             <table style="width: 100%; border-collapse: collapse;">
                                 <thead>
                                     <tr style="background: #f9fafb;">
-                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a;">Date</th>
-                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a;">Description</th>
-                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a;">Amount</th>
-                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a;">Status</th>
+                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a; font-size: 1rem;">Date</th>
+                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a; font-size: 1rem;">Description</th>
+                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a; font-size: 1rem;">Amount</th>
+                                        <th style="padding: 1rem; text-align: left; font-weight: 600; color: #1a1f3a; font-size: 1rem;">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($transactions as $transaction): ?>
                                         <tr style="border-bottom: 1px solid #e5e7eb;">
                                             <td style="padding: 1rem; color: #6b7280;"><?php echo date('M d, Y', strtotime($transaction['created_at'])); ?></td>
-                                            <td style="padding: 1rem; color: #1a1f3a;"><?php echo esc_html($transaction['tier'] ?? 'License'); ?> License</td>
-                                            <td style="padding: 1rem; color: #1a1f3a; font-weight: 600;">$<?php echo number_format($transaction['amount'], 2); ?></td>
+                                            <td style="padding: 1rem; color: #1a1f3a; font-weight: 500;"><?php echo esc_html($transaction['tier'] ?? 'License'); ?> License</td>
+                                            <td style="padding: 1rem; color: #1a1f3a; font-weight: 600; font-size: 1.1rem;">$<?php echo number_format($transaction['amount'], 2); ?></td>
                                             <td style="padding: 1rem;">
-                                                <span style="background: #d1fae5; color: #065f46; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                                <span style="background: #d1fae5; color: #065f46; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
                                                     <?php echo esc_html(ucfirst($transaction['status'] ?? 'completed')); ?>
                                                 </span>
                                             </td>
@@ -1054,6 +1409,63 @@ class ULNEC_Frontend_Pages {
                             </table>
                         </div>
                     <?php endif; ?>
+                    </div>
+                    
+                    <!-- Payment Settings Tab -->
+                    <div id="payment-settings" class="ulnec-tab-content">
+                        <h2 style="color: #ffffff; margin-bottom: 2rem; font-size: 1.5rem;">Payment Methods</h2>
+                        
+                        <div style="background: #f9fafb; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div>
+                                    <h3 style="color: #1a1f3a; margin-bottom: 0.5rem; font-size: 1.2rem;">💳 Credit/Debit Card</h3>
+                                    <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Pay securely with your credit or debit card</p>
+                                </div>
+                                <span style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">Available</span>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" style="height: 30px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" style="height: 30px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" style="height: 30px;">
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f9fafb; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div>
+                                    <h3 style="color: #1a1f3a; margin-bottom: 0.5rem; font-size: 1.2rem;">
+                                        <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height: 24px; vertical-align: middle; margin-right: 0.5rem;">
+                                        PayPal
+                                    </h3>
+                                    <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Fast and secure PayPal checkout</p>
+                                </div>
+                                <span style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">Available</span>
+                            </div>
+                            <p style="color: #6b7280; margin: 0; font-size: 0.9rem;">✓ Buyer protection included</p>
+                        </div>
+                        
+                        <div style="background: #f9fafb; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div>
+                                    <h3 style="color: #1a1f3a; margin-bottom: 0.5rem; font-size: 1.2rem;">
+                                        <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" style="height: 24px; vertical-align: middle; margin-right: 0.5rem;">
+                                        Razorpay (India)
+                                    </h3>
+                                    <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">UPI, Net Banking, Cards & Wallets</p>
+                                </div>
+                                <span style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">Available</span>
+                            </div>
+                            <p style="color: #6b7280; margin: 0; font-size: 0.9rem;">✓ Supports all major Indian payment methods</p>
+                        </div>
+                        
+                        <div style="background: #fef3c7; border: 2px solid #fcd34d; padding: 1.5rem; border-radius: 15px; margin-top: 2rem;">
+                            <h4 style="color: #92400e; margin: 0 0 0.5rem 0; font-size: 1.1rem;">🔒 Secure Payment Processing</h4>
+                            <p style="color: #92400e; margin: 0; font-size: 0.95rem; line-height: 1.6;">
+                                All payments are processed securely through encrypted connections. 
+                                We never store your complete card details on our servers.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <?php
