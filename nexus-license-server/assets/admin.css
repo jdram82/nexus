@@ -1,0 +1,225 @@
+/* Nexus License Server - Admin Styles */
+
+.nexus-license-admin {
+    max-width: 1400px;
+}
+
+.nls-container {
+    margin-top: 20px;
+}
+
+.nls-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.nls-card h2 {
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Statistics Cards */
+.nls-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.nls-stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.nls-stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.nls-stat-card.stat-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.nls-stat-card.stat-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+.nls-stat-card.stat-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #007bff 100%);
+}
+
+.stat-icon {
+    font-size: 48px;
+    margin-right: 20px;
+    opacity: 0.8;
+}
+
+.stat-content h3 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-content p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+/* Form Styles */
+.nls-form .form-table th {
+    width: 200px;
+}
+
+.nls-form input[type="text"],
+.nls-form input[type="email"],
+.nls-form input[type="number"],
+.nls-form input[type="date"],
+.nls-form select {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* License Table */
+.license-key {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 4px 8px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.nls-copy-btn {
+    vertical-align: middle;
+    text-decoration: none;
+    padding: 2px;
+}
+
+.nls-copy-btn:hover {
+    color: #667eea;
+}
+
+/* Tier Badges */
+.tier-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tier-pro {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.tier-advanced {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.tier-agency {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-suspended {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Search and Actions */
+.tablenav {
+    margin: 15px 0;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+#nls-search {
+    max-width: 300px;
+}
+
+/* Success Notice */
+#nls-generated-license {
+    margin-top: 20px;
+    padding: 15px;
+}
+
+#nls-new-license-key {
+    user-select: all;
+    font-size: 16px !important;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .nls-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-icon {
+        font-size: 36px;
+    }
+    
+    .stat-content h3 {
+        font-size: 28px;
+    }
+}
+
+/* Loading State */
+.nls-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.nls-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
