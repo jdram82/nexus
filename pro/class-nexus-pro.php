@@ -238,14 +238,19 @@ class Nexus_Pro {
 			require_once NEXUS_PRO_DIR . '/agency/class-agency-dashboard.php';
 		}
 	}
+	
+	// Advanced Filtering (Advanced Tier)
+	if ( $license_manager && $license_manager->has_feature( 'advanced_filtering' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/filtering/class-product-filter.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/filtering/class-product-filter.php';
 		}
 		if ( file_exists( NEXUS_PRO_DIR . '/filtering/class-ajax-filter.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/filtering/class-ajax-filter.php';
 		}
+	}
 
-		// Documentation System
+	// Documentation System (Advanced Tier)
+	if ( $license_manager && $license_manager->has_feature( 'api_docs' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/documentation/class-docs-manager.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/documentation/class-docs-manager.php';
 		}
@@ -255,8 +260,10 @@ class Nexus_Pro {
 		if ( file_exists( NEXUS_PRO_DIR . '/documentation/class-code-highlighter.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/documentation/class-code-highlighter.php';
 		}
+	}
 
-		// Client Portal
+	// Client Portal (Agency Tier)
+	if ( $license_manager && $license_manager->has_feature( 'client_portal' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/portal/class-portal-manager.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/portal/class-portal-manager.php';
 		}
@@ -266,8 +273,10 @@ class Nexus_Pro {
 		if ( file_exists( NEXUS_PRO_DIR . '/portal/class-portal-projects.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/portal/class-portal-projects.php';
 		}
+	}
 
-		// Form Builder
+	// Form Builder (Advanced Tier)
+	if ( $license_manager && $license_manager->has_feature( 'form_builder' ) ) {
 		if ( file_exists( NEXUS_PRO_DIR . '/forms/class-form-builder.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/forms/class-form-builder.php';
 		}
@@ -277,6 +286,7 @@ class Nexus_Pro {
 		if ( file_exists( NEXUS_PRO_DIR . '/forms/class-form-fields.php' ) ) {
 			require_once NEXUS_PRO_DIR . '/forms/class-form-fields.php';
 		}
+	}
 
 		// Admin
 		if ( file_exists( NEXUS_PRO_DIR . '/admin/class-pro-admin.php' ) ) {
