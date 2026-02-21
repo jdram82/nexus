@@ -4,13 +4,16 @@
 **Time Required:** 1-1.5 hours total  
 **Date:** February 21, 2026
 
+> 📧 **Can't access SendGrid?** See [EMAIL_SERVICE_COMPARISON.md](EMAIL_SERVICE_COMPARISON.md) for 5 alternative email services!  
+> ⭐ **Quick recommendation:** Use Gmail SMTP (5-minute setup)
+
 ---
 
 ## 📋 OVERVIEW
 
 This guide covers the final 3 tasks to reach beta launch:
 
-1. ✅ **Configure SMTP** (20-30 minutes)
+1. ✅ **Configure SMTP** (20-30 minutes) - Choose from 5 email services
 2. ✅ **Upload .msi file** (10-15 minutes)
 3. ✅ **Test email system** (20-30 minutes)
 
@@ -20,46 +23,150 @@ This guide covers the final 3 tasks to reach beta launch:
 
 # PART 1: SMTP CONFIGURATION (20-30 minutes)
 
-## Step 1.1: Create SendGrid Account (5 minutes)
+## 🎯 Choose Your Email Service
 
-1. Go to: https://signup.sendgrid.com/
+Pick ONE option that works for you:
+- **Option A: Gmail SMTP** (Easiest - 5 min setup) ⭐ RECOMMENDED
+- **Option B: Mailgun** (Free tier - 5,000 emails/month)
+- **Option C: Brevo** (300 emails/day free)
+- **Option D: SMTP.com** (100 emails/month free)
+- **Option E: cPanel/Hosting Email** (If you have hosting)
+
+---
+
+## ⭐ OPTION A: Gmail SMTP (RECOMMENDED - Easiest)
+
+### Step 1.1: Create Gmail App Password (5 minutes)
+
+**Requirements:** You need a Gmail account with 2-Factor Authentication enabled
+
+1. **Enable 2FA (if not already enabled):**
+   - Go to: https://myaccount.google.com/security
+   - Find "2-Step Verification"
+   - Click "Get Started" and follow steps
+   - (If already enabled, skip to step 2)
+
+2. **Create App Password:**
+   - Go to: https://myaccount.google.com/apppasswords
+   - OR Google Account → Security → 2-Step Verification → App passwords
+   - Select app: **Mail**
+   - Select device: **Other (Custom name)**
+   - Enter name: `WordPress UL-NEC`
+   - Click **Generate**
+
+3. **Copy the 16-character password:**
+   ```
+   Example: abcd efgh ijkl mnop
+   ```
+   - **COPY & SAVE IT** (shows only once!)
+   - Remove spaces when pasting: `abcdefghijklmnop`
+
+✅ **Done:** Gmail App Password created
+
+**Skip to Step 1.8** (Install WP Mail SMTP)
+
+---
+
+## OPTION B: Mailgun (5,000 emails/month free)
+
+### Step 1.2: Create Mailgun Account (8 minutes)
+
+1. Go to: https://signup.mailgun.com/
 2. Click **"Start Free"**
-3. Fill out form:
-   - Email: your-email@domain.com
-   - Password: [create strong password]
-   - Company: JDS & N Controls (or your company)
-4. Click **"Create Account"**
-5. **Check your email** for verification link
-6. Click verification link
-7. Complete profile setup
+3. Fill out signup form
+4. Verify your email address
+5. Complete profile
+6. Login to Mailgun Dashboard
+7. Left sidebar → **Sending** → **Domain settings**
+8. Find your sandbox domain (starts with `sandbox`)
+9. Click on the domain name
 
-✅ **Done:** SendGrid account created
+### Step 1.3: Get Mailgun SMTP Credentials
 
----
+1. On domain details page, note:
+   - **SMTP Hostname:** smtp.mailgun.org
+   - **Port:** 587
+   - **SMTP Username:** (shown on page, looks like: postmaster@sandbox...)
+2. **SMTP Password:**
+   - Click "Reset Password" button
+   - Copy the new password
+   - **SAVE IT** (won't show again)
 
-## Step 1.2: Create SendGrid API Key (3 minutes)
+✅ **Done:** Mailgun credentials ready
 
-1. Login to SendGrid Dashboard
-2. Left sidebar → **Settings** → **API Keys**
-3. Click blue **"Create API Key"** button
-4. Configure:
-   - Name: `WordPress UL-NEC`
-   - Permissions: Select **"Full Access"**
-5. Click **"Create & View"**
-6. **COPY THE API KEY** (shows only once!)
-
-```
-Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-7. **Save it in a text file** on your computer
-8. Click **"Done"**
-
-✅ **Done:** API key created and saved
+**Skip to Step 1.8** (Install WP Mail SMTP)
 
 ---
 
-## Step 1.3: Install WP Mail SMTP Plugin (5 minutes)
+## OPTION C: Brevo (300 emails/day free)
+
+### Step 1.4: Create Brevo Account (8 minutes)
+
+1. Go to: https://www.brevo.com/
+2. Click **"Sign up free"**
+3. Fill out form and verify email
+4. Complete onboarding
+
+### Step 1.5: Get Brevo SMTP Credentials
+
+1. **Login to Brevo Dashboard**
+2. Click your name (top right) → **SMTP & API**
+3. Scroll to **SMTP** section
+4. Click **"Create a new SMTP key"**
+5. Name: `WordPress UL-NEC`
+6. Click **"Generate"**
+7. **Copy these values:**
+   - **SMTP Server:** smtp-relay.brevo.com
+   - **Port:** 587
+   - **Login:** (your email address)
+   - **SMTP Key:** (the generated key - save it!)
+
+✅ **Done:** Brevo credentials ready
+
+**Skip to Step 1.8** (Install WP Mail SMTP)
+
+---
+
+## OPTION D: SMTP.com (100 emails/month free)
+
+### Step 1.6: SMTP.com Setup (5 minutes)
+
+1. Go to: https://www.smtp.com/
+2. Click **"Free Trial"**
+3. Sign up and verify email
+4. Dashboard → **SMTP Credentials**
+5. **Copy values:**
+   - **Server:** smtp.smtp.com
+   - **Port:** 587
+   - **Username:** (shown in dashboard)
+   - **Password:** (shown in dashboard)
+
+✅ **Done:** SMTP.com ready
+
+**Skip to Step 1.8** (Install WP Mail SMTP)
+
+---
+
+## OPTION E: cPanel/Hosting Email
+
+### Step 1.7: Get cPanel SMTP Details (5 minutes)
+
+**If you have standard hosting (cPanel/WHM):**
+
+1. Login to your cPanel or ask your hosting provider
+2. Look for **Email Accounts** section
+3. Create or use existing email: `support@jdsancontrols.com`
+4. Note your **SMTP details** (usually):
+   - **Server:** mail.jdsancontrols.com
+   - **Port:** 587 (TLS) or 465 (SSL)
+   - **Username:** support@jdsancontrols.com
+   - **Password:** (your email password)
+
+✅ **Done:** cPanel SMTP ready
+
+---
+
+## Step 1.8: Install WP Mail SMTP Plugin (5 minutes)
 
 1. **Login to WordPress:**
    - Go to: https://jdsancontrols.com/wp-admin/
@@ -81,7 +188,7 @@ Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ---
 
-## Step 1.4: Configure WP Mail SMTP (10 minutes)
+## Step 1.9: Configure WP Mail SMTP (10 minutes)
 
 1. **Go to Settings:**
    - Left sidebar → **WP Mail SMTP** → **Settings**
@@ -94,28 +201,82 @@ Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    Force From Name: ✅ (check the box)
    ```
 
-3. **Mailer Selection:**
-   - Click on **"SendGrid"** box (should highlight in blue)
+3. **Select Your Mailer:**
+   
+   Choose based on which option you completed above:
 
-4. **SendGrid Configuration:**
-   ```
-   API Key: [Paste your SendGrid API key from Step 1.2]
-   ```
+### If using Gmail (Option A):
+```
+Mailer: Select "Gmail"
+Client ID: (leave blank)
+Client Secret: (leave blank)
+```
+- Then click "Allow plugin to send emails using your Google account"
+- OR configure manually:
+  - Mailer: Select "Other SMTP"
+  - SMTP Host: smtp.gmail.com
+  - SMTP Port: 587
+  - Encryption: TLS
+  - Authentication: ON
+  - SMTP Username: your-email@gmail.com
+  - SMTP Password: [Your 16-character app password]
 
-5. **Email Settings (scroll down):**
+### If using Mailgun (Option B):
+```
+Mailer: Select "Mailgun"
+API Key: [Your Mailgun API key]
+Domain: [Your sandbox domain]
+Region: US or EU (check your account)
+```
+
+### If using Brevo (Option C):
+```
+Mailer: Select "Sendinblue" or "Other SMTP"
+If Other SMTP:
+  - SMTP Host: smtp-relay.brevo.com
+  - SMTP Port: 587
+  - Encryption: TLS
+  - Authentication: ON
+  - SMTP Username: [Your email]
+  - SMTP Password: [Your SMTP key]
+```
+
+### If using SMTP.com (Option D):
+```
+Mailer: Select "Other SMTP"
+SMTP Host: smtp.smtp.com
+SMTP Port: 587
+Encryption: TLS
+Authentication: ON
+SMTP Username: [From dashboard]
+SMTP Password: [From dashboard]
+```
+
+### If using cPanel (Option E):
+```
+Mailer: Select "Other SMTP"
+SMTP Host: mail.jdsancontrols.com
+SMTP Port: 587 (or 465)
+Encryption: TLS (or SSL if using 465)
+Authentication: ON
+SMTP Username: support@jdsancontrols.com
+SMTP Password: [Your email password]
+```
+
+4. **Email Settings (scroll down):**
    ```
    Return Path: ✅ (check the box)
    ```
 
-6. **Click "Save Settings"** button at bottom
+5. **Click "Save Settings"** button at bottom
 
-7. **Wait for success message:** "Settings were successfully saved."
+6. **Wait for success message:** "Settings were successfully saved."
 
-✅ **Done:** SMTP configured with SendGrid
+✅ **Done:** SMTP configured!
 
 ---
 
-## Step 1.5: Test Email Delivery (2-3 minutes)
+## Step 1.10: Test Email Delivery (2-3 minutes)
 
 1. **Go to Email Test:**
    - Top tabs → Click **"Email Test"**
@@ -409,16 +570,19 @@ Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
      - Bug report confirmation
      - Feature request confirmation
 
-2. **Check SendGrid Dashboard:**
-   - Go to SendGrid Dashboard
-   - Activity Feed
+2. **Check Email Service Dashboard:**
+   - **Gmail:** Check sent folder (youraddress@gmail.com)
+   - **Mailgun:** Activity → Logs
+   - **Brevo:** Statistics → Email Activity
+   - **SMTP.com:** Dashboard → Reports
+   - **cPanel:** May not have logs (check inbox directly)
    - Should see 2-3 emails:
-     - Test email from Step 1.5
+     - Test email from Step 1.10
      - Bug report email
      - Feature request email
 
 3. **Verify delivery status:**
-   - All should show "Delivered"
+   - All should show "Delivered" or "Sent"
    - None should show "Bounced" or "Dropped"
 
 ✅ **All Tests Passed:** Email system fully functional!
@@ -460,11 +624,44 @@ Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ### "Test email not received"
 **Solutions:**
-1. Check spam folder
-2. Verify API key copied correctly (no extra spaces)
+1. Check spam folder first (most common issue)
+2. Verify credentials copied correctly (no extra spaces)
 3. Try different "Send To" email address
-4. Check SendGrid Activity Feed for errors
-5. Verify email address in SendGrid is verified
+4. Check service-specific logs:
+   - **Gmail:** Check Sent folder
+   - **Mailgun:** Activity Feed
+   - **Brevo:** Statistics
+   - **SMTP.com:** Reports
+   - **cPanel:** Check inbox directly
+5. Verify WP Mail SMTP Email Log: WP Admin → WP Mail SMTP → Email Log
+
+### "Authentication failed" or "Connection error"
+**Solutions:**
+
+**For Gmail:**
+- Verify 2FA is enabled on Google account
+- Regenerate app password (may expire)
+- Try using "Other SMTP" instead of "Gmail" mailer
+- Check firewall allows smtp.gmail.com port 587
+
+**For Mailgun:**
+- Verify API key has full permissions
+- Check domain is correct (sandbox domain for testing)
+- Add recipient to Authorized Recipients (sandbox mode)
+
+**For Brevo:**
+- Verify SMTP key (not API key)
+- Check account verified
+- Verify smtp-relay.brevo.com accessible
+
+**For SMTP.com:**
+- Check credentials from dashboard
+- Verify account active (trial not expired)
+
+**For cPanel:**
+- Verify mail server address (usually mail.domain.com)
+- Check email account exists and password correct
+- Try port 465 (SSL) if 587 fails
 
 ### "500 Error when sending email"
 **Solutions:**
@@ -472,15 +669,28 @@ Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```php
    define('WP_MEMORY_LIMIT', '256M');
    ```
-2. Check error log in WordPress
-3. Verify SendGrid API key has Full Access permissions
+2. Check error log: WP Admin → Tools → Site Health
+3. Verify credentials have correct permissions
+4. Check WP Mail SMTP debug log for details
 
 ### "Emails go to spam"
 **Solutions:**
-1. Add SPF record to DNS (advanced)
-2. Use "noreply@" sender address
-3. Verify domain in SendGrid (Settings → Sender Authentication)
-4. Avoid spam trigger words in subject
+1. Use "noreply@yourdomain.com" sender address (not Gmail address)
+2. Avoid spam trigger words in subject/body
+3. For production (advanced):
+   - Add SPF record to DNS
+   - Verify domain with email service
+   - Set up DKIM authentication
+4. **Quick fix for beta:** Gmail has best deliverability
+
+### "Can't install WP Mail SMTP plugin"
+**Solutions:**
+1. Check WordPress version (need 5.2+)
+2. Try manual install:
+   - Download from WordPress.org
+   - Upload via Plugins → Add New → Upload
+3. Check file permissions on wp-content/plugins/
+4. Temporarily disable other plugins (conflict?)
 
 ## Upload Issues:
 
@@ -529,16 +739,16 @@ Example: SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 After completing this guide, verify:
 
-- [ ] SendGrid API key created and working
+- [ ] Email service chosen and credentials obtained
 - [ ] WP Mail SMTP plugin installed and configured
-- [ ] Test email sent and received
+- [ ] Test email sent and received (check spam folder too)
 - [ ] .msi file uploaded to ulnec-downloads bucket
 - [ ] File renamed to: UL-NEC-Compliance-Plugin-Latest.msi
 - [ ] File permissions/RLS policy set
 - [ ] Bug report email received and looks good
 - [ ] Feature request email received and looks good
 - [ ] Both emails in WP Mail SMTP log
-- [ ] Both emails in SendGrid Activity Feed
+- [ ] Both emails in email service dashboard (if available)
 - [ ] Bug report appears in WP Admin
 - [ ] Feature request appears in WP Admin
 
@@ -580,14 +790,20 @@ After completing this guide, verify:
 **Issues? Questions?**
 
 1. **Check error logs:**
-   - WordPress: WP Admin → Tools → Site Health → Info → Error Log
-   - SendGrid: Activity Feed
+   - WordPress: WP Admin → Tools → Site Health
+   - WP Mail SMTP: Email Log
+   - Email Service: Dashboard activity/logs
    - Supabase: Logs section
 
 2. **Documentation:**
    - WP Mail SMTP: https://wpmailsmtp.com/docs/
-   - SendGrid: https://docs.sendgrid.com/
+   - Gmail: https://support.google.com/mail/answer/7126229
+   - Mailgun: https://documentation.mailgun.com/
+   - Brevo: https://help.brevo.com/
    - Supabase: https://supabase.com/docs
+
+3. **Quick Comparison:**
+   - See: EMAIL_SERVICE_COMPARISON.md for choosing best service
 
 3. **Contact:**
    - support@jdsancontrols.com
