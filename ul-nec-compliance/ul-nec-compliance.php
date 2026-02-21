@@ -61,6 +61,11 @@ final class ULNEC_Plugin {
     public $payment = null;
     
     /**
+     * Emails instance
+     */
+    public $emails = null;
+    
+    /**
      * Get plugin instance
      */
     public static function instance() {
@@ -88,6 +93,7 @@ final class ULNEC_Plugin {
         require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-license.php';
         require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-download.php';
         require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-payment.php';
+        require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-emails.php';
         require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-admin.php';
         require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-frontend.php';
         require_once ULNEC_PLUGIN_DIR . 'includes/class-ulnec-frontend-pages.php';
@@ -123,6 +129,7 @@ final class ULNEC_Plugin {
         $this->license = new ULNEC_License($this->supabase);
         $this->download = new ULNEC_Download($this->supabase);
         $this->payment = new ULNEC_Payment($this->supabase);
+        $this->emails = new ULNEC_Emails();
         
         // Initialize admin interface
         if (is_admin()) {

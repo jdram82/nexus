@@ -112,9 +112,27 @@ class ULNEC_Frontend_Pages {
                         // Generate bug ID
                         if (isset($result[0]['id'])) {
                             $bug_id = 'BUG-' . date('Y') . '-' . substr($result[0]['id'], 0, 3);
+                            $bug_record_id = $result[0]['id'];
                         } else {
                             $bug_id = 'BUG-' . date('Y') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+                            $bug_record_id = time();
                         }
+                        
+                        // Send confirmation email
+                        $plugin = ULNEC_Plugin::instance();
+                        if ($plugin && $plugin->emails) {
+                            $email_data = [
+                                'user_name' => $current_user->display_name,
+                                'user_email' => $current_user->user_email,
+                                'id' => $bug_id,
+                                'title' => $title,
+                                'priority' => $severity,
+                                'status' => 'open',
+                                'track_url' => home_url('/founders-progress/')
+                            ];
+                            $plugin->emails->send_bug_confirmation_email($email_data);
+                        }
+                        
                         // Clear form
                         $_POST = [];
                     }
@@ -647,6 +665,21 @@ class ULNEC_Frontend_Pages {
                         } else {
                             $feature_id = 'FEAT-' . date('Y') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
                         }
+                        
+                        // Send confirmation email
+                        $plugin = ULNEC_Plugin::instance();
+                        if ($plugin && $plugin->emails) {
+                            $email_data = [
+                                'user_name' => $current_user->display_name,
+                                'user_email' => $current_user->user_email,
+                                'id' => $feature_id,
+                                'title' => $title,
+                                'status' => 'submitted',
+                                'track_url' => home_url('/founders-progress/')
+                            ];
+                            $plugin->emails->send_feature_confirmation_email($email_data);
+                        }
+                        
                         $_POST = [];
                     }
                 }

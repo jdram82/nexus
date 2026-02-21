@@ -95,22 +95,49 @@ class ULNEC_Payment {
     }
     
     /**
-     * Send license email
+     * Send license email with professional HTML template
      */
     private function send_license_email($user_id, $license) {
         $wp_user = get_userdata($user_id);
         
         if (!$wp_user) {
-            return;
+            error_log('UL/NEC Payment: User not found for license email - User ID: ' . $user_id);
+            return false;
         }
         
-        $to = $wp_user->user_email;
-        $subject = 'Your UL-NEC License Key';
-        $message = "Thank you for your purchase!\n\n";
-        $message .= "License Key: " . $license['license_key'] . "\n";
-        $message .= "Tier: " . $license['tier'] . "\n\n";
-        $message .= "Download: " . home_url('/dashboard') . "\n";
+        // Get plugin instance and email handler
+        $plugin = ULNEC_Plugin::instance();
+        if (!$plugin || !$plugin->emails) {
+            error_log('UL/NEC Payment: Email handler not available');
+            return false;
+        }
         
-        wp_mail($to, $subject, $message);
+        // Calculate expiration date
+        $expires_at = 'Lifetime';
+        if (!empty($license['expires_at'])) {
+            $expires_at = date('F j, Y', strtotime($license['expires_at']));
+        }
+        
+        // Prepare email data
+        $email_data = [
+            'customer_name' => $wp_user->display_name ?: $wp_user->user_login,
+            'customer_email' => $wp_user->user_email,
+            'license_key' => $license['license_key'],
+            'tier' => $license['tier'],
+            'expires_at' => $expires_at,
+            'max_activations' => isset($license['max_activations']) ? $license['max_activations'] : 1,
+            'download_url' => home_url('/billing/')
+        ];
+        
+        // Send professional HTML email
+        $sent = $plugin->emails->send_license_delivery_email($email_data);
+        
+        if ($sent) {
+            error_log('UL/NEC Payment: License email sent successfully to ' . $wp_user->user_email);
+        } else {
+            error_log('UL/NEC Payment: Failed to send license email to ' . $wp_user->user_email);
+        }
+        
+        return $sent;
     }
 }
