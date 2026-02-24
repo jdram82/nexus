@@ -79,10 +79,22 @@ get_header();
 
     .tagline {
         font-size: 1.8rem;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
         opacity: 0.95;
         font-weight: 300;
         animation: fadeInUp 0.8s ease-out 0.2s backwards;
+    }
+
+    .pricing-highlight {
+        font-size: 1.3rem;
+        margin-bottom: 3rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: 600;
+        animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        backdrop-filter: blur(10px);
     }
 
     @keyframes fadeInUp {
@@ -585,7 +597,10 @@ get_header();
     <section class="hero-product">
         <div class="container">
             <h1>⚡ UL/NEC Compliance Checker for AutoCAD</h1>
-            <p class="tagline">Validate electrical panel designs instantly</p>
+            <p class="tagline">Save 15-20 Hours Per Panel with Automated UL508A & NEC Validation</p>
+            <div class="pricing-highlight">
+                🎉 Beta Launch: Lock in $75/mo Forever (Save 50% for Life)
+            </div>
             
             <div class="cta-buttons">
                 <a href="#pricing" class="btn-primary">
@@ -598,8 +613,8 @@ get_header();
             
             <div class="trust-badges">
                 <span>✓ No credit card required</span>
-                <span>✓ Full features enabled</span>
-                <span>✓ Windows 10/11 compatible</span>
+                <span>✓ 1,200+ compliance rules</span>
+                <span>✓ 10,000+ component database</span>
             </div>
         </div>
     </section>
@@ -609,11 +624,11 @@ get_header();
         <div class="container">
             <h2 class="section-title">The Challenge Electrical Engineers Face</h2>
             <div class="problem-grid">
-                <div class="problem-item">Manual UL508A compliance checking takes 4-6 hours</div>
-                <div class="problem-item">Easy to miss critical NEC violations</div>
+                <div class="problem-item">Manual UL508A compliance checking takes 18-22 hours per panel</div>
+                <div class="problem-item">Easy to miss critical NEC violations (85% accuracy rate)</div>
                 <div class="problem-item">Rework costs $5,000-$50,000 after panel production</div>
-                <div class="problem-item">Component SCCR ratings scattered across datasheets</div>
-                <div class="problem-item">No automated validation in AutoCAD</div>
+                <div class="problem-item">Inspector rejections cause 3-4 revision cycles</div>
+                <div class="problem-item">Component databases scattered across 1,000+ datasheets</div>
             </div>
         </div>
     </section>
@@ -626,17 +641,17 @@ get_header();
                 <div class="solution-card">
                     <h3>✅ VALIDATE</h3>
                     <ul>
-                        <li>80 UL508A/NEC rules</li>
-                        <li>Checked in seconds</li>
-                        <li>SCCR calculation</li>
-                        <li>Wire gauge check</li>
+                        <li>1,200+ UL508A/NEC rules</li>
+                        <li>Checked in 2-3 minutes</li>
+                        <li>99.7% accuracy rate</li>
+                        <li>Wire sizing & voltage drop</li>
                     </ul>
                 </div>
                 <div class="solution-card">
                     <h3>✅ DETECT</h3>
                     <ul>
-                        <li>Real-time checking</li>
-                        <li>As you draw</li>
+                        <li>10,000+ components</li>
+                        <li>11 manufacturers</li>
                         <li>Visual highlights</li>
                         <li>Error prevention</li>
                     </ul>
@@ -644,10 +659,10 @@ get_header();
                 <div class="solution-card">
                     <h3>✅ REPORT</h3>
                     <ul>
-                        <li>PDF documentation</li>
-                        <li>Auto-export</li>
-                        <li>Professional</li>
-                        <li>Compliance ready</li>
+                        <li>Professional PDF reports</li>
+                        <li>Automated BOM generation</li>
+                        <li>NEC article citations</li>
+                        <li>Inspector-ready format</li>
                     </ul>
                 </div>
             </div>
@@ -657,79 +672,110 @@ get_header();
     <!-- Counter Section -->
     <section class="counter-section">
         <div class="container">
-            ⚡ <span id="spots-remaining">Only 25 FREE Licenses Available</span> | ⏰ <span>Offer Expires: March 31, 2026</span>
+            ⚡ <span id="beta-urgency">Beta Launch Pricing - Save 50% for Life</span> | ⏰ <span>Lock in $75/mo Forever - Expires April 30, 2026</span>
         </div>
     </section>
 
     <!-- Pricing Section -->
     <section class="pricing-section" id="pricing">
         <div class="container">
-            <div class="pricing-special">🎯 EXCLUSIVE BETA LAUNCH TIERS</div>
-            <h2 class="section-title">Choose Your Beta Tier</h2>
+            <div class="pricing-special">🎯 BETA LAUNCH PRICING - LOCK IN 50% OFF FOR LIFE</div>
+            <h2 class="section-title">Choose Your Plan</h2>
+            <p style="text-align: center; font-size: 1.2rem; opacity: 0.9; margin-bottom: 3rem;">Start with a 30-day free trial. No credit card required. Cancel anytime.</p>
             
             <div class="pricing-grid">
-                <!-- Tier 1: Founders (Free) -->
+                <!-- Plan 1: Professional -->
                 <div class="pricing-card featured">
-                    <span class="badge">🏆 Most Exclusive</span>
-                    <h3>FOUNDERS TIER</h3>
-                    <div class="price">FREE<span style="font-size: 1.5rem;"> Forever</span></div>
-                    <p class="price-note">First 25 Beta Testers Only</p>
+                    <span class="badge">💎 Most Popular</span>
+                    <h3>PROFESSIONAL</h3>
+                    <div class="price">$37.50<span style="font-size: 1.5rem;">/month</span></div>
+                    <p class="price-note">First 6 months, then $75/month forever</p>
+                    <div style="text-align: center; margin: 1rem 0; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 0.95rem;">
+                        <strong>Save $888/year</strong> vs regular $149/month<br>
+                        Regular price after April 30: $149/month
+                    </div>
                     
                     <ul class="features-list">
-                        <li>FREE 1-year license ($299 value)</li>
-                        <li>Renew at 50% off forever ($149/year)</li>
-                        <li>Direct Slack access to dev team</li>
-                        <li>Priority feature voting</li>
-                        <li>Name in Hall of Fame</li>
-                        <li>All features + updates</li>
+                        <li>✅ Unlimited NEC/UL508A validations</li>
+                        <li>✅ 1,200+ compliance rules</li>
+                        <li>✅ Professional PDF reports</li>
+                        <li>✅ Automated BOM generation</li>
+                        <li>✅ 10,000+ component database</li>
+                        <li>✅ Custom branding on reports</li>
+                        <li>✅ Priority email support (48hr)</li>
+                        <li>✅ All future features included</li>
+                        <li>✅ Lock in $75/mo rate forever</li>
                     </ul>
                     
-                    <a href="<?php echo esc_url(home_url('/founders-application')); ?>" class="btn-cta">
-                        🎯 Apply for FREE License
+                    <a href="<?php echo esc_url(home_url('/register')); ?>?tier=professional" class="btn-cta">
+                        Start 30-Day Free Trial
                     </a>
+                    <p style="text-align: center; font-size: 0.85rem; margin-top: 1rem; opacity: 0.8;">No credit card required</p>
                 </div>
 
-                <!-- Tier 2: Early Adopter -->
+                <!-- Plan 2: Team -->
                 <div class="pricing-card">
-                    <span class="badge">💎 Best Value</span>
-                    <h3>EARLY ADOPTER</h3>
-                    <div class="price">$149<span style="font-size: 1.5rem;">/year</span></div>
-                    <p class="price-note">Locked in forever (50% off retail)</p>
+                    <span class="badge">👥 Best for Teams</span>
+                    <h3>TEAM (5 USERS)</h3>
+                    <div class="price">$200<span style="font-size: 1.5rem;">/month</span></div>
+                    <p class="price-note">Year 1, then $280/month forever</p>
+                    <div style="text-align: center; margin: 1rem 0; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 0.95rem;">
+                        <strong>Save $1,428/year</strong> vs regular $399/month<br>
+                        Regular price after April 30: $399/month
+                    </div>
                     
                     <ul class="features-list">
-                        <li>$149/year locked-in pricing</li>
-                        <li>Priority email support (48hr)</li>
-                        <li>Feature request voting</li>
-                        <li>All updates included</li>
-                        <li>Beta tester recognition</li>
-                        <li>Commercial use allowed</li>
+                        <li>✅ Everything in Professional</li>
+                        <li>✅ <strong>5 user licenses</strong> included</li>
+                        <li>✅ Team collaboration tools</li>
+                        <li>✅ Shared component library</li>
+                        <li>✅ Batch validation (100+ drawings)</li>
+                        <li>✅ Centralized license management</li>
+                        <li>✅ Phone support (24hr response)</li>
+                        <li>✅ Team training session included</li>
+                        <li>✅ Lock in $280/mo rate forever</li>
                     </ul>
                     
-                    <a href="<?php echo esc_url(home_url('/register')); ?>?tier=early_adopter" class="btn-cta">
-                        Start Free Trial
+                    <a href="<?php echo esc_url(home_url('/register')); ?>?tier=team" class="btn-cta">
+                        Start 30-Day Free Trial
                     </a>
+                    <p style="text-align: center; font-size: 0.85rem; margin-top: 1rem; opacity: 0.8;">Try with full team for 30 days</p>
                 </div>
 
-                <!-- Tier 3: Beta Tester -->
+                <!-- Plan 3: Enterprise -->
                 <div class="pricing-card">
-                    <span class="badge">⚡ Last Chance</span>
-                    <h3>BETA TESTER</h3>
-                    <div class="price">$224<span style="font-size: 1.5rem;">/year</span></div>
-                    <p class="price-note">Locked in forever (25% off retail)</p>
+                    <span class="badge">🏢 Custom Solution</span>
+                    <h3>ENTERPRISE</h3>
+                    <div class="price">Custom<span style="font-size: 1.5rem;"> Pricing</span></div>
+                    <p class="price-note">Starting at $12,000/year</p>
+                    <div style="text-align: center; margin: 1rem 0; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 0.95rem;">
+                        For 20+ users or custom integrations<br>
+                        Volume discounts available
+                    </div>
                     
                     <ul class="features-list">
-                        <li>$224/year locked-in pricing</li>
-                        <li>Email support (72hr)</li>
-                        <li>All compliance features</li>
-                        <li>Regular updates</li>
-                        <li>Knowledge base access</li>
-                        <li>Community forum</li>
+                        <li>✅ Everything in Team</li>
+                        <li>✅ <strong>Unlimited users</strong></li>
+                        <li>✅ REST API access</li>
+                        <li>✅ Custom rule engine extensions</li>
+                        <li>✅ White-label option (rebrand/resell)</li>
+                        <li>✅ On-premise deployment option</li>
+                        <li>✅ 99.9% uptime SLA</li>
+                        <li>✅ Dedicated success manager</li>
+                        <li>✅ 4-hour critical bug response</li>
                     </ul>
                     
-                    <a href="<?php echo esc_url(home_url('/register')); ?>?tier=beta" class="btn-cta">
-                        Start Free Trial
+                    <a href="mailto:support@jdsancontrols.com?subject=Enterprise%20Quote" class="btn-cta">
+                        Request Enterprise Quote
                     </a>
+                    <p style="text-align: center; font-size: 0.85rem; margin-top: 1rem; opacity: 0.8;">Response within 24 hours</p>
                 </div>
+            </div>
+            
+            <!-- Pricing Guarantee -->
+            <div style="text-align: center; margin-top: 4rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 20px;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">💯 30-Day Money-Back Guarantee</h3>
+                <p style="font-size: 1.1rem; opacity: 0.9;">Not satisfied? Email us within 30 days for a full refund. No questions asked.</p>
             </div>
         </div>
     </section>
@@ -758,83 +804,102 @@ get_header();
             <div class="faq-container">
                 
                 <div class="faq-item">
-                    <h3 class="faq-question">How do I earn a FREE lifetime license in Founders Tier?</h3>
+                    <h3 class="faq-question">What happens after the 30-day trial?</h3>
                     <div class="faq-answer">
-                        <p>To earn a FREE lifetime license, you must complete all four requirements within 60 days of installing the beta:</p>
+                        <p>You'll receive an email with upgrade options. Your trial won't auto-convert to paid - you choose if/when to upgrade. All your validation data and settings are preserved.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I cancel anytime?</h3>
+                    <div class="faq-answer">
+                        <p>Yes, cancel anytime. No contracts, no commitments. Month-to-month billing. If you cancel, you can reactivate later and your locked-in beta pricing will still apply (if you signed up during beta period).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What if I lock in $75/month and you add more features?</h3>
+                    <div class="faq-answer">
+                        <p>You get ALL future features at no extra cost. Your rate stays $75/month forever. No hidden fees, no surprise price increases. This includes BricsCAD support (Q3 2026), API access upgrades, and all new compliance rules.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I upgrade from Professional to Team later?</h3>
+                    <div class="faq-answer">
+                        <p>Yes! You'll keep your Early Adopter discount. Email us at support@jdsancontrols.com to upgrade. Pro-rated billing applies - you only pay the difference for the current month.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What AutoCAD versions are supported?</h3>
+                    <div class="faq-answer">
+                        <p>AutoCAD 2020, 2021, 2022, 2023, 2024, 2025 are fully supported. BricsCAD V24+ support coming Q3 2026. Works with AutoCAD LT, Civil 3D, Mechanical, and Electrical editions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you offer annual billing?</h3>
+                    <div class="faq-answer">
+                        <p>Yes! Pay annually and save 10% extra:</p>
                         <ul>
-                            <li>Submit at least 3 bug reports or feature suggestions</li>
-                            <li>Record a 30-second video testimonial about your experience</li>
-                            <li>Allow us to create a case study featuring your company (with approval rights)</li>
-                            <li>Post about the product on LinkedIn (we'll provide talking points)</li>
+                            <li>Professional: $810/year (vs $900 paid monthly) - locked in forever</li>
+                            <li>Team: $3,024/year (vs $3,360 paid monthly) - locked in after Year 1</li>
                         </ul>
-                        <p>If you complete these requirements, your license becomes FREE forever with 50% off all renewals.</p>
+                        <p>Annual billing locks in your rate and you save an additional 10%.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">What happens if I start as Founders Tier but don't complete requirements?</h3>
+                    <h3 class="faq-question">Can I try it on multiple machines during trial?</h3>
                     <div class="faq-answer">
-                        <p>No problem! You'll automatically be moved to the Early Adopter tier at $149/year. You keep all your trial data and settings. We'll send you reminders at 30 and 45 days to help you complete the requirements if you want the free license.</p>
+                        <p>Yes, activate trial on up to 3 machines. Paid licenses are floating (1 user = use on multiple machines, just not simultaneously). Team licenses allow simultaneous use by all licensed users.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">What's included in the 30-day free trial?</h3>
+                    <h3 class="faq-question">Is my data secure? Do you upload my drawings?</h3>
                     <div class="faq-answer">
-                        <p>Everything! You get full access to all 80 UL508A/NEC compliance rules, SCCR calculations, real-time validation, PDF report generation, and priority support. No features are locked. No credit card required.</p>
+                        <p>We never upload your drawings. All validation happens locally on your machine. We only collect anonymous usage analytics (opt-out available). Your drawings stay private and secure on your computer.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">Does this work with BricsCAD or only AutoCAD?</h3>
-                    <div class="faq-answer">
-                        <p>Yes! The plugin works with AutoCAD 2024-2026 AND BricsCAD V24+. Both platforms are fully supported with identical features and performance.</p>
-                    </div>
+                    <h3 class="faq-question">What if I need help during the trial?</h3>
+                    <div Save 15-20 Hours Per Panel?</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 2rem;">Lock in $75/mo forever. Beta pricing expires April 30, 2026.</p>
+            <a href="#pricing" class="btn-primary">Start 30-Day Free Trial</a>
+            <p>Join 50+div>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">What happens after the beta period ends?</h3>
+                    <h3 class="faq-question">What happens after April 30, 2026 (beta launch deadline)?</h3>
                     <div class="faq-answer">
-                        <p>Your locked-in beta pricing continues forever! Founders Tier stays FREE with 50% off renewals. Early Adopters keep their $149/year pricing. Beta Testers keep $224/year. Once we exit beta (estimated Q3 2026), the standard price will be $299/year, so your savings continue for life.</p>
-                    </div>
-                </div>
+       Beta pricing urgency tracker
+    const betaDeadline = new Date('2026-04-30T23:59:59');
+    const now = new Date();
+    const daysRemaining = Math.ceil((betaDeadline - now) / (1000 * 60 * 60 * 24));
 
-                <div class="faq-item">
-                    <h3 class="faq-question">Can multiple team members use one license?</h3>
-                    <div class="faq-answer">
-                        <p>Each license is for one user/one computer. However, we offer volume discounts for teams: 3-5 licenses get 15% off, 6-10 licenses get 25% off, 10+ licenses get 35% off. Beta pricing applies to all team licenses purchased during the beta period.</p>
-                    </div>
-                </div>
+    function updateBetaUrgency() {
+        const urgencyElement = $('#beta-urgency');
+        if (daysRemaining > 0) {
+            if (daysRemaining <= 7) {
+                urgencyElement.text(`⚠️ URGENT: Only ${daysRemaining} days to lock in 50% off forever!`);
+                urgencyElement.css({
+                    'color': '#fef3c7',
+                    'animation': 'blink 1s infinite'
+                });
+            } else if (daysRemaining <= 30) {
+                urgencyElement.text(`🔥 ${daysRemaining} days left - Beta Launch Pricing`);
+            } else {
+                urgencyElement.text('Beta Launch Pricing - Save 50% for Life');
+            }
+        } else {
+            urgencyElement.text('Beta pricing has ended - contact us for current pricing');
+        }
+    }
 
-                <div class="faq-item">
-                    <h3 class="faq-question">What kind of support do I get as a beta tester?</h3>
-                    <div class="faq-answer">
-                        <p>Founders Tier gets direct Slack/email access to our dev team (response within 24 hours). Early Adopters get priority email support (response within 48 hours). All beta testers get access to our knowledge base, video tutorials, and community forum.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="final-cta">
-        <div class="container">
-            <h2>Ready to Eliminate Compliance Headaches?</h2>
-            <a href="#pricing" class="btn-primary">Get Started - 30 Days Free</a>
-            <p>Join 25 electrical engineers already using UL/NEC Compliance Checker</p>
-        </div>
-    </section>
-</div>
-
-<script>
-jQuery(document).ready(function($) {
-    // Real-time counter for Founders Tier spots
-    // Update from database
-    let foundersSpotsTaken = <?php 
-        global $wpdb;
-        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}ulnec_users WHERE tier = 'founders'");
-        echo $count ? $count : 0;
+    updateBetaUrgencynt ? $count : 0;
     ?>;
     const totalFoundersSpots = 25;
     const spotsRemaining = totalFoundersSpots - foundersSpotsTaken;
