@@ -491,7 +491,7 @@ class ULNEC_Admin {
     }
     
     /**
-     * Analytics page
+     * Analytics page - Enhanced with detailed user tracking
      */
     public function analytics_page() {
         $this->check_access();
@@ -500,27 +500,195 @@ class ULNEC_Admin {
         $total_users = $this->supabase->request('GET', 'ulnec_users?select=count');
         $total_licenses = $this->supabase->request('GET', 'ulnec_licenses?select=count');
         $total_downloads = $this->supabase->request('GET', 'ulnec_downloads?select=count');
+        $total_bugs = $this->supabase->request('GET', 'ulnec_bugs?select=count');
+        $total_features = $this->supabase->request('GET', 'ulnec_features?select=count');
+        
+        // Get recent users (last 30 days)
+        $date_30_days_ago = date('Y-m-d', strtotime('-30 days'));
+        $recent_users = $this->supabase->request('GET', 'ulnec_users?created_at=gte.' . $date_30_days_ago . '&order=created_at.desc');
+        
+        // Get all users with detailed info
+        $all_users = $this->supabase->request('GET', 'ulnec_users?order=created_at.desc&limit=100');
+        
+        // Calculate conversion rate
+        $total_users_count = is_array($total_users) && isset($total_users[0]['count']) ? $total_users[0]['count'] : 0;
+        $total_licenses_count = is_array($total_licenses) && isset($total_licenses[0]['count']) ? $total_licenses[0]['count'] : 0;
+        $conversion_rate = $total_users_count > 0 ? round(($total_licenses_count / $total_users_count) * 100, 1) : 0;
+        
+        // Get recent signups (last 7 days for chart)
+        $signups_by_day = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = date('Y-m-d', strtotime("-$i days"));
+            $count = 0;
+            if (is_array($all_users)) {
+                foreach ($all_users as $user) {
+                    if (isset($user['created_at']) && strpos($user['created_at'], $date) === 0) {
+                        $count++;
+                    }
+                }
+            }
+            $signups_by_day[] = ['date' => date('M d', strtotime($date)), 'count' => $count];
+        }
         
         ?>
         <div class="wrap">
-            <h1>📊 Beta Analytics</h1>
+            <h1>📊 UL/NEC Analytics Dashboard</h1>
+            <p style="color: #6b7280; margin-bottom: 30px;">Real-time insights into user signups, engagement, and usage</p>
             
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 30px 0;">
+            <!-- Summary Stats -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
                 <div class="ulnec-stat-card">
-                    <h3>Total Users</h3>
-                    <p class="stat-number"><?php echo is_array($total_users) && isset($total_users[0]['count']) ? $total_users[0]['count'] : 0; ?></p>
+                    <h3>👥 Total Users</h3>
+                    <p class="stat-number"><?php echo $total_users_count; ?></p>
+                    <p class="stat-label">All registered users</p>
                 </div>
-                <div class="ulnec-stat-card">
-                    <h3>Active Licenses</h3>
-                    <p class="stat-number"><?php echo is_array($total_licenses) && isset($total_licenses[0]['count']) ? $total_licenses[0]['count'] : 0; ?></p>
+                <div class="ulnec-stat-card" style="border-left-color: #10b981;">
+                    <h3>🔑 Active Licenses</h3>
+                    <p class="stat-number"><?php echo $total_licenses_count; ?></p>
+                    <p class="stat-label">Paid customers</p>
                 </div>
-                <div class="ulnec-stat-card">
-                    <h3>Total Downloads</h3>
+                <div class="ulnec-stat-card" style="border-left-color: #f59e0b;">
+                    <h3>📥 Downloads</h3>
                     <p class="stat-number"><?php echo is_array($total_downloads) && isset($total_downloads[0]['count']) ? $total_downloads[0]['count'] : 0; ?></p>
+                    <p class="stat-label">Total .msi downloads</p>
                 </div>
-                <div class="ulnec-stat-card">
-                    <h3>Conversion Rate</h3>
-                    <p class="stat-number">--</p>
+                <div class="ulnec-stat-card" style="border-left-color: #ef4444;">
+                    <h3>🐛 Bug Reports</h3>
+                    <p class="stat-number"><?php echo is_array($total_bugs) && isset($total_bugs[0]['count']) ? $total_bugs[0]['count'] : 0; ?></p>
+                    <p class="stat-label">Reported issues</p>
+                </div>
+                <div class="ulnec-stat-card" style="border-left-color: #8b5cf6;">
+                    <h3>💡 Features</h3>
+                    <p class="stat-number"><?php echo is_array($total_features) && isset($total_features[0]['count']) ? $total_features[0]['count'] : 0; ?></p>
+                    <p class="stat-label">Feature requests</p>
+                </div>
+                <div class="ulnec-stat-card" style="border-left-color: #06b6d4;">
+                    <h3>📈 Conversion</h3>
+                    <p class="stat-number"><?php echo $conversion_rate; ?>%</p>
+                    <p class="stat-label">Sign-up to paid</p>
+                </div>
+            </div>
+            
+            <!-- Signups Chart -->
+            <div style="background: #fff; padding: 25px; border-radius: 8px; margin: 30px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 style="margin-top: 0;">📅 Sign-ups Last 7 Days</h2>
+                <div style="display: flex; align-items: flex-end; gap: 15px; height: 200px; margin-top: 20px;">
+                    <?php 
+                    $max_count = max(array_column($signups_by_day, 'count'));
+                    $max_count = $max_count > 0 ? $max_count : 1;
+                    foreach ($signups_by_day as $day): 
+                        $height = $max_count > 0 ? ($day['count'] / $max_count) * 160 : 0;
+                    ?>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: <?php echo $height; ?>px; border-radius: 8px; min-height: 20px; position: relative;">
+                                <span style="position: absolute; top: -25px; left: 0; right: 0; font-weight: 600; color: #1f2937;"><?php echo $day['count']; ?></span>
+                            </div>
+                            <p style="margin-top: 10px; font-size: 12px; color: #6b7280;"><?php echo $day['date']; ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            
+            <!-- Recent Users Table -->
+            <div style="background: #fff; padding: 25px; border-radius: 8px; margin: 30px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 style="margin-top: 0;">🆕 Recent User Sign-ups (Last 30 Days)</h2>
+                <?php if (is_array($recent_users) && !empty($recent_users)): ?>
+                    <table class="wp-list-table widefat fixed striped" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Signed Up</th>
+                                <th>Status</th>
+                                <th>License</th>
+                                <th>Downloads</th>
+                                <th>Activity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach (array_slice($recent_users, 0, 20) as $user): ?>
+                                <?php
+                                // Get user's license info
+                                $user_licenses = $this->supabase->request('GET', 'ulnec_licenses?user_id=eq.' . $user['id']);
+                                $has_license = is_array($user_licenses) && !empty($user_licenses);
+                                
+                                // Get user's download count
+                                $user_downloads = $this->supabase->request('GET', 'ulnec_downloads?user_id=eq.' . $user['id'] . '&select=count');
+                                $download_count = is_array($user_downloads) && isset($user_downloads[0]['count']) ? $user_downloads[0]['count'] : 0;
+                                
+                                // Get user's activity (bugs + features)
+                                $user_bugs = $this->supabase->request('GET', 'ulnec_bugs?user_id=eq.' . $user['id'] . '&select=count');
+                                $user_features = $this->supabase->request('GET', 'ulnec_features?user_id=eq.' . $user['id'] . '&select=count');
+                                $bug_count = is_array($user_bugs) && isset($user_bugs[0]['count']) ? $user_bugs[0]['count'] : 0;
+                                $feature_count = is_array($user_features) && isset($user_features[0]['count']) ? $user_features[0]['count'] : 0;
+                                $total_activity = $bug_count + $feature_count;
+                                ?>
+                                <tr>
+                                    <td><strong><?php echo esc_html($user['name'] ?? 'N/A'); ?></strong></td>
+                                    <td><?php echo esc_html($user['email']); ?></td>
+                                    <td><?php echo esc_html(date('M d, Y', strtotime($user['created_at']))); ?></td>
+                                    <td>
+                                        <?php if ($has_license): ?>
+                                            <span style="background: #10b981; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px;">✓ Paid</span>
+                                        <?php else: ?>
+                                            <span style="background: #f59e0b; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px;">Trial</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($has_license): ?>
+                                            <?php echo esc_html(ucfirst($user_licenses[0]['tier'] ?? 'N/A')); ?>
+                                        <?php else: ?>
+                                            --
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?php echo $download_count; ?> times</td>
+                                    <td>
+                                        <?php if ($total_activity > 0): ?>
+                                            <?php echo $bug_count; ?> bugs, <?php echo $feature_count; ?> features
+                                        <?php else: ?>
+                                            <span style="color: #9ca3af;">No activity</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p style="color: #9ca3af; margin-top: 20px;">No users signed up in the last 30 days.</p>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Usage Insights -->
+            <div style="background: #fff; padding: 25px; border-radius: 8px; margin: 30px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 style="margin-top: 0;">💎 Key Insights</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div style="padding: 20px; background: #f9fafb; border-radius: 8px;">
+                        <h3 style="color: #667eea; margin-top: 0;">Average Downloads per User</h3>
+                        <p style="font-size: 28px; font-weight: 700; margin: 10px 0;">
+                            <?php 
+                            $total_downloads_count = is_array($total_downloads) && isset($total_downloads[0]['count']) ? $total_downloads[0]['count'] : 0;
+                            echo $total_users_count > 0 ? round($total_downloads_count / $total_users_count, 1) : 0; 
+                            ?>
+                        </p>
+                        <p style="color: #6b7280; font-size: 14px;">Times per registered user</p>
+                    </div>
+                    <div style="padding: 20px; background: #f9fafb; border-radius: 8px;">
+                        <h3 style="color: #10b981; margin-top: 0;">Engagement Rate</h3>
+                        <p style="font-size: 28px; font-weight: 700; margin: 10px 0;">
+                            <?php 
+                            $total_bugs_count = is_array($total_bugs) && isset($total_bugs[0]['count']) ? $total_bugs[0]['count'] : 0;
+                            $total_features_count = is_array($total_features) && isset($total_features[0]['count']) ? $total_features[0]['count'] : 0;
+                            $total_engaged = $total_bugs_count + $total_features_count;
+                            echo $total_users_count > 0 ? round(($total_engaged / $total_users_count) * 100, 1) : 0; 
+                            ?>%
+                        </p>
+                        <p style="color: #6b7280; font-size: 14px;">Users submitting bugs/features</p>
+                    </div>
+                    <div style="padding: 20px; background: #f9fafb; border-radius: 8px;">
+                        <h3 style="color: #f59e0b; margin-top: 0;">Trial to Paid</h3>
+                        <p style="font-size: 28px; font-weight: 700; margin: 10px 0;"><?php echo $conversion_rate; ?>%</p>
+                        <p style="color: #6b7280; font-size: 14px;">Conversion rate</p>
+                    </div>
                 </div>
             </div>
             
@@ -542,11 +710,14 @@ class ULNEC_Admin {
                     font-size: 36px;
                     font-weight: 700;
                     color: #1f2937;
+                    margin: 5px 0;
+                }
+                .ulnec-stat-card .stat-label {
+                    font-size: 12px;
+                    color: #9ca3af;
                     margin: 0;
                 }
             </style>
-            
-            <p><em>More detailed analytics coming soon...</em></p>
         </div>
         <?php
     }
