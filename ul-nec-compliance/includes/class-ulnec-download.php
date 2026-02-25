@@ -68,7 +68,7 @@ class ULNEC_Download {
         
         // Get download file
         $version = sanitize_text_field($_GET['version'] ?? 'latest');
-        $file_name = 'UL-NEC-Compliance-Plugin-Latest.msi';
+        $file_name = $this->get_file_path($version);
         
         if (!$file_name) {
             wp_die('File not found', 'Download Error', ['response' => 404]);
@@ -97,12 +97,8 @@ class ULNEC_Download {
      * Get file path for version
      */
     private function get_file_path($version) {
-        // You can customize this based on your file structure
-        if ($version === 'latest') {
-            return 'UL-NEC-Compliance-Plugin-Latest.msi';
-        }
-        
-        return 'UL-NEC-Compliance-Plugin-' . $version . '.msi';
+        // Current release filename in Supabase Storage bucket 'ulnec-downloads'
+        return 'UL_NEC_RuleEngine_v0.1.0_20260221_160007.msi';
     }
     
     /**
