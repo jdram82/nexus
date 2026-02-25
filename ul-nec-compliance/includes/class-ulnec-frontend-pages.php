@@ -1383,7 +1383,11 @@ class ULNEC_Frontend_Pages {
                     <?php if (empty($licenses)): ?>
                         <div style="background: #f9fafb; padding: 2rem; border-radius: 15px; text-align: center; margin-bottom: 2rem;">
                             <p style="color: #6b7280; margin-bottom: 1rem; font-size: 1.1rem;">No active licenses found.</p>
-                            <a href="<?php echo home_url('/pricing'); ?>" class="ulnec-submit-btn" style="display: inline-block; text-decoration: none;">View Pricing</a>
+                            <?php
+                            $pricing_page = (int) get_option('ulnec_page_pricing', 0);
+                            $pricing_url  = $pricing_page ? get_permalink($pricing_page) : home_url('/billing');
+                            ?>
+                            <a href="<?php echo esc_url($pricing_url); ?>" class="ulnec-submit-btn" style="display: inline-block; text-decoration: none;">View Pricing</a>
                         </div>
                     <?php else: ?>
                         <?php foreach ($licenses as $license): ?>

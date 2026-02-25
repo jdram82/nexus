@@ -734,13 +734,21 @@ class ULNEC_Admin {
             update_option('ulnec_supabase_url', sanitize_text_field($_POST['supabase_url']));
             update_option('ulnec_supabase_anon_key', sanitize_text_field($_POST['supabase_anon_key']));
             update_option('ulnec_supabase_service_key', sanitize_text_field($_POST['supabase_service_key']));
+            update_option('ulnec_page_pricing',  absint($_POST['ulnec_page_pricing']));
+            update_option('ulnec_page_login',    absint($_POST['ulnec_page_login']));
+            update_option('ulnec_page_register', absint($_POST['ulnec_page_register']));
+            update_option('ulnec_page_dashboard',absint($_POST['ulnec_page_dashboard']));
             
             echo '<div class="updated"><p>Settings saved!</p></div>';
         }
         
-        $url = get_option('ulnec_supabase_url', '');
-        $anon = get_option('ulnec_supabase_anon_key', '');
+        $url     = get_option('ulnec_supabase_url', '');
+        $anon    = get_option('ulnec_supabase_anon_key', '');
         $service = get_option('ulnec_supabase_service_key', '');
+        $pg_pricing   = (int) get_option('ulnec_page_pricing', 0);
+        $pg_login     = (int) get_option('ulnec_page_login', 0);
+        $pg_register  = (int) get_option('ulnec_page_register', 0);
+        $pg_dashboard = (int) get_option('ulnec_page_dashboard', 0);
         ?>
         <div class="wrap">
             <h1>UL-NEC Settings</h1>
@@ -768,7 +776,40 @@ class ULNEC_Admin {
                         </td>
                     </tr>
                 </table>
-                
+
+                <h2 style="margin-top:2rem;">Page Links</h2>
+                <p style="color:#666;">Choose which WordPress page each link points to.</p>
+                <table class="form-table">
+                    <tr>
+                        <th><label>Pricing / Billing Page</label></th>
+                        <td>
+                            <?php wp_dropdown_pages(['name' => 'ulnec_page_pricing', 'selected' => $pg_pricing, 'show_option_none' => '— Select a page —', 'option_none_value' => 0]); ?>
+                            <?php if ($pg_pricing) echo '<p class="description">Current URL: <code>' . get_permalink($pg_pricing) . '</code></p>'; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>Login Page</label></th>
+                        <td>
+                            <?php wp_dropdown_pages(['name' => 'ulnec_page_login', 'selected' => $pg_login, 'show_option_none' => '— Select a page —', 'option_none_value' => 0]); ?>
+                            <?php if ($pg_login) echo '<p class="description">Current URL: <code>' . get_permalink($pg_login) . '</code></p>'; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>Register Page</label></th>
+                        <td>
+                            <?php wp_dropdown_pages(['name' => 'ulnec_page_register', 'selected' => $pg_register, 'show_option_none' => '— Select a page —', 'option_none_value' => 0]); ?>
+                            <?php if ($pg_register) echo '<p class="description">Current URL: <code>' . get_permalink($pg_register) . '</code></p>'; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>Dashboard Page</label></th>
+                        <td>
+                            <?php wp_dropdown_pages(['name' => 'ulnec_page_dashboard', 'selected' => $pg_dashboard, 'show_option_none' => '— Select a page —', 'option_none_value' => 0]); ?>
+                            <?php if ($pg_dashboard) echo '<p class="description">Current URL: <code>' . get_permalink($pg_dashboard) . '</code></p>'; ?>
+                        </td>
+                    </tr>
+                </table>
+
                 <p class="submit">
                     <button type="submit" name="ulnec_save_settings" class="button button-primary">Save Settings</button>
                 </p>

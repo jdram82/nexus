@@ -516,7 +516,9 @@ class ULNEC_Shortcodes {
                             <?php
                         }
                     } else {
-                        echo '<p>No licenses yet. <a href="' . home_url('/pricing') . '">Purchase a license</a></p>';
+                        $pricing_page = (int) get_option('ulnec_page_pricing', 0);
+                        $pricing_url  = $pricing_page ? get_permalink($pricing_page) : home_url('/billing');
+                        echo '<p>No licenses yet. <a href="' . esc_url($pricing_url) . '">Purchase a license</a></p>';
                     }
                     ?>
                 </div>
@@ -535,7 +537,11 @@ class ULNEC_Shortcodes {
                         </a>
                     <?php else: ?>
                         <p>Purchase a license to download the plugin.</p>
-                        <a href="<?php echo home_url('/pricing'); ?>" class="purchase-button">View Pricing</a>
+                        <?php
+                        $pricing_page = (int) get_option('ulnec_page_pricing', 0);
+                        $pricing_url  = $pricing_page ? get_permalink($pricing_page) : home_url('/billing');
+                        ?>
+                        <a href="<?php echo esc_url($pricing_url); ?>" class="purchase-button">View Pricing</a>
                     <?php endif; ?>
                 </div>
                 

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '3.2.0' );
+define( 'NEXUS_VERSION', '3.2.4' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -106,6 +106,94 @@ function nexus_init() {
 	}
 }
 add_action( 'after_setup_theme', 'nexus_init' );
+
+/**
+ * UL/NEC Workflow Functions
+ * Handles page protection, redirects, and user flow
+ */
+
+/**
+ * Protect dashboard pages - redirect to login if not authenticated
+ */
+function ulnec_protect_dashboard_pages() {
+	// Skip if in admin area
+	if ( is_admin() ) {
+		return;
+	}
+	
+	// Get current page
+	$current_page = get_queried_object();
+	
+	// Pages that require authentication
+	$protected_pages = array(
+		'dashboard',
+		'bug-report',
+		'feature-request',
+		'billing',
+		'account-settings'
+	);
+	
+	// Check if current page is protected and user is not logged in
+	if ( $current_page && isset( $current_page->post_name ) && 
+	     in_array( $current_page->post_name, $protected_pages ) && 
+	     ! is_user_logged_in() ) {
+		
+		// Save the requested URL for redirect after login
+		$redirect_url = add_query_arg( 'redirect', urlencode( $_SERVER['REQUEST_URI'] ), home_url( '/login' ) );
+		wp_redirect( $redirect_url );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'ulnec_protect_dashboard_pages' );
+
+/**
+ * Redirect logged-in users away from login/register pages
+ */
+function ulnec_redirect_logged_in_users() {
+	// Skip if in admin area
+	if ( is_admin() ) {
+		return;
+	}
+	
+	// If user is logged in and viewing login or register page
+	if ( is_user_logged_in() && ( is_page( 'login' ) || is_page( 'register' ) ) ) {
+		wp_redirect( home_url( '/dashboard' ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'ulnec_redirect_logged_in_users' );
+
+/**
+ * Handle post-login redirect
+ */
+function ulnec_login_redirect( $redirect_to, $request, $user ) {
+	// Check if there's a redirect parameter
+	if ( isset( $_GET['redirect'] ) && ! empty( $_GET['redirect'] ) ) {
+		$redirect = esc_url_raw( $_GET['redirect'] );
+		// Validate it's a local URL
+		if ( strpos( $redirect, home_url() ) === 0 ) {
+			return $redirect;
+		}
+	}
+	
+	// Default redirect to dashboard
+	return home_url( '/dashboard' );
+}
+add_filter( 'login_redirect', 'ulnec_login_redirect', 10, 3 );
+
+/**
+ * Add body class for UL/NEC pages
+ */
+function ulnec_body_classes( $classes ) {
+	$ulnec_pages = array( 'login', 'register', 'dashboard', 'billing', 'bug-report', 'feature-request', 'account-settings' );
+	
+	if ( is_page( $ulnec_pages ) ) {
+		$classes[] = 'ulnec-page';
+	}
+	
+	return $classes;
+}
+add_filter( 'body_class', 'ulnec_body_classes' );
 
 /**
  * Load Nexus Pro if available

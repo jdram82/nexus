@@ -74,25 +74,25 @@ class Nexus_Plugin_Orchestrator {
      */
     public function register_integration_handlers() {
         // Gravity Forms Deep Integration
-        if ( class_exists( 'GFForms' ) ) {
+        if ( class_exists( 'GFForms' ) && file_exists( __DIR__ . '/integrations/class-gravity-forms-integration.php' ) ) {
             require_once __DIR__ . '/integrations/class-gravity-forms-integration.php';
             $this->integration_handlers['gravity-forms'] = new Nexus_Gravity_Forms_Integration();
         }
         
         // Rank Math Deep Integration
-        if ( class_exists( 'RankMath' ) ) {
+        if ( class_exists( 'RankMath' ) && file_exists( __DIR__ . '/integrations/class-rank-math-integration.php' ) ) {
             require_once __DIR__ . '/integrations/class-rank-math-integration.php';
             $this->integration_handlers['rank-math'] = new Nexus_Rank_Math_Integration();
         }
         
         // WPForms Deep Integration
-        if ( function_exists( 'wpforms' ) ) {
+        if ( function_exists( 'wpforms' ) && file_exists( __DIR__ . '/integrations/class-wpforms-integration.php' ) ) {
             require_once __DIR__ . '/integrations/class-wpforms-integration.php';
             $this->integration_handlers['wpforms'] = new Nexus_WPForms_Integration();
         }
         
         // WP Rocket Deep Integration
-        if ( defined( 'WP_ROCKET_VERSION' ) ) {
+        if ( defined( 'WP_ROCKET_VERSION' ) && file_exists( __DIR__ . '/integrations/class-wp-rocket-integration.php' ) ) {
             require_once __DIR__ . '/integrations/class-wp-rocket-integration.php';
             $this->integration_handlers['wp-rocket'] = new Nexus_WP_Rocket_Integration();
         }

@@ -9,15 +9,19 @@ echo ""
 THEME_NAME="nexus"
 VERSION="3.2.1"
 CURRENT_DIR="$(pwd)"
-OUTPUT_DIR="${CURRENT_DIR}/dist"
+# Output to workspace releases folder for easy access
+WORKSPACE_ROOT="$(dirname "${CURRENT_DIR}")"
+OUTPUT_DIR="${WORKSPACE_ROOT}/releases"
 OUTPUT_FILE="nexus-${VERSION}.zip"
 TEMP_DIR="/tmp/${THEME_NAME}"
 
 # Clean up previous builds
 echo "🧹 Cleaning up previous builds..."
-rm -rf "${OUTPUT_DIR}"
+# Don't delete entire releases folder, just old temp files
 rm -rf "${TEMP_DIR}"
+# Create releases folder if it doesn't exist
 mkdir -p "${OUTPUT_DIR}"
+echo "📁 Releases folder: ${OUTPUT_DIR}"
 
 # Create temporary directory
 echo "📁 Creating temporary directory..."

@@ -21,12 +21,14 @@ get_header();
     }
 
     body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
         background: #0a0e27;
-        color: #fff;
+        color: #ffffff;
         overflow-x: hidden;
         margin: 0;
         padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
@@ -70,31 +72,37 @@ get_header();
     }
 
     .hero-product h1 {
-        font-size: 4rem;
-        font-weight: 800;
+        font-size: 4.5rem;
+        font-weight: 900;
         margin-bottom: 1.5rem;
         line-height: 1.1;
         animation: fadeInUp 0.8s ease-out;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        color: #ffffff;
     }
 
     .tagline {
-        font-size: 1.8rem;
+        font-size: 2rem;
         margin-bottom: 2rem;
-        opacity: 0.95;
-        font-weight: 300;
+        font-weight: 400;
         animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        color: #ffffff;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        line-height: 1.5;
     }
 
     .pricing-highlight {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
         margin-bottom: 3rem;
-        padding: 1rem 2rem;
-        background: rgba(255, 255, 255, 0.15);
+        padding: 1.2rem 2.5rem;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.9) 0%, rgba(245, 158, 11, 0.8) 100%);
         border-radius: 50px;
         display: inline-block;
-        font-weight: 600;
+        font-weight: 700;
         animation: fadeInUp 0.8s ease-out 0.3s backwards;
         backdrop-filter: blur(10px);
+        color: #1e293b;
+        box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
     }
 
     @keyframes fadeInUp {
@@ -118,9 +126,9 @@ get_header();
     }
 
     .btn-primary, .btn-secondary {
-        padding: 1.2rem 2.5rem;
-        font-size: 1.1rem;
-        font-weight: 600;
+        padding: 1.4rem 3rem;
+        font-size: 1.2rem;
+        font-weight: 700;
         text-decoration: none;
         border-radius: 50px;
         transition: all 0.3s ease;
@@ -128,25 +136,28 @@ get_header();
     }
 
     .btn-primary {
-        background: #fff;
+        background: #ffffff;
         color: #667eea;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        border: 2px solid #ffffff;
     }
 
     .btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 50px rgba(255,255,255,0.3);
+        background: #f8fafc;
     }
 
     .btn-secondary {
         background: transparent;
-        color: #fff;
-        border: 2px solid #fff;
+        color: #ffffff;
+        border: 3px solid #ffffff;
     }
 
     .btn-secondary:hover {
-        background: rgba(255,255,255,0.1);
-        transform: translateY(-3px);
+        background: rgba(255,255,255,0.2);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(255,255,255,0.2);
     }
 
     .trust-badges {
@@ -155,24 +166,44 @@ get_header();
         justify-content: center;
         animation: fadeInUp 0.8s ease-out 0.6s backwards;
         flex-wrap: wrap;
+        font-size: 1.1rem;
+        font-weight: 600;
     }
 
     .trust-badges span {
-        font-size: 1rem;
-        opacity: 0.9;
+        font-size: 1.1rem;
+        color: #ffffff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
     /* Problem Section */
     .problem-section {
         padding: 6rem 0;
-        background: #0f1729;
+        background: linear-gradient(180deg, #1a1f3a 0%, #0f1729 100%);
+        position: relative;
+    }
+    
+    .problem-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.08) 0%, transparent 50%);
+        pointer-events: none;
     }
 
     .section-title {
         text-align: center;
-        font-size: 3rem;
+        font-size: 3.5rem;
         margin-bottom: 4rem;
-        font-weight: 700;
+        font-weight: 800;
+        color: #ffffff;
+        text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        letter-spacing: -0.02em;
     }
 
     .problem-grid {
@@ -183,23 +214,33 @@ get_header();
     }
 
     .problem-item {
-        background: rgba(255,255,255,0.05);
-        padding: 2rem;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+        padding: 2.5rem;
         border-radius: 20px;
-        border-left: 4px solid #ef4444;
+        border-left: 5px solid #ef4444;
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
+        border: 2px solid rgba(239, 68, 68, 0.2);
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 1.8;
+        position: relative;
+        z-index: 1;
     }
 
     .problem-item:hover {
-        background: rgba(255,255,255,0.08);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(220, 38, 38, 0.15) 100%);
         transform: translateX(10px);
+        border-color: #ef4444;
+        box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
     }
 
     .problem-item::before {
         content: '❌';
-        margin-right: 1rem;
-        font-size: 1.5rem;
+        margin-right: 1.5rem;
+        font-size: 2rem;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
 
     /* Solution Section */
@@ -216,24 +257,28 @@ get_header();
     }
 
     .solution-card {
-        background: rgba(255,255,255,0.1);
+        background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
         padding: 3rem 2rem;
         border-radius: 30px;
         text-align: center;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.3);
         transition: all 0.4s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .solution-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        border-color: rgba(251, 191, 36, 0.5);
     }
 
     .solution-card h3 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         margin-bottom: 1.5rem;
         color: #fbbf24;
+        font-weight: 800;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
     .solution-card ul {
@@ -243,44 +288,71 @@ get_header();
 
     .solution-card li {
         margin-bottom: 1rem;
-        padding-left: 1.5rem;
+        padding-left: 2rem;
         position: relative;
+        font-size: 1.1rem;
+        font-weight: 500;
+        line-height: 1.6;
+        color: #ffffff;
     }
 
     .solution-card li::before {
-        content: '→';
+        content: '✓';
         position: absolute;
         left: 0;
         color: #fbbf24;
+        font-size: 1.4rem;
+        font-weight: 700;
     }
 
     /* Counter Section */
     .counter-section {
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        padding: 2rem 0;
+        padding: 2.5rem 0;
         text-align: center;
-        font-size: 1.3rem;
-        font-weight: 700;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
     }
 
     .counter-section span {
         color: #fef3c7;
+        font-size: 1.6rem;
     }
 
     /* Pricing Section */
     .pricing-section {
         padding: 6rem 0;
-        background: #0a0e27;
+        background: linear-gradient(180deg, #0a0e27 0%, #0f1535 100%);
+        position: relative;
+    }
+    
+    .pricing-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+        pointer-events: none;
     }
 
     .pricing-special {
         text-align: center;
         background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-        padding: 1rem;
+        padding: 1.5rem;
         border-radius: 20px;
         margin-bottom: 3rem;
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ffffff;
+        box-shadow: 0 10px 40px rgba(245, 158, 11, 0.4);
+        position: relative;
+        z-index: 1;
     }
 
     .pricing-grid {
@@ -291,14 +363,15 @@ get_header();
     }
 
     .pricing-card {
-        background: rgba(255,255,255,0.05);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
         padding: 3rem 2rem;
         border-radius: 30px;
         text-align: center;
-        border: 2px solid transparent;
+        border: 2px solid rgba(102, 126, 234, 0.3);
         transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .pricing-card::before {
@@ -344,22 +417,25 @@ get_header();
     }
 
     .pricing-card h3 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         margin-bottom: 1rem;
-        color: #fff;
+        color: #ffffff;
+        font-weight: 800;
     }
 
     .price {
-        font-size: 3.5rem;
-        font-weight: 800;
+        font-size: 4rem;
+        font-weight: 900;
         color: #fbbf24;
         margin: 1.5rem 0;
+        text-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
     }
 
     .price-note {
-        font-size: 1rem;
-        opacity: 0.8;
+        font-size: 1.1rem;
+        color: #e2e8f0;
         margin-bottom: 2rem;
+        font-weight: 500;
     }
 
     .features-list {
@@ -373,10 +449,19 @@ get_header();
         margin-bottom: 1rem;
         padding-left: 2rem;
         position: relative;
-        opacity: 0.9;
+        color: #e2e8f0;
+        font-size: 1.05rem;
+        font-weight: 500;
     }
 
     .features-list li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: 700;
+        font-size: 1.4rem;
+    }
         content: '✓';
         position: absolute;
         left: 0;
@@ -446,52 +531,77 @@ get_header();
     /* FAQ Section */
     .faq-section {
         padding: 6rem 0;
-        background: #0a0e27;
+        background: linear-gradient(180deg, #0f1535 0%, #1a1f3a 100%);
+        position: relative;
+    }
+    
+    .faq-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 30% 30%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 70% 70%, rgba(118, 75, 162, 0.08) 0%, transparent 50%);
+        pointer-events: none;
     }
 
     .faq-container {
         max-width: 900px;
         margin: 0 auto;
+        position: relative;
+        z-index: 1;
     }
 
     .faq-item {
-        background: rgba(255,255,255,0.05);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.08) 100%);
         margin-bottom: 1.5rem;
         border-radius: 20px;
         overflow: hidden;
-        border: 2px solid transparent;
+        border: 2px solid rgba(102, 126, 234, 0.3);
         transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
 
     .faq-item:hover {
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(102, 126, 234, 0.6);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
     }
 
     .faq-item.active {
         border-color: #667eea;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.15) 100%);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
     }
 
     .faq-question {
-        padding: 2rem;
-        font-size: 1.3rem;
-        font-weight: 600;
+        padding: 2rem 4rem 2rem 2rem;
+        font-size: 1.4rem;
+        font-weight: 700;
         cursor: pointer;
         position: relative;
         user-select: none;
         margin: 0;
+        color: #ffffff;
+        line-height: 1.6;
     }
 
     .faq-question::after {
         content: '+';
         position: absolute;
         right: 2rem;
-        font-size: 2rem;
-        color: #667eea;
-        transition: transform 0.3s ease;
+        font-size: 2.5rem;
+        color: #a5b4fc;
+        transition: all 0.3s ease;
+        font-weight: 300;
     }
 
     .faq-item.active .faq-question::after {
         transform: rotate(45deg);
+        color: #c7d2fe;
     }
 
     .faq-answer {
@@ -508,8 +618,10 @@ get_header();
 
     .faq-answer p {
         margin-bottom: 1rem;
-        line-height: 1.6;
-        opacity: 0.9;
+        line-height: 1.8;
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        font-weight: 400;
     }
 
     .faq-answer ul {
@@ -521,13 +633,17 @@ get_header();
         margin-bottom: 0.75rem;
         padding-left: 2rem;
         position: relative;
+        color: #e2e8f0;
+        font-size: 1.05rem;
     }
 
     .faq-answer li::before {
-        content: '→';
+        content: '✓';
         position: absolute;
         left: 0;
-        color: #667eea;
+        color: #a5b4fc;
+        font-weight: 700;
+        font-size: 1.2rem;
     }
 
     /* Final CTA */
@@ -603,7 +719,7 @@ get_header();
             </div>
             
             <div class="cta-buttons">
-                <a href="#pricing" class="btn-primary">
+                <a href="<?php echo esc_url(home_url('/register')); ?>" class="btn-primary">
                     Start 30-Day Free Trial
                 </a>
                 <a href="#demo" class="btn-secondary">
@@ -868,7 +984,7 @@ get_header();
                     <h3 class="faq-question">What if I need help during the trial?</h3>
                     <div Save 15-20 Hours Per Panel?</h2>
             <p style="font-size: 1.3rem; margin-bottom: 2rem;">Lock in $75/mo forever. Beta pricing expires April 30, 2026.</p>
-            <a href="#pricing" class="btn-primary">Start 30-Day Free Trial</a>
+            <a href="<?php echo esc_url(home_url('/register')); ?>" class="btn-primary">Start 30-Day Free Trial</a>
             <p>Join 50+div>
                 </div>
 
