@@ -57,9 +57,7 @@ class ULNEC_Shortcodes {
         ul li:empty,
         ol li:empty,
         header ul li:empty,
-        header ol li:empty,
-        nav li,
-        .menu li {
+        header ol li:empty {
             display: none !important;
             list-style: none !important;
             margin: 0 !important;
@@ -261,9 +259,7 @@ class ULNEC_Shortcodes {
         ul li:empty,
         ol li:empty,
         header ul li:empty,
-        header ol li:empty,
-        nav li,
-        .menu li {
+        header ol li:empty {
             display: none !important;
             list-style: none !important;
             margin: 0 !important;
@@ -566,9 +562,7 @@ class ULNEC_Shortcodes {
         ul li:empty,
         ol li:empty,
         header ul li:empty,
-        header ol li:empty,
-        nav li,
-        .menu li {
+        header ol li:empty {
             display: none !important;
             list-style: none !important;
             margin: 0 !important;

@@ -143,9 +143,7 @@ class ULNEC_Frontend_Pages {
         ob_start();
         ?>
         <style>
-            /* Hide all theme navigation and list elements */
-            nav, .menu, header nav, header ul, header ol,
-            nav ul, nav ol, nav li, .menu li,
+            /* Hide empty list elements */
             ul:not(.ulnec-form-group ul):not(.ulnec-list):empty,
             ol:not(.ulnec-form-group ol):not(.ulnec-list):empty,
             li:empty {
@@ -689,9 +687,7 @@ class ULNEC_Frontend_Pages {
         ob_start();
         ?>
         <style>
-            /* Hide all theme navigation and list elements */
-            nav, .menu, header nav, header ul, header ol,
-            nav ul, nav ol, nav li, .menu li,
+            /* Hide empty list elements */
             ul:not(.ulnec-form-group ul):not(.ulnec-list):empty,
             ol:not(.ulnec-form-group ol):not(.ulnec-list):empty,
             li:empty {
