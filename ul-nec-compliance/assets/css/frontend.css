@@ -9,16 +9,7 @@ body {
     min-height: 100vh;
 }
 
-/* Hide theme navigation and empty list elements */
-body nav:not(.ulnec-nav),
-body .menu:not(.ulnec-menu),
-body header nav,
-body header ul:not(.ulnec-list),
-body header ol:not(.ulnec-list),
-body nav ul:not(.ulnec-list),
-body nav ol:not(.ulnec-list),
-body nav li:not(.ulnec-list li),
-body .menu li:not(.ulnec-list li),
+/* Hide empty list elements only */
 body ul:empty:not(.ulnec-list),
 body ol:empty:not(.ulnec-list),
 body li:empty:not(.ulnec-list li) {

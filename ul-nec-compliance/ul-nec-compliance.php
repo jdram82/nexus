@@ -3,7 +3,7 @@
  * Plugin Name: UL-NEC Compliance AutoCAD Plugin Manager
  * Plugin URI: https://jdsancontrols.com
  * Description: Complete management system for UL-NEC Compliance AutoCAD Plugin - handles users, licensing, downloads, payments, and support.
- * Version: 1.3.1
+ * Version: 1.3.2
  * Author: JDS & N Controls
  * Author URI: https://jdsancontrols.com
  * License: GPL v2 or later
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('ULNEC_VERSION', '1.3.1');
+define('ULNEC_VERSION', '1.3.2');
 define('ULNEC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ULNEC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ULNEC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -198,6 +198,10 @@ final class ULNEC_Plugin {
      * Enqueue frontend assets
      */
     public function enqueue_frontend_assets() {
+        if ( ! $this->should_load_frontend_assets() ) {
+            return;
+        }
+
         // CSS
         wp_enqueue_style(
             'ulnec-frontend',
@@ -224,6 +228,72 @@ final class ULNEC_Plugin {
                 'success' => __('Success!', 'ulnec'),
             ]
         ]);
+    }
+
+    /**
+     * Determine whether UL/NEC frontend assets should load on current request.
+     *
+     * @return bool
+     */
+    private function should_load_frontend_assets() {
+        if ( is_admin() ) {
+            return false;
+        }
+
+        $configured_page_ids = array_filter(
+            array_map(
+                'absint',
+                array(
+                    get_option( 'ulnec_page_pricing', 0 ),
+                    get_option( 'ulnec_page_login', 0 ),
+                    get_option( 'ulnec_page_register', 0 ),
+                    get_option( 'ulnec_page_dashboard', 0 ),
+                )
+            )
+        );
+
+        $current_page_id = get_queried_object_id();
+        if ( $current_page_id && in_array( (int) $current_page_id, $configured_page_ids, true ) ) {
+            return true;
+        }
+
+        $ulnec_slugs = array(
+            'login',
+            'register',
+            'dashboard',
+            'billing',
+            'bug-report',
+            'feature-request',
+            'account-settings',
+            'support',
+            'founders-progress',
+            'ul-nec-compliance-checker',
+        );
+
+        if ( is_page( $ulnec_slugs ) ) {
+            return true;
+        }
+
+        if ( is_singular() ) {
+            $post = get_post();
+
+            if ( $post && ! empty( $post->post_content ) ) {
+                $ulnec_shortcodes = array(
+                    'ulnec_login',
+                    'ulnec_register',
+                    'ulnec_dashboard',
+                    'ulnec_download',
+                );
+
+                foreach ( $ulnec_shortcodes as $shortcode ) {
+                    if ( has_shortcode( $post->post_content, $shortcode ) ) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
     
     /**

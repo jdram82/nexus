@@ -131,3 +131,41 @@ function nexus_has_sidebar() {
 	
 	return is_active_sidebar( 'sidebar-1' );
 }
+
+/**
+ * Primary menu fallback.
+ *
+ * Shows top-level pages when no menu is assigned to the primary location,
+ * so the header never appears empty.
+ *
+ * @param array $args wp_nav_menu() arguments.
+ * @return string|void
+ */
+function nexus_primary_menu_fallback( $args ) {
+	$menu_class = isset( $args['menu_class'] ) ? $args['menu_class'] : 'primary-menu';
+	$menu_id    = isset( $args['menu_id'] ) ? $args['menu_id'] : '';
+
+	$menu_items = wp_list_pages(
+		array(
+			'title_li' => '',
+			'depth'    => 1,
+			'echo'     => false,
+		)
+	);
+
+	if ( empty( $menu_items ) ) {
+		return;
+	}
+
+	$menu_id_attr = $menu_id ? ' id="' . esc_attr( $menu_id ) . '"' : '';
+	$output       = '<ul' . $menu_id_attr . ' class="' . esc_attr( $menu_class ) . '">';
+	$output      .= $menu_items;
+	$output      .= '</ul>';
+
+	if ( ! empty( $args['echo'] ) ) {
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return;
+	}
+
+	return $output;
+}

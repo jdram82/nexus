@@ -60,6 +60,17 @@
       @include box-shadow($shadow-lg);
       padding: $spacing-sm;
       z-index: $z-index-dropdown;
+
+      @include respond-to(lg) {
+        display: flex;
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+      }
     }
   }
 

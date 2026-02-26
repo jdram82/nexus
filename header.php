@@ -56,6 +56,7 @@
 						'theme_location' => 'primary',
 						'menu_id'        => 'primary-menu',
 						'menu_class'     => 'primary-menu',
+						'fallback_cb'    => 'nexus_primary_menu_fallback',
 					)
 				);
 				?>

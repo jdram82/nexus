@@ -19,6 +19,16 @@ import '../scss/main.scss';
       this.setAttribute('aria-expanded', !expanded);
       navigation.classList.toggle('toggled');
     });
+
+    const resetMenuForDesktop = function() {
+      if (window.innerWidth >= 992) {
+        navigation.classList.remove('toggled');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+    };
+
+    resetMenuForDesktop();
+    window.addEventListener('resize', resetMenuForDesktop);
   }
 
   /**

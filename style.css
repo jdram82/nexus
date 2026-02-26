@@ -4,7 +4,7 @@ Theme URI: https://jdsandigitel.com/nexus
 Author: Jdsan Digitel
 Author URI: https://jdsandigitel.com
 Description: Professional WordPress theme with Theme Builder, Advanced Controls, Mega Menu, Template Manager, API Docs, Circuit Simulator, Performance Analytics, A/B Testing, Cloud Storage, Payment Gateway, Credits System, and White-Label. Multi-tier licensing: Free, Pro ($199/year), Advanced ($299/year), Agency ($599/year).
-Version: 3.2.4
+Version: 3.2.5
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 8.0
@@ -37,3 +37,17 @@ Nexus is distributed under the terms of the GNU GPL.
 --------------------------------------------------------------*/
 
 /* Normalize is handled in SASS */
+
+/* Desktop nav safety: prevent stale mobile toggled state from showing overlapping menu */
+@media (min-width: 992px) {
+	.main-navigation.toggled .primary-menu {
+		display: flex !important;
+		position: static !important;
+		top: auto !important;
+		left: auto !important;
+		right: auto !important;
+		padding: 0 !important;
+		background: transparent !important;
+		box-shadow: none !important;
+	}
+}

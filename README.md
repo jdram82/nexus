@@ -349,7 +349,7 @@ Comprehensive guides available in the `docs/` folder:
 
 - **[Installation Guide](docs/INSTALLATION.md)** - Step-by-step setup
 - **[Theme Update Guide](docs/THEME_UPDATE_GUIDE.md)** - 🆕 Automatic updates, manual updates, troubleshooting
-- **[Update Quick Reference](UPDATE_QUICK_REFERENCE.md)** - 🆕 Quick reference for updating theme
+- **[Update Quick Reference](docs/project-notes/UPDATE_QUICK_REFERENCE.md)** - 🆕 Quick reference for updating theme
 - **[Changelog](CHANGELOG.md)** - 🆕 Version history and release notes
 - **[Phase 1: Core Theme](docs/PHASE-1-CORE.md)** - Foundation features
 - **[Phase 2: Pro Features](docs/PHASE-2-PRO.md)** - 5 premium features

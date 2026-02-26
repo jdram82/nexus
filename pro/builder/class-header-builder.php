@@ -372,6 +372,7 @@ class Nexus_Header_Builder {
 					'theme_location' => 'primary',
 					'menu_class'     => 'primary-menu',
 					'container'      => false,
+					'fallback_cb'    => 'nexus_primary_menu_fallback',
 				)
 			);
 			?>
