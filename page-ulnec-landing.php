@@ -462,13 +462,6 @@ get_header();
         font-weight: 700;
         font-size: 1.4rem;
     }
-        content: '✓';
-        position: absolute;
-        left: 0;
-        color: #10b981;
-        font-weight: 700;
-        font-size: 1.3rem;
-    }
 
     .btn-cta {
         display: block;
@@ -982,22 +975,45 @@ get_header();
 
                 <div class="faq-item">
                     <h3 class="faq-question">What if I need help during the trial?</h3>
-                    <div Save 15-20 Hours Per Panel?</h2>
-            <p style="font-size: 1.3rem; margin-bottom: 2rem;">Lock in $75/mo forever. Beta pricing expires April 30, 2026.</p>
-            <a href="<?php echo esc_url(home_url('/register')); ?>" class="btn-primary">Start 30-Day Free Trial</a>
-            <p>Join 50+div>
+                    <div class="faq-answer">
+                        <p>All plans include support during trial. Professional users get email support (48-hour response), Team users get priority support (24-hour response), and Enterprise users get dedicated support.</p>
+                    </div>
                 </div>
 
                 <div class="faq-item">
                     <h3 class="faq-question">What happens after April 30, 2026 (beta launch deadline)?</h3>
                     <div class="faq-answer">
-       Beta pricing urgency tracker
+                        <p>Beta pricing closes and public pricing applies. If you sign up before the deadline, your discounted rate stays locked in according to your selected plan terms.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="counter-section" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+        <div class="container" style="text-align: center; padding: 4rem 0;">
+            <h2 style="font-size: 2.8rem; margin-bottom: 1rem; color: #fff;">Ready to Save 15-20 Hours Per Panel?</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 2rem; color: rgba(255,255,255,0.92);">Lock in beta pricing before April 30, 2026.</p>
+            <a href="<?php echo esc_url(home_url('/register')); ?>" class="btn-primary">Start 30-Day Free Trial</a>
+        </div>
+    </section>
+
+</div>
+
+<script>
+jQuery(document).ready(function($) {
     const betaDeadline = new Date('2026-04-30T23:59:59');
-    const now = new Date();
-    const daysRemaining = Math.ceil((betaDeadline - now) / (1000 * 60 * 60 * 24));
 
     function updateBetaUrgency() {
         const urgencyElement = $('#beta-urgency');
+        const now = new Date();
+        const daysRemaining = Math.ceil((betaDeadline - now) / (1000 * 60 * 60 * 24));
+
+        if (!urgencyElement.length) {
+            return;
+        }
+
         if (daysRemaining > 0) {
             if (daysRemaining <= 7) {
                 urgencyElement.text(`⚠️ URGENT: Only ${daysRemaining} days to lock in 50% off forever!`);
@@ -1015,43 +1031,19 @@ get_header();
         }
     }
 
-    updateBetaUrgencynt ? $count : 0;
-    ?>;
-    const totalFoundersSpots = 25;
-    const spotsRemaining = totalFoundersSpots - foundersSpotsTaken;
+    updateBetaUrgency();
 
-    function updateCounter() {
-        const counterElement = $('#spots-remaining');
-        if (spotsRemaining > 0) {
-            counterElement.text(`Only ${spotsRemaining} of 25 FREE Licenses Remaining`);
-            if (spotsRemaining <= 5) {
-                counterElement.css({
-                    'color': '#fef3c7',
-                    'animation': 'blink 1s infinite'
-                });
-            }
-        } else {
-            counterElement.text('Founders Tier SOLD OUT - Early Adopter Available');
-        }
-    }
-
-    updateCounter();
-
-    // FAQ Accordion functionality
     $('.faq-question').on('click', function() {
         const faqItem = $(this).parent();
         const isActive = faqItem.hasClass('active');
-        
-        // Close all other items
+
         $('.faq-item').removeClass('active');
-        
-        // Toggle current item
+
         if (!isActive) {
             faqItem.addClass('active');
         }
     });
 
-    // Smooth scroll for anchor links
     $('a[href^="#"]').on('click', function(e) {
         e.preventDefault();
         const target = $($(this).attr('href'));

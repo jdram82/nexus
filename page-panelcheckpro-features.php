@@ -369,7 +369,7 @@ get_header();
 		<h1>Automated UL508A Compliance for AutoCAD</h1>
 		<p>The only AutoCAD plugin that validates electrical panel designs against UL508A and NEC standards. Save 15-20 hours per panel with 99.7% accuracy.</p>
 		<div class="hero-buttons">
-			<a href="#cta" class="btn btn-primary btn-large">Start 30-Day Free Trial</a>
+			<a href="<?php echo esc_url( home_url( '/register' ) ); ?>?tier=professional" class="btn btn-primary btn-large">Start 30-Day Free Trial</a>
 			<a href="#features" class="btn btn-secondary btn-large">See Features</a>
 		</div>
 		<div class="hero-stats">
@@ -500,8 +500,8 @@ get_header();
 			<div class="pricing-card">
 				<h3>Professional</h3>
 				<div class="original-price">Regular $149/month</div>
-				<div class="price">$75<span class="price-period">/month</span></div>
-				<div class="savings">Save $888/year forever</div>
+				<div class="price">$37.50<span class="price-period">/month</span></div>
+				<div class="savings">First 6 months, then $75/month forever</div>
 				<ul class="pricing-features">
 					<li>Single user license</li>
 					<li>All validation rules</li>
@@ -510,7 +510,7 @@ get_header();
 					<li>BOM generation</li>
 					<li>Email support</li>
 				</ul>
-				<a href="#cta" class="btn btn-primary btn-large">Start Free Trial</a>
+				<a href="<?php echo esc_url( home_url( '/register' ) ); ?>?tier=professional" class="btn btn-primary btn-large">Start Free Trial</a>
 				<div class="deadline">⏰ Offer ends April 30, 2026</div>
 			</div>
 
@@ -518,8 +518,8 @@ get_header();
 				<div class="pricing-badge">🏆 MOST POPULAR</div>
 				<h3>Team</h3>
 				<div class="original-price">Regular $399/month</div>
-				<div class="price">$280<span class="price-period">/month</span></div>
-				<div class="savings">Save $1,428/year forever</div>
+				<div class="price">$200<span class="price-period">/month</span></div>
+				<div class="savings">Year 1, then $280/month forever</div>
 				<ul class="pricing-features">
 					<li>Up to 5 user licenses</li>
 					<li>Shared settings & templates</li>
@@ -528,14 +528,14 @@ get_header();
 					<li>Priority support</li>
 					<li>Free AI features (Q3 2026)</li>
 				</ul>
-				<a href="#cta" class="btn btn-primary btn-large">Start Free Trial</a>
+				<a href="<?php echo esc_url( home_url( '/register' ) ); ?>?tier=team" class="btn btn-primary btn-large">Start Free Trial</a>
 				<div class="deadline">⏰ Offer ends April 30, 2026</div>
 			</div>
 
 			<div class="pricing-card">
 				<h3>Enterprise</h3>
 				<div class="price">Custom</div>
-				<div class="price-period">Contact for quote</div>
+				<div class="price-period">Starting at $12,000/year</div>
 				<ul class="pricing-features">
 					<li>Unlimited users</li>
 					<li>Dedicated account manager</li>

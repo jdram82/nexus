@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '3.2.8' );
+define( 'NEXUS_VERSION', '3.2.9' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -181,6 +181,28 @@ function ulnec_login_redirect( $redirect_to, $request, $user ) {
 	return home_url( '/download' );
 }
 add_filter( 'login_redirect', 'ulnec_login_redirect', 10, 3 );
+
+/**
+ * Force UL/NEC auth templates for core workflow slugs.
+ */
+function ulnec_force_auth_templates( $template ) {
+	if ( is_page( 'register' ) ) {
+		$register_template = NEXUS_DIR . '/page-ulnec-register.php';
+		if ( file_exists( $register_template ) ) {
+			return $register_template;
+		}
+	}
+
+	if ( is_page( 'login' ) ) {
+		$login_template = NEXUS_DIR . '/page-ulnec-login.php';
+		if ( file_exists( $login_template ) ) {
+			return $login_template;
+		}
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'ulnec_force_auth_templates', 99 );
 
 /**
  * Add body class for UL/NEC pages
