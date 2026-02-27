@@ -41,6 +41,7 @@
 				<?php endif; ?>
 			</div><!-- .site-branding -->
 
+			<?php if ( has_nav_menu( 'primary' ) ) : ?>
 			<nav id="site-navigation" class="main-navigation">
 				<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
 					<span class="menu-toggle-text"><?php esc_html_e( 'Menu', 'nexus' ); ?></span>
@@ -56,10 +57,11 @@
 						'theme_location' => 'primary',
 						'menu_id'        => 'primary-menu',
 						'menu_class'     => 'primary-menu',
-						'fallback_cb'    => 'nexus_primary_menu_fallback',
+						'fallback_cb'    => false,
 					)
 				);
 				?>
 			</nav><!-- #site-navigation -->
+			<?php endif; ?>
 		</div><!-- .container -->
 	</header><!-- #masthead -->

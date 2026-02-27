@@ -364,6 +364,10 @@ class Nexus_Header_Builder {
 	 * Render Menu
 	 */
 	private function render_menu() {
+		if ( ! has_nav_menu( 'primary' ) ) {
+			return;
+		}
+
 		?>
 		<nav class="header-element header-menu">
 			<?php
@@ -372,7 +376,7 @@ class Nexus_Header_Builder {
 					'theme_location' => 'primary',
 					'menu_class'     => 'primary-menu',
 					'container'      => false,
-					'fallback_cb'    => 'nexus_primary_menu_fallback',
+					'fallback_cb'    => false,
 				)
 			);
 			?>
