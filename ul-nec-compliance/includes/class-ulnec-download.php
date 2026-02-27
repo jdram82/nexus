@@ -76,6 +76,9 @@ class ULNEC_Download {
         
         // Build direct Supabase Storage URL (public access)
         $supabase_url = defined('ULNEC_SUPABASE_URL') ? ULNEC_SUPABASE_URL : get_option('ulnec_supabase_url');
+        if (empty($supabase_url)) {
+            wp_die('Download service is not configured. Please contact support.', 'Download Error', ['response' => 500]);
+        }
         $download_url = trailingslashit($supabase_url) . 'storage/v1/object/public/ulnec-downloads/' . $file_name;
         
         // Record download

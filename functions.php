@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '3.2.6' );
+define( 'NEXUS_VERSION', '3.2.8' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -127,6 +127,7 @@ function ulnec_protect_dashboard_pages() {
 	// Pages that require authentication
 	$protected_pages = array(
 		'dashboard',
+		'download',
 		'bug-report',
 		'feature-request',
 		'billing',
@@ -157,7 +158,7 @@ function ulnec_redirect_logged_in_users() {
 	
 	// If user is logged in and viewing login or register page
 	if ( is_user_logged_in() && ( is_page( 'login' ) || is_page( 'register' ) ) ) {
-		wp_redirect( home_url( '/dashboard' ) );
+		wp_redirect( home_url( '/download' ) );
 		exit;
 	}
 }
@@ -176,8 +177,8 @@ function ulnec_login_redirect( $redirect_to, $request, $user ) {
 		}
 	}
 	
-	// Default redirect to dashboard
-	return home_url( '/dashboard' );
+	// Default redirect to download page
+	return home_url( '/download' );
 }
 add_filter( 'login_redirect', 'ulnec_login_redirect', 10, 3 );
 
@@ -185,7 +186,7 @@ add_filter( 'login_redirect', 'ulnec_login_redirect', 10, 3 );
  * Add body class for UL/NEC pages
  */
 function ulnec_body_classes( $classes ) {
-	$ulnec_pages = array( 'login', 'register', 'dashboard', 'billing', 'bug-report', 'feature-request', 'account-settings' );
+	$ulnec_pages = array( 'login', 'register', 'dashboard', 'download', 'billing', 'bug-report', 'feature-request', 'account-settings' );
 	
 	if ( is_page( $ulnec_pages ) ) {
 		$classes[] = 'ulnec-page';

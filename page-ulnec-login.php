@@ -225,7 +225,7 @@ get_header();
 <div class="ulnec-login-container">
     <div class="ulnec-login-header">
         <div class="logo">⚡</div>
-        <h1>UL/NEC Compliance Checker</h1>
+        <h1>PanelcheckPRO</h1>
         <p>Automated UL508A & NEC Validation for AutoCAD</p>
     </div>
     

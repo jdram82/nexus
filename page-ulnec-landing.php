@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: UL/NEC Landing Page
- * Description: Landing page for UL/NEC Compliance Checker
+ * Description: Beta landing page for PanelcheckPRO (UL/NEC Compliance Checker)
  */
 
 // Disable WordPress admin bar for clean landing page
@@ -712,7 +712,7 @@ get_header();
     <!-- Hero Section -->
     <section class="hero-product">
         <div class="container">
-            <h1>⚡ UL/NEC Compliance Checker for AutoCAD</h1>
+            <h1>⚡ PanelcheckPRO for AutoCAD</h1>
             <p class="tagline">Save 15-20 Hours Per Panel with Automated UL508A & NEC Validation</p>
             <div class="pricing-highlight">
                 🎉 Beta Launch: Lock in $75/mo Forever (Save 50% for Life)

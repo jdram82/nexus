@@ -32,7 +32,7 @@ class ULNEC_Shortcodes {
             <?php
             if (!is_user_logged_in()) {
                 wp_login_form(array(
-                    'redirect' => home_url('/dashboard'),
+                    'redirect' => home_url('/download'),
                     'label_username' => 'Email or Username',
                     'label_password' => 'Password',
                     'label_remember' => 'Remember Me',
@@ -44,7 +44,7 @@ class ULNEC_Shortcodes {
                 echo '<p class="forgot-link"><a href="' . wp_lostpassword_url() . '">Forgot Password?</a></p>';
             } else {
                 echo '<p class="already-logged">You are already logged in.</p>';
-                echo '<p><a href="' . home_url('/dashboard') . '" class="dashboard-link">Go to Dashboard</a></p>';
+                echo '<p><a href="' . home_url('/download') . '" class="dashboard-link">Go to Download</a></p>';
             }
             ?>
         </div>
@@ -209,8 +209,8 @@ class ULNEC_Shortcodes {
                 } else {
                     wp_set_current_user($user_id);
                     wp_set_auth_cookie($user_id);
-                    $success_message = 'Registration successful! Redirecting to dashboard...';
-                    echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/dashboard') . '"; }, 2000);</script>';
+                    $success_message = 'Registration successful! Redirecting to download...';
+                    echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/download') . '"; }, 2000);</script>';
                 }
             }
         }

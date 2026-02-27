@@ -274,6 +274,10 @@ get_header();
                 <span class="icon">📊</span>
                 <span>Dashboard</span>
             </a>
+            <a href="<?php echo home_url('/download'); ?>">
+                <span class="icon">⬇️</span>
+                <span>Download Plugin</span>
+            </a>
             <a href="#projects">
                 <span class="icon">📋</span>
                 <span>My Projects</span>
@@ -321,6 +325,7 @@ get_header();
         <div class="ulnec-topbar">
             <h2>Dashboard</h2>
             <div class="ulnec-topbar-actions">
+                <a href="<?php echo home_url('/download'); ?>" class="ulnec-btn ulnec-btn-primary">Download PanelcheckPRO</a>
                 <a href="#new-check" class="ulnec-btn ulnec-btn-primary">+ New Compliance Check</a>
             </div>
         </div>
