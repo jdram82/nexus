@@ -8,6 +8,13 @@
 show_admin_bar(false);
 
 get_header();
+
+$login_output = '';
+if ( shortcode_exists( 'ulnec_login' ) ) {
+    $login_output = do_shortcode( '[ulnec_login]' );
+}
+
+$use_fallback_login_form = empty( trim( wp_strip_all_tags( (string) $login_output ) ) );
 ?>
 
 <style>
@@ -134,6 +141,25 @@ get_header();
         transform: translateY(-2px);
         box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
     }
+
+    .ulnec-login-body .forgot-link,
+    .ulnec-login-body .register-link,
+    .ulnec-login-body .already-logged,
+    .ulnec-login-body .dashboard-link {
+        text-align: center;
+        margin-top: 12px;
+        display: block;
+    }
+
+    .ulnec-login-body .dashboard-link {
+        color: #3b82f6;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .ulnec-login-body .dashboard-link:hover {
+        text-decoration: underline;
+    }
     
     .ulnec-login-footer {
         padding: 25px 40px;
@@ -231,11 +257,30 @@ get_header();
     
     <div class="ulnec-login-body">
         <h2>Welcome Back</h2>
-        
-        <?php
-        // Display the login shortcode
-        the_content();
-        ?>
+
+        <?php if ( ! $use_fallback_login_form ) : ?>
+            <?php echo $login_output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php else : ?>
+            <?php if ( ! is_user_logged_in() ) : ?>
+                <?php
+                wp_login_form(
+                    array(
+                        'redirect'       => home_url( '/download' ),
+                        'label_username' => 'Email or Username',
+                        'label_password' => 'Password',
+                        'label_remember' => 'Remember Me',
+                        'label_log_in'   => 'Login',
+                        'remember'       => true,
+                    )
+                );
+                ?>
+                <p class="register-link">Don't have an account? <a href="<?php echo esc_url( home_url( '/register' ) ); ?>">Register here</a></p>
+                <p class="forgot-link"><a href="<?php echo esc_url( wp_lostpassword_url() ); ?>">Forgot Password?</a></p>
+            <?php else : ?>
+                <p class="already-logged">You are already logged in.</p>
+                <a class="dashboard-link" href="<?php echo esc_url( home_url( '/download' ) ); ?>">Go to Download</a>
+            <?php endif; ?>
+        <?php endif; ?>
         
     </div>
     

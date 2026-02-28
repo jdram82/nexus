@@ -234,14 +234,14 @@ class Nexus_Popup_Builder {
 
 		wp_enqueue_style(
 			'nexus-popup-builder-admin',
-			NEXUS_PRO_URL . 'assets/css/popup-builder-admin.css',
+			NEXUS_PRO_URL . 'popup-builder/assets/css/popup-builder-admin.css',
 			array(),
 			self::VERSION
 		);
 
 		wp_enqueue_script(
 			'nexus-popup-builder-admin',
-			NEXUS_PRO_URL . 'assets/js/popup-builder-admin.js',
+			NEXUS_PRO_URL . 'popup-builder/assets/js/popup-builder-admin.js',
 			array( 'jquery', 'wp-color-picker', 'jquery-ui-sortable' ),
 			self::VERSION,
 			true
@@ -275,14 +275,14 @@ class Nexus_Popup_Builder {
 
 		wp_enqueue_style(
 			'nexus-popup-builder',
-			NEXUS_PRO_URL . 'assets/css/popup-builder.css',
+			NEXUS_PRO_URL . 'popup-builder/assets/css/popup-builder.css',
 			array(),
 			self::VERSION
 		);
 
 		wp_enqueue_script(
 			'nexus-popup-builder',
-			NEXUS_PRO_URL . 'assets/js/popup-builder.js',
+			NEXUS_PRO_URL . 'popup-builder/assets/js/popup-builder.js',
 			array( 'jquery' ),
 			self::VERSION,
 			true
