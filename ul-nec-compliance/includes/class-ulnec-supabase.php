@@ -96,6 +96,100 @@ class ULNEC_Supabase {
         
         return json_decode($body, true);
     }
+
+    /**
+     * Make HTTP request to Supabase Auth API.
+     */
+    public function auth_request($method, $endpoint, $data = [], $use_service_key = false) {
+        if (empty($this->url) || empty($this->anon_key)) {
+            return new WP_Error('no_credentials', 'Supabase credentials not configured');
+        }
+
+        if (substr($endpoint, 0, 1) !== '/') {
+            $endpoint = '/' . $endpoint;
+        }
+
+        $url = trailingslashit($this->url) . 'auth/v1' . $endpoint;
+        $key = $use_service_key && !empty($this->service_key) ? $this->service_key : $this->anon_key;
+
+        $args = [
+            'method' => $method,
+            'headers' => [
+                'apikey' => $key,
+                'Authorization' => 'Bearer ' . $key,
+                'Content-Type' => 'application/json'
+            ],
+            'timeout' => 30
+        ];
+
+        if (!empty($data) && in_array($method, ['POST', 'PATCH', 'PUT'])) {
+            $args['body'] = json_encode($data);
+        }
+
+        $response = wp_remote_request($url, $args);
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        $decoded = json_decode($body, true);
+
+        if ($code >= 400) {
+            $error_message = '';
+
+            if (is_array($decoded)) {
+                if (!empty($decoded['msg'])) {
+                    $error_message = $decoded['msg'];
+                } elseif (!empty($decoded['error_description'])) {
+                    $error_message = $decoded['error_description'];
+                } elseif (!empty($decoded['message'])) {
+                    $error_message = $decoded['message'];
+                }
+            }
+
+            if (empty($error_message)) {
+                $error_message = $body;
+            }
+
+            return new WP_Error(
+                'supabase_auth_error',
+                sprintf('Supabase Auth Error (Code %d): %s', $code, $error_message),
+                ['code' => $code, 'body' => $decoded]
+            );
+        }
+
+        return $decoded;
+    }
+
+    /**
+     * Create a user in Supabase Auth (admin API).
+     */
+    public function create_auth_user($email, $password, $metadata = []) {
+        if (empty($this->service_key)) {
+            return new WP_Error('no_service_key', 'Supabase service role key not configured');
+        }
+
+        return $this->auth_request('POST', '/admin/users', [
+            'email' => $email,
+            'password' => $password,
+            'email_confirm' => true,
+            'user_metadata' => (array) $metadata,
+        ], true);
+    }
+
+    /**
+     * Authenticate via Supabase Auth using password grant.
+     */
+    public function sign_in_with_password($email, $password) {
+        $query = '/token?grant_type=password';
+
+        return $this->auth_request('POST', $query, [
+            'email' => $email,
+            'password' => $password,
+        ], false);
+    }
     
     /**
      * Get user by WordPress ID

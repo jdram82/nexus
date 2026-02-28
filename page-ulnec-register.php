@@ -45,14 +45,37 @@ if ( $use_fallback_register_form && isset( $_POST['fallback_register_user'] ) ) 
     } elseif ( email_exists( $email ) ) {
         $fallback_error_message = 'Email already registered.';
     } else {
-        $user_id = wp_create_user( $username, $password, $email );
-        if ( is_wp_error( $user_id ) ) {
-            $fallback_error_message = $user_id->get_error_message();
+        $registration_result = null;
+
+        if ( class_exists( 'ULNEC_Plugin' ) ) {
+            $plugin = ULNEC_Plugin::instance();
+            if ( $plugin && isset( $plugin->auth ) && is_object( $plugin->auth ) && method_exists( $plugin->auth, 'register_with_redundancy' ) ) {
+                $registration_result = $plugin->auth->register_with_redundancy( $username, $email, $password );
+            }
+        }
+
+        if ( ! $registration_result ) {
+            $fallback_user_id = wp_create_user( $username, $password, $email );
+            $registration_result = is_wp_error( $fallback_user_id )
+                ? $fallback_user_id
+                : array(
+                    'user_id' => (int) $fallback_user_id,
+                );
+        }
+
+        if ( is_wp_error( $registration_result ) ) {
+            $fallback_error_message = $registration_result->get_error_message();
         } else {
-            wp_set_current_user( $user_id );
-            wp_set_auth_cookie( $user_id );
-            wp_safe_redirect( home_url( '/download' ) );
-            exit;
+            $user_id = isset( $registration_result['user_id'] ) ? (int) $registration_result['user_id'] : 0;
+
+            if ( $user_id <= 0 ) {
+                $fallback_error_message = 'Registration failed. Please try again.';
+            } else {
+                wp_set_current_user( $user_id );
+                wp_set_auth_cookie( $user_id );
+                wp_safe_redirect( home_url( '/download' ) );
+                exit;
+            }
         }
     }
 }

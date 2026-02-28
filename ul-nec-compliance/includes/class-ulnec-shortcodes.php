@@ -202,15 +202,37 @@ class ULNEC_Shortcodes {
             } elseif (email_exists($email)) {
                 $error_message = 'Email already registered.';
             } else {
-                $user_id = wp_create_user($username, $password, $email);
-                
-                if (is_wp_error($user_id)) {
-                    $error_message = $user_id->get_error_message();
+                $registration_result = null;
+
+                if (class_exists('ULNEC_Plugin')) {
+                    $plugin = ULNEC_Plugin::instance();
+                    if ($plugin && isset($plugin->auth) && is_object($plugin->auth) && method_exists($plugin->auth, 'register_with_redundancy')) {
+                        $registration_result = $plugin->auth->register_with_redundancy($username, $email, $password);
+                    }
+                }
+
+                if (!$registration_result) {
+                    $fallback_user_id = wp_create_user($username, $password, $email);
+                    $registration_result = is_wp_error($fallback_user_id) ? $fallback_user_id : [
+                        'user_id' => (int) $fallback_user_id,
+                        'supabase_auth_synced' => false,
+                        'supabase_auth_error' => '',
+                    ];
+                }
+
+                if (is_wp_error($registration_result)) {
+                    $error_message = $registration_result->get_error_message();
                 } else {
-                    wp_set_current_user($user_id);
-                    wp_set_auth_cookie($user_id);
-                    $success_message = 'Registration successful! Redirecting to download...';
-                    echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/download') . '"; }, 2000);</script>';
+                    $user_id = isset($registration_result['user_id']) ? (int) $registration_result['user_id'] : 0;
+
+                    if ($user_id <= 0) {
+                        $error_message = 'Registration failed. Please try again.';
+                    } else {
+                        wp_set_current_user($user_id);
+                        wp_set_auth_cookie($user_id);
+                        $success_message = 'Registration successful! Redirecting to download...';
+                        echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/download') . '"; }, 2000);</script>';
+                    }
                 }
             }
         }

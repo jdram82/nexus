@@ -3,7 +3,7 @@
  * Plugin Name: PanelcheckPRO - UL/NEC Compliance Manager
  * Plugin URI: https://jdsancontrols.com
  * Description: Complete management system for UL-NEC Compliance AutoCAD Plugin - handles users, licensing, downloads, payments, and support.
- * Version: 1.3.5
+ * Version: 1.3.6
  * Author: JDS & N Controls
  * Author URI: https://jdsancontrols.com
  * License: GPL v2 or later
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('ULNEC_VERSION', '1.3.5');
+define('ULNEC_VERSION', '1.3.6');
 define('ULNEC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ULNEC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ULNEC_PLUGIN_BASENAME', plugin_basename(__FILE__));
