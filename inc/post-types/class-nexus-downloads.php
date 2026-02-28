@@ -68,7 +68,7 @@ class Nexus_Downloads {
 			'show_ui'             => true,
 			'show_in_menu'        => true,
 			'query_var'           => true,
-			'rewrite'             => array( 'slug' => 'download' ),
+			'rewrite'             => array( 'slug' => 'downloads-library' ),
 			'capability_type'     => 'post',
 			'has_archive'         => true,
 			'hierarchical'        => false,

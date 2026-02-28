@@ -8,6 +8,8 @@
 show_admin_bar(false);
 
 get_header();
+
+$payment_method_url = function_exists( 'ulnec_get_add_payment_method_url' ) ? ulnec_get_add_payment_method_url() : home_url( '/billing/' );
 ?>
 
 <style>
@@ -39,13 +41,13 @@ get_header();
     
     .ulnec-billing-header h1 {
         font-size: 36px;
-        color: #1e293b;
+        color: #f8fafc !important;
         margin: 0 0 10px 0;
     }
     
     .ulnec-billing-header p {
         font-size: 18px;
-        color: #64748b;
+        color: #cbd5e1 !important;
         margin: 0;
     }
     
@@ -411,7 +413,7 @@ get_header();
                     <li>✓ Early access to new features</li>
                     <li>✓ Lifetime price guarantee</li>
                 </ul>
-                <button class="btn-primary">Subscribe Now</button>
+                <a class="btn-primary" href="<?php echo esc_url( $payment_method_url ); ?>">Subscribe Now</a>
             </div>
             
             <div class="pricing-card">
@@ -425,18 +427,18 @@ get_header();
                     <li>✓ API access</li>
                     <li>✓ All future features</li>
                 </ul>
-                <button class="btn-secondary">Learn More</button>
+                <a class="btn-secondary" href="<?php echo esc_url( home_url( '/ul-nec-compliance-checker/' ) ); ?>">Learn More</a>
             </div>
         </div>
     </div>
     
     <!-- Payment Method -->
-    <div class="payment-method-section">
+    <div id="payment-method-section" class="payment-method-section">
         <h2>Payment Method</h2>
         <p style="color: #64748b; margin-bottom: 20px;">
             No payment method on file. Add a payment method to upgrade to a paid plan.
         </p>
-        <button class="btn-primary" style="max-width: 300px;">+ Add Payment Method</button>
+        <a class="btn-primary" style="max-width: 300px;" href="<?php echo esc_url( $payment_method_url ); ?>">+ Add Payment Method</a>
     </div>
     
     <!-- Billing History -->
@@ -466,14 +468,6 @@ get_header();
                 </tr>
             </tbody>
         </table>
-    </div>
-    
-    <!-- Shortcode Content -->
-    <div style="margin-top: 30px;">
-        <?php
-        // Display the billing shortcode content (for form processing, etc.)
-        the_content();
-        ?>
     </div>
     
     <div style="text-align: center; margin-top: 40px;">

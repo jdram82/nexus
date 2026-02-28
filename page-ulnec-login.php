@@ -15,6 +15,98 @@ if ( shortcode_exists( 'ulnec_login' ) ) {
 }
 
 $use_fallback_login_form = empty( trim( wp_strip_all_tags( (string) $login_output ) ) );
+$fallback_show_lost_password = isset( $_GET['action'] ) && sanitize_key( wp_unslash( $_GET['action'] ) ) === 'lostpassword';
+
+$fallback_login_error_message = '';
+$fallback_login_notice_message = '';
+
+if ( isset( $_GET['verified'] ) ) {
+    $verified_state = sanitize_text_field( wp_unslash( $_GET['verified'] ) );
+    if ( $verified_state === '1' ) {
+        $fallback_login_notice_message = 'Email verified successfully. You can now log in.';
+    } elseif ( $verified_state === 'expired' ) {
+        $fallback_login_error_message = 'Verification link has expired. Please register again or contact support.';
+    } elseif ( $verified_state === 'invalid' ) {
+        $fallback_login_error_message = 'Invalid verification link. Please use the latest email link.';
+    }
+}
+
+if ( $use_fallback_login_form && $fallback_show_lost_password && isset( $_POST['fallback_lost_password_user'] ) ) {
+    $lost_nonce = isset( $_POST['fallback_lost_password_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['fallback_lost_password_nonce'] ) ) : '';
+
+    if ( ! wp_verify_nonce( $lost_nonce, 'fallback_lost_password_action' ) ) {
+        $fallback_login_error_message = 'Security check failed. Please try again.';
+    } else {
+        $lost_login = isset( $_POST['fallback_lost_user_login'] ) ? sanitize_text_field( wp_unslash( $_POST['fallback_lost_user_login'] ) ) : '';
+
+        if ( empty( $lost_login ) ) {
+            $fallback_login_error_message = 'Please enter your username or email address.';
+        } else {
+            $lost_result = retrieve_password( $lost_login );
+
+            if ( is_wp_error( $lost_result ) ) {
+                $fallback_login_error_message = 'We could not process that request. Please verify your username/email and try again.';
+            } else {
+                $fallback_login_notice_message = 'Password reset instructions have been sent to your email address.';
+            }
+        }
+    }
+}
+
+if ( $use_fallback_login_form && ! $fallback_show_lost_password && isset( $_POST['fallback_login_user'] ) ) {
+    $nonce = isset( $_POST['fallback_login_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['fallback_login_nonce'] ) ) : '';
+
+    if ( ! wp_verify_nonce( $nonce, 'fallback_login_action' ) ) {
+        $fallback_login_error_message = 'Security check failed. Please try again.';
+    } else {
+        $login_input = isset( $_POST['fallback_login'] ) ? sanitize_text_field( wp_unslash( $_POST['fallback_login'] ) ) : '';
+        $password = isset( $_POST['fallback_password'] ) ? (string) wp_unslash( $_POST['fallback_password'] ) : '';
+        $remember = ! empty( $_POST['fallback_remember'] );
+
+        if ( empty( $login_input ) || empty( $password ) ) {
+            $fallback_login_error_message = 'Please enter username/email and password.';
+        } else {
+            $wp_login = $login_input;
+            if ( is_email( $login_input ) ) {
+                $user_by_email = get_user_by( 'email', $login_input );
+                if ( $user_by_email instanceof WP_User ) {
+                    $wp_login = $user_by_email->user_login;
+                }
+            }
+
+            $auth_user = wp_signon(
+                array(
+                    'user_login'    => $wp_login,
+                    'user_password' => $password,
+                    'remember'      => $remember,
+                ),
+                is_ssl()
+            );
+
+            if ( is_wp_error( $auth_user ) ) {
+                if ( in_array( $auth_user->get_error_code(), array( 'ulnec_email_not_confirmed', 'ulnec_account_suspended' ), true ) ) {
+                    $fallback_login_error_message = $auth_user->get_error_message();
+                } else {
+                    $fallback_login_error_message = 'Invalid login credentials. Please try again.';
+                }
+            } else {
+                wp_set_current_user( $auth_user->ID );
+                wp_set_auth_cookie( $auth_user->ID, $remember );
+
+                $post_login_url = function_exists( 'ulnec_get_requested_redirect_url' ) ? ulnec_get_requested_redirect_url() : '';
+                if ( empty( $post_login_url ) && function_exists( 'ulnec_get_default_post_login_url' ) ) {
+                    $post_login_url = ulnec_get_default_post_login_url();
+                }
+                if ( empty( $post_login_url ) ) {
+                    $post_login_url = home_url( '/download/' );
+                }
+
+                wp_safe_redirect( $post_login_url );
+                exit;
+            }
+        }
+    }
+}
 ?>
 
 <style>
@@ -160,6 +252,26 @@ $use_fallback_login_form = empty( trim( wp_strip_all_tags( (string) $login_outpu
     .ulnec-login-body .dashboard-link:hover {
         text-decoration: underline;
     }
+
+    .ulnec-login-body .error-message {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    .ulnec-login-body .success-message {
+        background: #edfdf3;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
     
     .ulnec-login-footer {
         padding: 25px 40px;
@@ -262,20 +374,54 @@ $use_fallback_login_form = empty( trim( wp_strip_all_tags( (string) $login_outpu
             <?php echo $login_output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php else : ?>
             <?php if ( ! is_user_logged_in() ) : ?>
-                <?php
-                wp_login_form(
-                    array(
-                        'redirect'       => home_url( '/download' ),
-                        'label_username' => 'Email or Username',
-                        'label_password' => 'Password',
-                        'label_remember' => 'Remember Me',
-                        'label_log_in'   => 'Login',
-                        'remember'       => true,
-                    )
-                );
-                ?>
+                <?php if ( ! empty( $fallback_login_notice_message ) ) : ?>
+                    <div class="success-message"><?php echo esc_html( $fallback_login_notice_message ); ?></div>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $fallback_login_error_message ) ) : ?>
+                    <div class="error-message"><?php echo esc_html( $fallback_login_error_message ); ?></div>
+                <?php endif; ?>
+
+                <?php if ( $fallback_show_lost_password ) : ?>
+                <form method="post" action="">
+                    <?php wp_nonce_field( 'fallback_lost_password_action', 'fallback_lost_password_nonce' ); ?>
+
+                    <p class="form-group">
+                        <label for="fallback_lost_user_login">Email or Username</label>
+                        <input type="text" name="fallback_lost_user_login" id="fallback_lost_user_login" value="<?php echo esc_attr( isset( $_POST['fallback_lost_user_login'] ) ? sanitize_text_field( wp_unslash( $_POST['fallback_lost_user_login'] ) ) : '' ); ?>" autocomplete="username" required>
+                    </p>
+
+                    <button type="submit" name="fallback_lost_password_user">Send Reset Link</button>
+                </form>
+
+                <p class="register-link"><a href="<?php echo esc_url( home_url( '/login' ) ); ?>">Back to Login</a></p>
+                <?php else : ?>
+                <form method="post" action="">
+                    <?php wp_nonce_field( 'fallback_login_action', 'fallback_login_nonce' ); ?>
+
+                    <p class="form-group">
+                        <label for="fallback_login">Email or Username</label>
+                        <input type="text" name="fallback_login" id="fallback_login" value="<?php echo esc_attr( isset( $_POST['fallback_login'] ) ? sanitize_text_field( wp_unslash( $_POST['fallback_login'] ) ) : '' ); ?>" autocomplete="username" required>
+                    </p>
+
+                    <p class="form-group">
+                        <label for="fallback_password">Password</label>
+                        <input type="password" name="fallback_password" id="fallback_password" autocomplete="current-password" required>
+                    </p>
+
+                    <p class="form-group">
+                        <label style="display:flex;align-items:center;gap:8px;">
+                            <input type="checkbox" name="fallback_remember" value="1" style="width:auto;">
+                            <span>Remember Me</span>
+                        </label>
+                    </p>
+
+                    <button type="submit" name="fallback_login_user">Login</button>
+                </form>
+
                 <p class="register-link">Don't have an account? <a href="<?php echo esc_url( home_url( '/register' ) ); ?>">Register here</a></p>
-                <p class="forgot-link"><a href="<?php echo esc_url( wp_lostpassword_url() ); ?>">Forgot Password?</a></p>
+                <p class="forgot-link"><a href="<?php echo esc_url( home_url( '/login/?action=lostpassword' ) ); ?>">Forgot Password?</a></p>
+                <?php endif; ?>
             <?php else : ?>
                 <p class="already-logged">You are already logged in.</p>
                 <a class="dashboard-link" href="<?php echo esc_url( home_url( '/download' ) ); ?>">Go to Download</a>

@@ -116,6 +116,101 @@ class ULNEC_Admin {
      */
     public function users_page() {
         $this->check_access();
+
+        $action_notice = '';
+        $action_error = '';
+        $can_manage_status = $this->is_saas_admin() || current_user_can('manage_options');
+
+        if (isset($_GET['ulnec_action'], $_GET['_wpnonce'])) {
+            $ulnec_action = sanitize_key(wp_unslash($_GET['ulnec_action']));
+
+            if (in_array($ulnec_action, ['suspend_user', 'activate_user'], true)) {
+                if (!$can_manage_status) {
+                    $action_error = 'You do not have permission to update user status.';
+                } else {
+                    $supabase_user_id = isset($_GET['supabase_user_id']) ? sanitize_text_field(wp_unslash($_GET['supabase_user_id'])) : '';
+                    $wp_user_id = isset($_GET['wp_user_id']) ? absint($_GET['wp_user_id']) : 0;
+                    $nonce = sanitize_text_field(wp_unslash($_GET['_wpnonce']));
+
+                    if (empty($supabase_user_id)) {
+                        $action_error = 'Invalid user selected.';
+                    } elseif (!wp_verify_nonce($nonce, 'ulnec_' . $ulnec_action . '_' . $supabase_user_id)) {
+                        $action_error = 'Security check failed. Please try again.';
+                    } else {
+                        $target_status = $ulnec_action === 'suspend_user' ? 'suspended' : 'active';
+                        $status_result = $this->supabase->request(
+                            'PATCH',
+                            'ulnec_users?id=eq.' . urlencode($supabase_user_id),
+                            ['status' => $target_status]
+                        );
+
+                        if (is_wp_error($status_result)) {
+                            $action_error = 'Failed to update user status: ' . $status_result->get_error_message();
+                        } else {
+                            if ($wp_user_id > 0) {
+                                update_user_meta($wp_user_id, 'ulnec_account_status', $target_status);
+                            }
+
+                            $action_notice = $target_status === 'suspended'
+                                ? 'User suspended successfully.'
+                                : 'User reactivated successfully.';
+                        }
+                    }
+                }
+            }
+        }
+
+        if (
+            isset($_GET['ulnec_action'], $_GET['wp_user_id'], $_GET['_wpnonce']) &&
+            $_GET['ulnec_action'] === 'delete_user'
+        ) {
+            if (!current_user_can('delete_users')) {
+                $action_error = 'You do not have permission to delete users.';
+            } else {
+                $wp_user_id = absint($_GET['wp_user_id']);
+                $nonce = sanitize_text_field(wp_unslash($_GET['_wpnonce']));
+
+                if (!wp_verify_nonce($nonce, 'ulnec_delete_user_' . $wp_user_id)) {
+                    $action_error = 'Security check failed. Please try again.';
+                } elseif ($wp_user_id <= 0) {
+                    $action_error = 'Invalid user selected.';
+                } elseif (get_current_user_id() === $wp_user_id) {
+                    $action_error = 'You cannot delete your own account.';
+                } else {
+                    $wp_user = get_user_by('id', $wp_user_id);
+
+                    if (!$wp_user) {
+                        $action_error = 'WordPress user not found.';
+                    } else {
+                        $supabase_delete_error = '';
+                        $supabase_user = $this->supabase->get_user_by_wordpress_id($wp_user_id);
+
+                        if (!is_wp_error($supabase_user) && !empty($supabase_user['id'])) {
+                            $supabase_result = $this->supabase->request('DELETE', 'ulnec_users?id=eq.' . urlencode($supabase_user['id']));
+                            if (is_wp_error($supabase_result)) {
+                                $supabase_delete_error = $supabase_result->get_error_message();
+                            }
+                        }
+
+                        if (!function_exists('wp_delete_user')) {
+                            require_once ABSPATH . 'wp-admin/includes/user.php';
+                        }
+
+                        $wp_deleted = wp_delete_user($wp_user_id);
+
+                        if (!$wp_deleted) {
+                            $action_error = 'Failed to delete WordPress user. Please try again.';
+                        } else {
+                            if (!empty($supabase_delete_error)) {
+                                $action_notice = 'User deleted in WordPress, but failed to remove Supabase record: ' . $supabase_delete_error;
+                            } else {
+                                $action_notice = 'User deleted successfully.';
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
         // Get users from Supabase
         $users = $this->supabase->request('GET', 'ulnec_users?order=created_at.desc&limit=100');
@@ -123,6 +218,18 @@ class ULNEC_Admin {
         ?>
         <div class="wrap">
             <h1>UL-NEC Users</h1>
+
+            <?php if (!empty($action_notice)): ?>
+                <div class="notice notice-success is-dismissible">
+                    <p><?php echo esc_html($action_notice); ?></p>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($action_error)): ?>
+                <div class="notice notice-error is-dismissible">
+                    <p><?php echo esc_html($action_error); ?></p>
+                </div>
+            <?php endif; ?>
             
             <?php if (is_wp_error($users)): ?>
                 <div class="error">
@@ -143,10 +250,50 @@ class ULNEC_Admin {
                             <th>Status</th>
                             <th>WordPress ID</th>
                             <th>Created</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($users as $user): ?>
+                            <?php
+                            $supabase_user_id = isset($user['id']) ? sanitize_text_field($user['id']) : '';
+                            $current_status = isset($user['status']) ? sanitize_key($user['status']) : 'active';
+                            $wp_user_id = isset($user['wordpress_user_id']) ? absint($user['wordpress_user_id']) : 0;
+                            $can_delete_user = $wp_user_id > 0 && current_user_can('delete_users') && get_current_user_id() !== $wp_user_id;
+                            $delete_url = '';
+                            $status_url = '';
+                            $status_action = $current_status === 'suspended' ? 'activate_user' : 'suspend_user';
+                            $status_label = $current_status === 'suspended' ? 'Reactivate' : 'Suspend';
+
+                            if ($can_delete_user) {
+                                $delete_url = wp_nonce_url(
+                                    add_query_arg(
+                                        [
+                                            'page' => 'ulnec-users',
+                                            'ulnec_action' => 'delete_user',
+                                            'wp_user_id' => $wp_user_id,
+                                        ],
+                                        admin_url('admin.php')
+                                    ),
+                                    'ulnec_delete_user_' . $wp_user_id
+                                );
+                            }
+
+                            if ($can_manage_status && !empty($supabase_user_id)) {
+                                $status_url = wp_nonce_url(
+                                    add_query_arg(
+                                        [
+                                            'page' => 'ulnec-users',
+                                            'ulnec_action' => $status_action,
+                                            'supabase_user_id' => $supabase_user_id,
+                                            'wp_user_id' => $wp_user_id,
+                                        ],
+                                        admin_url('admin.php')
+                                    ),
+                                    'ulnec_' . $status_action . '_' . $supabase_user_id
+                                );
+                            }
+                            ?>
                             <tr>
                                 <td><strong><?php echo esc_html($user['name'] ?? 'N/A'); ?></strong></td>
                                 <td><?php echo esc_html($user['email']); ?></td>
@@ -162,6 +309,30 @@ class ULNEC_Admin {
                                 </td>
                                 <td><?php echo esc_html($user['wordpress_user_id'] ?? 'Not synced'); ?></td>
                                 <td><?php echo esc_html(date('M d, Y', strtotime($user['created_at']))); ?></td>
+                                <td>
+                                    <?php if (!empty($status_url)): ?>
+                                        <a
+                                            href="<?php echo esc_url($status_url); ?>"
+                                            class="button"
+                                            onclick="return confirm('<?php echo $status_action === 'suspend_user' ? 'Suspend this user account?' : 'Reactivate this user account?'; ?>');"
+                                        ><?php echo esc_html($status_label); ?></a>
+                                    <?php endif; ?>
+
+                                    <?php if ($can_delete_user): ?>
+                                        <?php if (!empty($status_url)): ?>&nbsp;<?php endif; ?>
+                                        <a
+                                            href="<?php echo esc_url($delete_url); ?>"
+                                            class="button button-link-delete"
+                                            onclick="return confirm('Delete this user from WordPress? This cannot be undone.');"
+                                        >Delete User</a>
+                                    <?php elseif ($wp_user_id <= 0): ?>
+                                        <span style="color:#666;">No WP account</span>
+                                    <?php elseif (get_current_user_id() === $wp_user_id): ?>
+                                        <span style="color:#666;">Current user</span>
+                                    <?php else: ?>
+                                        <span style="color:#666;">No permission</span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

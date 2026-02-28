@@ -96,12 +96,16 @@ get_header();
 
         <div class="ulnec-download-content">
             <?php
-            echo do_shortcode( '[ulnec_download]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
             $page_content = trim( get_post_field( 'post_content', get_the_ID() ) );
 
-            if ( '' !== $page_content ) {
+            if ( '' !== $page_content && has_shortcode( $page_content, 'ulnec_download' ) ) {
                 the_content();
+            } else {
+                echo do_shortcode( '[ulnec_download]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+                if ( '' !== $page_content ) {
+                    the_content();
+                }
             }
             ?>
         </div>

@@ -28,6 +28,7 @@ if ( shortcode_exists( 'ulnec_register' ) ) {
 $use_fallback_register_form = empty( trim( wp_strip_all_tags( (string) $register_output ) ) );
 
 $fallback_error_message = '';
+$fallback_success_message = '';
 if ( $use_fallback_register_form && isset( $_POST['fallback_register_user'] ) ) {
     $username         = isset( $_POST['username'] ) ? sanitize_user( wp_unslash( $_POST['username'] ) ) : '';
     $email            = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
@@ -71,10 +72,7 @@ if ( $use_fallback_register_form && isset( $_POST['fallback_register_user'] ) ) 
             if ( $user_id <= 0 ) {
                 $fallback_error_message = 'Registration failed. Please try again.';
             } else {
-                wp_set_current_user( $user_id );
-                wp_set_auth_cookie( $user_id );
-                wp_safe_redirect( home_url( '/download' ) );
-                exit;
+                $fallback_success_message = 'Registration successful! Please check your email to verify your account, then log in.';
             }
         }
     }
@@ -265,6 +263,16 @@ if ( $use_fallback_register_form && isset( $_POST['fallback_register_user'] ) ) 
         font-size: 14px;
     }
 
+    .ulnec-register-body .success-message {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
     .ulnec-register-body .terms-container {
         margin: 10px 0 16px;
         font-size: 14px;
@@ -358,7 +366,12 @@ if ( $use_fallback_register_form && isset( $_POST['fallback_register_user'] ) ) 
                 <div class="error-message"><?php echo esc_html( $fallback_error_message ); ?></div>
             <?php endif; ?>
 
-            <form method="post" id="ulnec-fallback-register-form">
+            <?php if ( ! empty( $fallback_success_message ) ) : ?>
+                <div class="success-message"><?php echo esc_html( $fallback_success_message ); ?></div>
+                <script>setTimeout(function(){ window.location.href = "<?php echo esc_url( home_url( '/login' ) ); ?>"; }, 2500);</script>
+            <?php endif; ?>
+
+            <form method="post" id="ulnec-fallback-register-form" <?php echo ! empty( $fallback_success_message ) ? 'style="display:none;"' : ''; ?>>
                 <div class="form-group">
                     <label for="username">Username *</label>
                     <input type="text" name="username" id="username" required minlength="3">

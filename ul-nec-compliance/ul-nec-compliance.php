@@ -3,7 +3,7 @@
  * Plugin Name: PanelcheckPRO - UL/NEC Compliance Manager
  * Plugin URI: https://jdsancontrols.com
  * Description: Complete management system for UL-NEC Compliance AutoCAD Plugin - handles users, licensing, downloads, payments, and support.
- * Version: 1.3.6
+ * Version: 1.4.6
  * Author: JDS & N Controls
  * Author URI: https://jdsancontrols.com
  * License: GPL v2 or later
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('ULNEC_VERSION', '1.3.6');
+define('ULNEC_VERSION', '1.4.6');
 define('ULNEC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ULNEC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ULNEC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -121,6 +121,11 @@ final class ULNEC_Plugin {
      * Initialize plugin components
      */
     public function init() {
+        if ( get_option( 'ulnec_version' ) !== ULNEC_VERSION ) {
+            update_option( 'ulnec_version', ULNEC_VERSION, false );
+            update_option( 'ulnec_required_pages_ready', '0', false );
+        }
+
         // Initialize Supabase connection
         $this->supabase = new ULNEC_Supabase();
         
@@ -147,9 +152,84 @@ final class ULNEC_Plugin {
         
         // Initialize AJAX handlers
         new ULNEC_Ajax($this->supabase);
+
+        // Ensure required frontend pages exist.
+        $this->ensure_required_pages();
         
         // Load text domain
         load_plugin_textdomain('ulnec', false, dirname(ULNEC_PLUGIN_BASENAME) . '/languages');
+    }
+
+    /**
+     * Create required UL/NEC pages when missing.
+     *
+     * @return void
+     */
+    private function ensure_required_pages() {
+        if ( get_option( 'ulnec_required_pages_ready', '0' ) === '1' ) {
+            return;
+        }
+
+        $page_definitions = [
+            'login' => [
+                'title' => 'Login',
+                'content' => '[ulnec_login]',
+            ],
+            'register' => [
+                'title' => 'Register',
+                'content' => '[ulnec_register]',
+            ],
+            'dashboard' => [
+                'title' => 'Dashboard',
+                'content' => '[ulnec_dashboard]',
+            ],
+            'download' => [
+                'title' => 'Download',
+                'content' => '[ulnec_download]',
+            ],
+            'bug-report' => [
+                'title' => 'Bug Report',
+                'content' => '[ulnec_bug_report]',
+            ],
+            'feature-request' => [
+                'title' => 'Feature Request',
+                'content' => '[ulnec_feature_request]',
+            ],
+            'billing' => [
+                'title' => 'Billing',
+                'content' => '[ulnec_billing]',
+            ],
+            'account-settings' => [
+                'title' => 'Account Settings',
+                'content' => '[ulnec_account_settings]',
+            ],
+            'founders-progress' => [
+                'title' => 'Founders Progress',
+                'content' => '[ulnec_founders_progress]',
+            ],
+        ];
+
+        foreach ( $page_definitions as $slug => $definition ) {
+            $existing = get_page_by_path( $slug, OBJECT, 'page' );
+
+            if ( $existing instanceof WP_Post ) {
+                continue;
+            }
+
+            wp_insert_post(
+                [
+                    'post_type' => 'page',
+                    'post_status' => 'publish',
+                    'post_title' => $definition['title'],
+                    'post_name' => $slug,
+                    'post_content' => $definition['content'],
+                    'comment_status' => 'closed',
+                    'ping_status' => 'closed',
+                ]
+            );
+        }
+
+        update_option( 'ulnec_required_pages_ready', '1', false );
     }
     
     /**
@@ -181,6 +261,7 @@ final class ULNEC_Plugin {
         // Create necessary options
         add_option('ulnec_version', ULNEC_VERSION);
         add_option('ulnec_activated', current_time('mysql'));
+        update_option('ulnec_required_pages_ready', '0', false);
         
         // Flush rewrite rules
         flush_rewrite_rules();
@@ -261,6 +342,7 @@ final class ULNEC_Plugin {
             'login',
             'register',
             'dashboard',
+            'download',
             'billing',
             'bug-report',
             'feature-request',

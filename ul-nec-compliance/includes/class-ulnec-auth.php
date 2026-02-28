@@ -22,6 +22,12 @@ class ULNEC_Auth {
         // Sync WordPress user on profile update
         add_action('profile_update', [$this, 'sync_user_on_update'], 10, 2);
 
+        // Handle WordPress email verification links
+        add_action('init', [$this, 'handle_email_verification']);
+
+        // Enforce email confirmation before login succeeds
+        add_filter('authenticate', [$this, 'enforce_email_confirmation'], 40, 3);
+
         // Allow login fallback against Supabase Auth
         add_filter('authenticate', [$this, 'authenticate_via_supabase'], 30, 3);
     }
@@ -59,7 +65,7 @@ class ULNEC_Auth {
             return new WP_Error('invalid_user', 'Invalid WordPress user');
         }
 
-        $auth_result = $this->supabase->create_auth_user(
+        $auth_result = $this->supabase->sign_up_user(
             $user->user_email,
             $plain_password,
             [
@@ -81,12 +87,45 @@ class ULNEC_Auth {
         }
 
         update_user_meta($user_id, 'ulnec_supabase_auth_status', 'synced');
+        update_user_meta($user_id, 'ulnec_email_verification_required', '1');
+        update_user_meta($user_id, 'ulnec_email_verified', '0');
 
         if (is_array($auth_result) && !empty($auth_result['id'])) {
             update_user_meta($user_id, 'ulnec_supabase_auth_id', sanitize_text_field($auth_result['id']));
+        } elseif (is_array($auth_result) && !empty($auth_result['user']['id'])) {
+            update_user_meta($user_id, 'ulnec_supabase_auth_id', sanitize_text_field($auth_result['user']['id']));
         }
 
         return true;
+    }
+
+    /**
+     * Force email verification before first successful login.
+     */
+    public function enforce_email_confirmation($user, $username, $password) {
+        if (!$user instanceof WP_User) {
+            return $user;
+        }
+
+        $account_status = get_user_meta($user->ID, 'ulnec_account_status', true);
+        if ($account_status === 'suspended') {
+            return new WP_Error(
+                'ulnec_account_suspended',
+                'Your account is suspended. Please contact support.'
+            );
+        }
+
+        $auth_required = get_user_meta($user->ID, 'ulnec_email_verification_required', true) === '1';
+        $is_verified = get_user_meta($user->ID, 'ulnec_email_verified', true) === '1';
+
+        if (!$auth_required || $is_verified) {
+            return $user;
+        }
+
+        return new WP_Error(
+            'ulnec_email_not_confirmed',
+            'Please verify your email first. Check your inbox for the confirmation link before logging in.'
+        );
     }
 
     /**
@@ -101,13 +140,112 @@ class ULNEC_Auth {
 
         $this->sync_user_on_registration($user_id);
 
-        $auth_sync = $this->ensure_supabase_auth_user($user_id, $password);
+        $token = wp_generate_password(32, false, false);
+        $token_hash = wp_hash_password($token);
+        $expires = time() + DAY_IN_SECONDS;
+
+        update_user_meta($user_id, 'ulnec_email_verification_required', '1');
+        update_user_meta($user_id, 'ulnec_email_verified', '0');
+        update_user_meta($user_id, 'ulnec_account_status', 'active');
+        update_user_meta($user_id, 'ulnec_email_verify_token_hash', $token_hash);
+        update_user_meta($user_id, 'ulnec_email_verify_expires', (string) $expires);
+
+        $mail_result = $this->send_verification_email($user_id, $token);
+
+        if (is_wp_error($mail_result)) {
+            if (!function_exists('wp_delete_user')) {
+                require_once ABSPATH . 'wp-admin/includes/user.php';
+            }
+
+            wp_delete_user($user_id);
+            return new WP_Error('verification_email_failed', 'Unable to send verification email. Please try again later.');
+        }
 
         return [
             'user_id' => (int) $user_id,
-            'supabase_auth_synced' => !is_wp_error($auth_sync),
-            'supabase_auth_error' => is_wp_error($auth_sync) ? $auth_sync->get_error_message() : '',
+            'supabase_auth_synced' => false,
+            'supabase_auth_error' => '',
+            'requires_email_verification' => true,
         ];
+    }
+
+    /**
+     * Send verification email via WordPress mail (WP Mail SMTP transport if configured).
+     */
+    private function send_verification_email($user_id, $token) {
+        $user = get_userdata($user_id);
+        if (!$user instanceof WP_User) {
+            return new WP_Error('invalid_user', 'Invalid user for verification email');
+        }
+
+        $verify_url = add_query_arg(
+            [
+                'ulnec_verify' => '1',
+                'uid' => (int) $user_id,
+                'token' => rawurlencode($token),
+            ],
+            home_url('/login')
+        );
+
+        $subject = sprintf('[%s] Verify your email address', wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES));
+
+        $message = '<p>Hi ' . esc_html($user->display_name ?: $user->user_login) . ',</p>';
+        $message .= '<p>Thanks for registering. Please confirm your email address to activate your account:</p>';
+        $message .= '<p><a href="' . esc_url($verify_url) . '">Verify Email Address</a></p>';
+        $message .= '<p>This verification link will expire in 24 hours.</p>';
+
+        $headers = ['Content-Type: text/html; charset=UTF-8'];
+
+        $sent = wp_mail($user->user_email, $subject, $message, $headers);
+
+        if (!$sent) {
+            return new WP_Error('mail_failed', 'Verification email could not be sent');
+        }
+
+        return true;
+    }
+
+    /**
+     * Process email verification callback.
+     */
+    public function handle_email_verification() {
+        if (!isset($_GET['ulnec_verify'])) {
+            return;
+        }
+
+        $user_id = isset($_GET['uid']) ? absint($_GET['uid']) : 0;
+        $token = isset($_GET['token']) ? sanitize_text_field(wp_unslash($_GET['token'])) : '';
+
+        if ($user_id <= 0 || empty($token)) {
+            wp_safe_redirect(add_query_arg('verified', 'invalid', home_url('/login')));
+            exit;
+        }
+
+        $stored_hash = (string) get_user_meta($user_id, 'ulnec_email_verify_token_hash', true);
+        $expires = (int) get_user_meta($user_id, 'ulnec_email_verify_expires', true);
+
+        if (empty($stored_hash) || empty($expires)) {
+            wp_safe_redirect(add_query_arg('verified', 'invalid', home_url('/login')));
+            exit;
+        }
+
+        if ($expires < time()) {
+            wp_safe_redirect(add_query_arg('verified', 'expired', home_url('/login')));
+            exit;
+        }
+
+        if (!wp_check_password($token, $stored_hash)) {
+            wp_safe_redirect(add_query_arg('verified', 'invalid', home_url('/login')));
+            exit;
+        }
+
+        update_user_meta($user_id, 'ulnec_email_verified', '1');
+        update_user_meta($user_id, 'ulnec_email_verification_required', '0');
+        delete_user_meta($user_id, 'ulnec_email_verify_token_hash');
+        delete_user_meta($user_id, 'ulnec_email_verify_expires');
+
+        wp_safe_redirect(add_query_arg('verified', '1', home_url('/login')));
+        exit;
     }
 
     /**
@@ -150,6 +288,14 @@ class ULNEC_Auth {
 
         $auth_result = $this->supabase->sign_in_with_password($email, $password);
         if (is_wp_error($auth_result)) {
+            $message = strtolower($auth_result->get_error_message());
+            if (strpos($message, 'confirm') !== false || strpos($message, 'not confirmed') !== false) {
+                return new WP_Error(
+                    'ulnec_email_not_confirmed',
+                    'Please verify your email first. Check your inbox for the confirmation link before logging in.'
+                );
+            }
+
             return $user;
         }
 
@@ -184,6 +330,8 @@ class ULNEC_Auth {
         }
 
         if ($wp_user instanceof WP_User) {
+            update_user_meta($wp_user->ID, 'ulnec_email_verification_required', '1');
+            update_user_meta($wp_user->ID, 'ulnec_email_verified', '1');
             $this->sync_user_on_update($wp_user->ID, $wp_user);
             return $wp_user;
         }

@@ -1290,6 +1290,8 @@ class ULNEC_Frontend_Pages {
         }
         
         $current_user = wp_get_current_user();
+        $checkout_url = function_exists('ulnec_get_checkout_url') ? ulnec_get_checkout_url() : home_url('/billing/');
+        $payment_method_url = function_exists('ulnec_get_add_payment_method_url') ? ulnec_get_add_payment_method_url() : $checkout_url;
         
         // Get user and licenses
         $supabase_user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
@@ -1356,6 +1358,16 @@ class ULNEC_Frontend_Pages {
                     document.getElementById(tabName).classList.add('active');
                     document.querySelector('[onclick="switchTab(\'' + tabName + '\')"]').classList.add('active');
                 }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    var hashTab = window.location.hash ? window.location.hash.replace('#', '') : '';
+                    var queryTab = new URLSearchParams(window.location.search).get('tab');
+                    var targetTab = queryTab || hashTab;
+
+                    if (targetTab && document.getElementById(targetTab)) {
+                        switchTab(targetTab);
+                    }
+                });
             </script>
             
             <div class="ulnec-bug-container">
@@ -1498,6 +1510,11 @@ class ULNEC_Frontend_Pages {
                                 We never store your complete card details on our servers.
                             </p>
                         </div>
+
+						<div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1.5rem;">
+							<a href="<?php echo esc_url($payment_method_url); ?>" class="ulnec-submit-btn" style="display: inline-block; width: auto; text-decoration: none; padding: 0.9rem 1.4rem; border-radius: 12px;">+ Add Payment Method</a>
+							<a href="<?php echo esc_url($checkout_url); ?>" style="display: inline-block; text-decoration: none; padding: 0.9rem 1.4rem; border-radius: 12px; background: #e5e7eb; color: #1f2937; font-weight: 700;">Subscribe Now</a>
+						</div>
                     </div>
                 </div>
             </div>

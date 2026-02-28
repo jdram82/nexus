@@ -155,7 +155,7 @@ class ULNEC_Supabase {
 
             return new WP_Error(
                 'supabase_auth_error',
-                sprintf('Supabase Auth Error (Code %d): %s', $code, $error_message),
+                sprintf('Authentication service error (Code %d): %s', $code, $error_message),
                 ['code' => $code, 'body' => $decoded]
             );
         }
@@ -177,6 +177,17 @@ class ULNEC_Supabase {
             'email_confirm' => true,
             'user_metadata' => (array) $metadata,
         ], true);
+    }
+
+    /**
+     * Sign up a user via Supabase Auth and trigger email confirmation flow.
+     */
+    public function sign_up_user($email, $password, $metadata = []) {
+        return $this->auth_request('POST', '/signup', [
+            'email' => $email,
+            'password' => $password,
+            'data' => (array) $metadata,
+        ], false);
     }
 
     /**

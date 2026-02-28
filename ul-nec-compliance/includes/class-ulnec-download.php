@@ -1,8 +1,8 @@
 <?php
 /**
  * Download Management Class
- * 
- * Handles secure file downloads with license validation
+ *
+ * Handles secure file downloads
  */
 
 if (!defined('ABSPATH')) {
@@ -42,28 +42,16 @@ class ULNEC_Download {
         // Get current user's Supabase record
         $user_id = get_current_user_id();
         $supabase_user = $this->supabase->get_user_by_wordpress_id($user_id);
-        
+
+        // Fallback lookup by email when WordPress ID mapping is missing
         if (!$supabase_user || is_wp_error($supabase_user)) {
-            wp_die('User not found', 'Download Error', ['response' => 404]);
-        }
-        
-        // Check if user has active license
-        $licenses = $this->supabase->get_user_licenses($supabase_user['id']);
-        
-        if (is_wp_error($licenses) || empty($licenses)) {
-            wp_die('No active license found. Please purchase a license first.', 'Download Error', ['response' => 403]);
-        }
-        
-        $has_active_license = false;
-        foreach ($licenses as $license) {
-            if ($license['status'] === 'active' && (empty($license['expires_at']) || strtotime($license['expires_at']) > time())) {
-                $has_active_license = true;
-                break;
+            $current_user = wp_get_current_user();
+            if ($current_user instanceof WP_User && !empty($current_user->user_email)) {
+                $user_response = $this->supabase->request('GET', 'ulnec_users?email=eq.' . urlencode($current_user->user_email));
+                if (!is_wp_error($user_response) && is_array($user_response) && !empty($user_response[0])) {
+                    $supabase_user = $user_response[0];
+                }
             }
-        }
-        
-        if (!$has_active_license) {
-            wp_die('No active license found. Please purchase or renew your license.', 'Download Error', ['response' => 403]);
         }
         
         // Get download file
@@ -81,15 +69,17 @@ class ULNEC_Download {
         }
         $download_url = trailingslashit($supabase_url) . 'storage/v1/object/public/ulnec-downloads/' . $file_name;
         
-        // Record download
-        $this->supabase->request('POST', '/ulnec_downloads', [
-            'user_id' => $supabase_user['id'],
-            'license_id' => $license['id'] ?? null,
-            'version' => $version,
-            'file_name' => $file_name,
-            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null,
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null
-        ]);
+        // Record download (best effort)
+        if (is_array($supabase_user) && !empty($supabase_user['id'])) {
+            $this->supabase->request('POST', '/ulnec_downloads', [
+                'user_id' => $supabase_user['id'],
+                'license_id' => null,
+                'version' => $version,
+                'file_name' => $file_name,
+                'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null,
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null
+            ]);
+        }
         
         // Redirect to file
         wp_redirect($download_url);

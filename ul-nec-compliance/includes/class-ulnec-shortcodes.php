@@ -25,23 +25,153 @@ class ULNEC_Shortcodes {
      */
     public function login_shortcode() {
         ob_start();
+
+        $login_error_message = '';
+        $login_notice_message = '';
+        $show_lost_password = isset($_GET['action']) && sanitize_key(wp_unslash($_GET['action'])) === 'lostpassword';
+
+        if (isset($_GET['verified'])) {
+            $verified_state = sanitize_text_field(wp_unslash($_GET['verified']));
+            if ($verified_state === '1') {
+                $login_notice_message = 'Email verified successfully. You can now log in.';
+            } elseif ($verified_state === 'expired') {
+                $login_error_message = 'Verification link has expired. Please register again or contact support.';
+            } elseif ($verified_state === 'invalid') {
+                $login_error_message = 'Invalid verification link. Please use the latest email link.';
+            }
+        }
+
+        if ($show_lost_password && isset($_POST['ulnec_lost_password_user'])) {
+            $lost_nonce = isset($_POST['ulnec_lost_password_nonce']) ? sanitize_text_field(wp_unslash($_POST['ulnec_lost_password_nonce'])) : '';
+
+            if (!wp_verify_nonce($lost_nonce, 'ulnec_lost_password_action')) {
+                $login_error_message = 'Security check failed. Please try again.';
+            } else {
+                $user_login = isset($_POST['ulnec_lost_user_login']) ? sanitize_text_field(wp_unslash($_POST['ulnec_lost_user_login'])) : '';
+
+                if (empty($user_login)) {
+                    $login_error_message = 'Please enter your username or email address.';
+                } else {
+                    $lost_result = retrieve_password($user_login);
+
+                    if (is_wp_error($lost_result)) {
+                        $login_error_message = 'We could not process that request. Please verify your username/email and try again.';
+                    } else {
+                        $login_notice_message = 'Password reset instructions have been sent to your email address.';
+                    }
+                }
+            }
+        } elseif (isset($_POST['ulnec_login_user'])) {
+            $nonce = isset($_POST['ulnec_login_nonce']) ? sanitize_text_field(wp_unslash($_POST['ulnec_login_nonce'])) : '';
+
+            if (!wp_verify_nonce($nonce, 'ulnec_login_action')) {
+                $login_error_message = 'Security check failed. Please try again.';
+            } else {
+                $login_input = isset($_POST['ulnec_login']) ? sanitize_text_field(wp_unslash($_POST['ulnec_login'])) : '';
+                $password = isset($_POST['ulnec_password']) ? (string) wp_unslash($_POST['ulnec_password']) : '';
+                $remember = !empty($_POST['ulnec_remember']);
+
+                if (empty($login_input) || empty($password)) {
+                    $login_error_message = 'Please enter username/email and password.';
+                } else {
+                    $wp_login = $login_input;
+                    if (is_email($login_input)) {
+                        $user_by_email = get_user_by('email', $login_input);
+                        if ($user_by_email instanceof WP_User) {
+                            $wp_login = $user_by_email->user_login;
+                        }
+                    }
+
+                    $auth_user = wp_signon([
+                        'user_login' => $wp_login,
+                        'user_password' => $password,
+                        'remember' => $remember,
+                    ], is_ssl());
+
+                    if (is_wp_error($auth_user)) {
+                        if (in_array($auth_user->get_error_code(), ['ulnec_email_not_confirmed', 'ulnec_account_suspended'], true)) {
+                            $login_error_message = $auth_user->get_error_message();
+                        } else {
+                            $login_error_message = 'Invalid login credentials. Please try again.';
+                        }
+                    } else {
+                        wp_set_current_user($auth_user->ID);
+                        wp_set_auth_cookie($auth_user->ID, $remember);
+                        $post_login_url = function_exists('ulnec_get_requested_redirect_url') ? ulnec_get_requested_redirect_url() : '';
+                        if (empty($post_login_url) && function_exists('ulnec_get_default_post_login_url')) {
+                            $post_login_url = ulnec_get_default_post_login_url();
+                        }
+                        if (empty($post_login_url)) {
+                            $post_login_url = home_url('/download/');
+                        }
+
+                        wp_safe_redirect($post_login_url);
+                        exit;
+                    }
+                }
+            }
+        }
         ?>
         <div class="login-container">
             <h2>Login to Your Account</h2>
             
             <?php
             if (!is_user_logged_in()) {
-                wp_login_form(array(
-                    'redirect' => home_url('/download'),
-                    'label_username' => 'Email or Username',
-                    'label_password' => 'Password',
-                    'label_remember' => 'Remember Me',
-                    'label_log_in' => 'Login',
-                    'remember' => true
-                ));
+                if (!empty($login_notice_message)) {
+                    echo '<div class="success-message">' . esc_html($login_notice_message) . '</div>';
+                }
+
+                if (!empty($login_error_message)) {
+                    echo '<div class="error-message">' . esc_html($login_error_message) . '</div>';
+                }
+
+                $posted_login = isset($_POST['ulnec_login']) ? sanitize_text_field(wp_unslash($_POST['ulnec_login'])) : '';
+                ?>
+                <?php if ($show_lost_password): ?>
+                    <form method="post" action="">
+                        <?php wp_nonce_field('ulnec_lost_password_action', 'ulnec_lost_password_nonce'); ?>
+
+                        <p>
+                            <label for="ulnec_lost_user_login"><?php esc_html_e('Email or Username', 'ulnec'); ?></label>
+                            <input type="text" name="ulnec_lost_user_login" id="ulnec_lost_user_login" value="<?php echo esc_attr(isset($_POST['ulnec_lost_user_login']) ? sanitize_text_field(wp_unslash($_POST['ulnec_lost_user_login'])) : ''); ?>" autocomplete="username" required>
+                        </p>
+
+                        <p>
+                            <input type="submit" name="ulnec_lost_password_user" value="<?php esc_attr_e('Send Reset Link', 'ulnec'); ?>">
+                        </p>
+                    </form>
+
+                    <p class="register-link"><a href="<?php echo esc_url(home_url('/login')); ?>">Back to Login</a></p>
+                <?php else: ?>
+                <form method="post" action="">
+                    <?php wp_nonce_field('ulnec_login_action', 'ulnec_login_nonce'); ?>
+
+                    <p>
+                        <label for="ulnec_login"><?php esc_html_e('Email or Username', 'ulnec'); ?></label>
+                        <input type="text" name="ulnec_login" id="ulnec_login" value="<?php echo esc_attr($posted_login); ?>" autocomplete="username" required>
+                    </p>
+
+                    <p>
+                        <label for="ulnec_password"><?php esc_html_e('Password', 'ulnec'); ?></label>
+                        <input type="password" name="ulnec_password" id="ulnec_password" autocomplete="current-password" required>
+                    </p>
+
+                    <p>
+                        <label>
+                            <input type="checkbox" name="ulnec_remember" value="1">
+                            <?php esc_html_e('Remember Me', 'ulnec'); ?>
+                        </label>
+                    </p>
+
+                    <p>
+                        <input type="submit" name="ulnec_login_user" value="<?php esc_attr_e('Login', 'ulnec'); ?>">
+                    </p>
+                </form>
+                <?php
                 
                 echo '<p class="register-link">Don\'t have an account? <a href="' . home_url('/register') . '">Register here</a></p>';
-                echo '<p class="forgot-link"><a href="' . wp_lostpassword_url() . '">Forgot Password?</a></p>';
+                echo '<p class="forgot-link"><a href="' . home_url('/login/?action=lostpassword') . '">Forgot Password?</a></p>';
+                endif;
             } else {
                 echo '<p class="already-logged">You are already logged in.</p>';
                 echo '<p><a href="' . home_url('/download') . '" class="dashboard-link">Go to Download</a></p>';
@@ -228,10 +358,8 @@ class ULNEC_Shortcodes {
                     if ($user_id <= 0) {
                         $error_message = 'Registration failed. Please try again.';
                     } else {
-                        wp_set_current_user($user_id);
-                        wp_set_auth_cookie($user_id);
-                        $success_message = 'Registration successful! Redirecting to download...';
-                        echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/download') . '"; }, 2000);</script>';
+                        $success_message = 'Registration successful! Please check your email to verify your account, then log in.';
+                        echo '<script>setTimeout(function(){ window.location.href = "' . home_url('/login') . '"; }, 2500);</script>';
                     }
                 }
             }
@@ -375,6 +503,13 @@ class ULNEC_Shortcodes {
             padding: 12px;
             margin-bottom: 20px;
             color: #c0392b;
+        }
+        .success-message {
+            background: #edfdf3;
+            border-left: 4px solid #16a34a;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #166534;
         }
         .success-message {
             background: #efd;
@@ -767,6 +902,10 @@ class ULNEC_Shortcodes {
         
         $download_manager = new ULNEC_Download($this->supabase);
         $download_url = $download_manager->get_download_link();
+
+        if (empty($download_url)) {
+            return '<p>Download is temporarily unavailable. Please contact support.</p>';
+        }
         
         return '<a href="' . esc_url($download_url) . '" class="button">Download Plugin</a>';
     }

@@ -55,6 +55,10 @@ class Nexus_Enqueue {
 				array(),
 				NEXUS_VERSION
 			);
+
+			$this->add_navigation_click_fix( 'nexus-main' );
+		} else {
+			$this->add_navigation_click_fix( 'nexus-style' );
 		}
 
 		// Add inline style for CSS custom properties
@@ -125,5 +129,44 @@ class Nexus_Enqueue {
 		$css .= '}';
 
 		wp_add_inline_style( 'nexus-style', $css );
+	}
+
+	/**
+	 * Add dropdown safety styles to keep submenu clickable above page content.
+	 *
+	 * @param string $style_handle Style handle to attach inline CSS to.
+	 */
+	private function add_navigation_click_fix( $style_handle ) {
+		$css = '
+			.site-header {
+				position: sticky;
+				top: 0;
+				z-index: 2200;
+			}
+
+			#site-navigation,
+			.main-navigation,
+			.main-navigation .menu-item,
+			.main-navigation .menu-item-has-children {
+				position: relative;
+			}
+
+			.main-navigation .menu-item-has-children > .sub-menu {
+				z-index: 2300 !important;
+				pointer-events: auto;
+			}
+
+			.main-navigation .menu-item-has-children:hover > .sub-menu,
+			.main-navigation .menu-item-has-children:focus-within > .sub-menu,
+			.main-navigation .menu-item-has-children.toggled > .sub-menu,
+			.main-navigation .menu-item-has-children.menu-open > .sub-menu {
+				display: block;
+				visibility: visible;
+				opacity: 1;
+				pointer-events: auto;
+			}
+		';
+
+		wp_add_inline_style( $style_handle, $css );
 	}
 }
