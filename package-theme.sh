@@ -33,7 +33,7 @@ rsync -av --progress "${CURRENT_DIR}/" "${TEMP_DIR}/" \
   --exclude '.git' \
   --exclude '.github' \
   --exclude 'node_modules' \
-  --exclude 'dist' \
+  --exclude '/dist' \
   --exclude '.gitignore' \
   --exclude '.gitattributes' \
   --exclude '*.log' \

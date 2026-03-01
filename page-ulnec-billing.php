@@ -9,7 +9,11 @@ show_admin_bar(false);
 
 get_header();
 
+$checkout_url = function_exists( 'ulnec_get_checkout_url' ) ? ulnec_get_checkout_url() : home_url( '/billing/' );
 $payment_method_url = function_exists( 'ulnec_get_add_payment_method_url' ) ? ulnec_get_add_payment_method_url() : home_url( '/billing/' );
+
+$payment_notice = isset( $_GET['ulnec_payment_notice'] ) ? sanitize_key( wp_unslash( $_GET['ulnec_payment_notice'] ) ) : '';
+$payment_gateway = isset( $_GET['ulnec_gateway'] ) ? sanitize_key( wp_unslash( $_GET['ulnec_gateway'] ) ) : 'payment';
 ?>
 
 <style>
@@ -362,6 +366,27 @@ $payment_method_url = function_exists( 'ulnec_get_add_payment_method_url' ) ? ul
 </style>
 
 <div class="ulnec-billing-wrapper">
+    <?php if ( in_array( $payment_notice, array( 'success', 'cancel', 'failed', 'pending' ), true ) ) : ?>
+        <?php
+        $notice_styles = array(
+            'success' => 'background:#dcfce7;color:#166534;border:1px solid #86efac;',
+            'cancel'  => 'background:#fef3c7;color:#92400e;border:1px solid #fcd34d;',
+            'failed'  => 'background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;',
+            'pending' => 'background:#e0f2fe;color:#075985;border:1px solid #7dd3fc;',
+        );
+
+        $notice_messages = array(
+            'success' => 'Payment confirmed via ' . strtoupper( $payment_gateway ) . '. Your license has been activated.',
+            'cancel'  => 'Payment was cancelled. You can try again anytime.',
+            'failed'  => 'Payment failed. Please retry or contact support.',
+            'pending' => 'Payment is being processed. Your license will activate after webhook confirmation.',
+        );
+        ?>
+        <div style="<?php echo esc_attr( $notice_styles[ $payment_notice ] ); ?>padding:12px 16px;border-radius:10px;margin-bottom:20px;font-weight:600;">
+            <?php echo esc_html( $notice_messages[ $payment_notice ] ); ?>
+        </div>
+    <?php endif; ?>
+
     <div class="ulnec-billing-header">
         <h1>⚡ Billing & Subscription</h1>
         <p>Manage your UL/NEC Compliance Checker subscription</p>
@@ -413,7 +438,7 @@ $payment_method_url = function_exists( 'ulnec_get_add_payment_method_url' ) ? ul
                     <li>✓ Early access to new features</li>
                     <li>✓ Lifetime price guarantee</li>
                 </ul>
-                <a class="btn-primary" href="<?php echo esc_url( $payment_method_url ); ?>">Subscribe Now</a>
+                <a class="btn-primary" href="<?php echo esc_url( $checkout_url ); ?>">Subscribe Now</a>
             </div>
             
             <div class="pricing-card">

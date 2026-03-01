@@ -12,8 +12,6 @@ get_header();
 
 <style>
     /* Hide default WordPress elements for landing page */
-    #site-header,
-    .site-header,
     .page-header,
     .entry-header,
     .breadcrumbs {

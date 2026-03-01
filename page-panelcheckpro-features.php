@@ -30,8 +30,6 @@ get_header();
 ?>
 
 <style>
-	.site-header,
-	#site-header,
 	.page-header,
 	.entry-header,
 	#breadcrumbs,

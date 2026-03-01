@@ -909,6 +909,14 @@ class ULNEC_Admin {
             update_option('ulnec_page_login',    absint($_POST['ulnec_page_login']));
             update_option('ulnec_page_register', absint($_POST['ulnec_page_register']));
             update_option('ulnec_page_dashboard',absint($_POST['ulnec_page_dashboard']));
+            update_option('ulnec_paypal_mode', isset($_POST['ulnec_paypal_mode']) && $_POST['ulnec_paypal_mode'] === 'live' ? 'live' : 'sandbox');
+            update_option('ulnec_paypal_client_id', sanitize_text_field($_POST['ulnec_paypal_client_id'] ?? ''));
+            update_option('ulnec_paypal_client_secret', sanitize_text_field($_POST['ulnec_paypal_client_secret'] ?? ''));
+            update_option('ulnec_paypal_webhook_id', sanitize_text_field($_POST['ulnec_paypal_webhook_id'] ?? ''));
+            update_option('ulnec_razorpay_key_id', sanitize_text_field($_POST['ulnec_razorpay_key_id'] ?? ''));
+            update_option('ulnec_razorpay_key_secret', sanitize_text_field($_POST['ulnec_razorpay_key_secret'] ?? ''));
+            update_option('ulnec_razorpay_webhook_secret', sanitize_text_field($_POST['ulnec_razorpay_webhook_secret'] ?? ''));
+            update_option('ulnec_default_paid_tier', sanitize_key($_POST['ulnec_default_paid_tier'] ?? 'beta'));
             
             echo '<div class="updated"><p>Settings saved!</p></div>';
         }
@@ -920,6 +928,20 @@ class ULNEC_Admin {
         $pg_login     = (int) get_option('ulnec_page_login', 0);
         $pg_register  = (int) get_option('ulnec_page_register', 0);
         $pg_dashboard = (int) get_option('ulnec_page_dashboard', 0);
+        $paypal_mode = get_option('ulnec_paypal_mode', 'sandbox');
+        $paypal_client_id = get_option('ulnec_paypal_client_id', '');
+        $paypal_client_secret = get_option('ulnec_paypal_client_secret', '');
+        $paypal_webhook_id = get_option('ulnec_paypal_webhook_id', '');
+        $razorpay_key_id = get_option('ulnec_razorpay_key_id', '');
+        $razorpay_key_secret = get_option('ulnec_razorpay_key_secret', '');
+        $razorpay_webhook_secret = get_option('ulnec_razorpay_webhook_secret', '');
+        $default_paid_tier = get_option('ulnec_default_paid_tier', 'beta');
+        $paypal_webhook_url = home_url('/?ulnec_webhook=paypal');
+        $razorpay_webhook_url = home_url('/?ulnec_webhook=razorpay');
+        $paypal_success_return_url = home_url('/?ulnec_payment_return=1&gateway=paypal&status=success');
+        $paypal_cancel_return_url = home_url('/?ulnec_payment_return=1&gateway=paypal&status=cancel');
+        $razorpay_success_return_url = home_url('/?ulnec_payment_return=1&gateway=razorpay&status=success');
+        $razorpay_cancel_return_url = home_url('/?ulnec_payment_return=1&gateway=razorpay&status=cancel');
         ?>
         <div class="wrap">
             <h1>UL-NEC Settings</h1>
@@ -978,6 +1000,83 @@ class ULNEC_Admin {
                             <?php wp_dropdown_pages(['name' => 'ulnec_page_dashboard', 'selected' => $pg_dashboard, 'show_option_none' => '— Select a page —', 'option_none_value' => 0]); ?>
                             <?php if ($pg_dashboard) echo '<p class="description">Current URL: <code>' . get_permalink($pg_dashboard) . '</code></p>'; ?>
                         </td>
+                    </tr>
+                </table>
+
+                <h2 style="margin-top:2rem;">Payment Gateway (Production)</h2>
+                <p style="color:#666;">Configure verified webhook credentials for PayPal and Razorpay. Webhooks activate licenses and write transactions to Supabase.</p>
+                <table class="form-table">
+                    <tr>
+                        <th><label for="ulnec_paypal_mode">PayPal Mode</label></th>
+                        <td>
+                            <select name="ulnec_paypal_mode" id="ulnec_paypal_mode">
+                                <option value="sandbox" <?php selected($paypal_mode, 'sandbox'); ?>>Sandbox</option>
+                                <option value="live" <?php selected($paypal_mode, 'live'); ?>>Live</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_paypal_client_id">PayPal Client ID</label></th>
+                        <td><input type="text" name="ulnec_paypal_client_id" id="ulnec_paypal_client_id" value="<?php echo esc_attr($paypal_client_id); ?>" class="large-text"></td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_paypal_client_secret">PayPal Client Secret</label></th>
+                        <td><input type="password" name="ulnec_paypal_client_secret" id="ulnec_paypal_client_secret" value="<?php echo esc_attr($paypal_client_secret); ?>" class="large-text"></td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_paypal_webhook_id">PayPal Webhook ID</label></th>
+                        <td>
+                            <input type="text" name="ulnec_paypal_webhook_id" id="ulnec_paypal_webhook_id" value="<?php echo esc_attr($paypal_webhook_id); ?>" class="large-text">
+                            <p class="description">Webhook URL: <code><?php echo esc_html($paypal_webhook_url); ?></code></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_razorpay_key_id">Razorpay Key ID</label></th>
+                        <td><input type="text" name="ulnec_razorpay_key_id" id="ulnec_razorpay_key_id" value="<?php echo esc_attr($razorpay_key_id); ?>" class="large-text"></td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_razorpay_key_secret">Razorpay Key Secret</label></th>
+                        <td><input type="password" name="ulnec_razorpay_key_secret" id="ulnec_razorpay_key_secret" value="<?php echo esc_attr($razorpay_key_secret); ?>" class="large-text"></td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_razorpay_webhook_secret">Razorpay Webhook Secret</label></th>
+                        <td>
+                            <input type="password" name="ulnec_razorpay_webhook_secret" id="ulnec_razorpay_webhook_secret" value="<?php echo esc_attr($razorpay_webhook_secret); ?>" class="large-text">
+                            <p class="description">Webhook URL: <code><?php echo esc_html($razorpay_webhook_url); ?></code></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="ulnec_default_paid_tier">Default Paid Tier</label></th>
+                        <td>
+                            <select name="ulnec_default_paid_tier" id="ulnec_default_paid_tier">
+                                <option value="beta" <?php selected($default_paid_tier, 'beta'); ?>>Beta</option>
+                                <option value="pro" <?php selected($default_paid_tier, 'pro'); ?>>Pro</option>
+                                <option value="enterprise" <?php selected($default_paid_tier, 'enterprise'); ?>>Enterprise</option>
+                                <option value="agency" <?php selected($default_paid_tier, 'agency'); ?>>Agency</option>
+                            </select>
+                            <p class="description">Used when provider webhook payload does not include plan/tier metadata.</p>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2 style="margin-top:2rem;">Payment Return URLs</h2>
+                <p style="color:#666;">Use these as success/cancel return URLs in gateway checkout settings.</p>
+                <table class="form-table">
+                    <tr>
+                        <th>PayPal Success URL</th>
+                        <td><code><?php echo esc_html($paypal_success_return_url); ?></code></td>
+                    </tr>
+                    <tr>
+                        <th>PayPal Cancel URL</th>
+                        <td><code><?php echo esc_html($paypal_cancel_return_url); ?></code></td>
+                    </tr>
+                    <tr>
+                        <th>Razorpay Success URL</th>
+                        <td><code><?php echo esc_html($razorpay_success_return_url); ?></code></td>
+                    </tr>
+                    <tr>
+                        <th>Razorpay Cancel URL</th>
+                        <td><code><?php echo esc_html($razorpay_cancel_return_url); ?></code></td>
                     </tr>
                 </table>
 
