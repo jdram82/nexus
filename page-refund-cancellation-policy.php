@@ -33,7 +33,7 @@ get_header();
 
         <h2>3. Refund Eligibility</h2>
         <ul>
-            <li>Refund requests must be submitted within <strong>[Add Refund Window, e.g., 7 days]</strong> of purchase.</li>
+            <li>Refund requests must be submitted within <strong>7 days</strong> of purchase.</li>
             <li>Refunds may be approved for duplicate payments, technical non-delivery, or accidental overcharge.</li>
             <li>Refunds may be denied where service was substantially consumed or where abuse/fraud is detected.</li>
         </ul>
@@ -46,13 +46,13 @@ get_header();
         </ul>
 
         <h2>5. Refund Process</h2>
-        <p>To request a refund, email <strong>[Add Billing Email]</strong> with your registered email, order ID, and reason. Approved refunds are processed to the original payment method within <strong>[Add Timeline, e.g., 7-14 business days]</strong>.</p>
+        <p>To request a refund, email <strong>support@jdsancontrols.com</strong> with your registered email, order ID, and reason. Approved refunds are processed to the original payment method within <strong>7-14 business days</strong>.</p>
 
         <h2>6. Chargebacks</h2>
         <p>If you raise a chargeback without contacting support first, we reserve the right to suspend related accounts/licenses during investigation.</p>
 
         <h2>7. Contact</h2>
-        <p>Billing and refund support: <strong>[Add Billing Email]</strong></p>
+        <p>Billing and refund support: <strong>support@jdsancontrols.com</strong></p>
     </article>
 </div>
 

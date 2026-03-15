@@ -47,10 +47,10 @@ get_header();
         <p>The software is provided "as is" without warranties of any kind to the extent permitted by law. Our liability is limited to the maximum extent permitted under applicable law.</p>
 
         <h2>7. Governing Law</h2>
-        <p>This EULA is governed by the laws of India. Courts at <strong>[Add City, India]</strong> shall have jurisdiction, subject to applicable law.</p>
+        <p>This EULA is governed by the laws of India. Courts at <strong>Chennai, India</strong> shall have jurisdiction, subject to applicable law.</p>
 
         <h2>8. Contact</h2>
-        <p>For licensing support: <strong>[Add Licensing Email]</strong></p>
+        <p>For licensing support: <strong>support@jdsancontrols.com</strong></p>
     </article>
 </div>
 

@@ -62,6 +62,17 @@
 			<?php endif; ?>
 
 			<div class="site-info">
+				<p class="legal-links">
+					<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a>
+					<span class="sep"> | </span>
+					<a href="<?php echo esc_url( home_url( '/terms-and-conditions/' ) ); ?>">Terms</a>
+					<span class="sep"> | </span>
+					<a href="<?php echo esc_url( home_url( '/refund-cancellation-policy/' ) ); ?>">Refund Policy</a>
+					<span class="sep"> | </span>
+					<a href="<?php echo esc_url( home_url( '/disclaimer/' ) ); ?>">Disclaimer</a>
+					<span class="sep"> | </span>
+					<a href="<?php echo esc_url( home_url( '/eula/' ) ); ?>">EULA</a>
+				</p>
 				<p class="copyright">
 					<?php
 					printf(

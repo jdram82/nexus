@@ -72,9 +72,9 @@ get_header();
         <h2>10. Grievance and Contact</h2>
         <p>For privacy concerns or rights requests, contact:</p>
         <p>
-            <strong>Grievance Officer:</strong> [Add Name]<br>
-            <strong>Email:</strong> [Add Privacy Email]<br>
-            <strong>Address:</strong> [Add Business Address]
+            <strong>Grievance Officer:</strong> Durgaram Jayavanan<br>
+            <strong>Email:</strong> support@jdsancontrols.com<br>
+            <strong>Address:</strong> Chennai, India
         </p>
 
         <h2>11. Policy Updates</h2>

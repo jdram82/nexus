@@ -60,10 +60,10 @@ get_header();
         <p>We may suspend or terminate access for breach of these terms or legal non-compliance.</p>
 
         <h2>10. Governing Law and Jurisdiction</h2>
-        <p>These terms are governed by the laws of India. Courts at <strong>[Add City, India]</strong> shall have jurisdiction, subject to applicable consumer law.</p>
+        <p>These terms are governed by the laws of India. Courts at <strong>Chennai, India</strong> shall have jurisdiction, subject to applicable consumer law.</p>
 
         <h2>11. Contact</h2>
-        <p>For legal queries: <strong>[Add Legal Email]</strong></p>
+        <p>For legal queries: <strong>support@jdsancontrols.com</strong></p>
     </article>
 </div>
 

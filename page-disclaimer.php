@@ -38,7 +38,7 @@ get_header();
         <p>To the extent permitted by law, we are not liable for direct or indirect loss resulting from reliance on website content, service interruption, or use of downloaded files.</p>
 
         <h2>6. Contact</h2>
-        <p>For concerns, contact: <strong>[Add Support Email]</strong></p>
+        <p>For concerns, contact: <strong>support@jdsancontrols.com</strong></p>
     </article>
 </div>
 
