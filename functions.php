@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'NEXUS_VERSION', '3.2.26' );
+define( 'NEXUS_VERSION', '3.2.32' );
 define( 'NEXUS_DIR', get_template_directory() );
 define( 'NEXUS_URI', get_template_directory_uri() );
 
@@ -437,6 +437,11 @@ function ulnec_force_auth_templates( $template ) {
 		'dashboard' => NEXUS_DIR . '/page-ulnec-dashboard.php',
 		'download'  => NEXUS_DIR . '/page-ulnec-download.php',
 		'billing'   => NEXUS_DIR . '/page-ulnec-billing.php',
+		'privacy-policy' => NEXUS_DIR . '/page-privacy-policy.php',
+		'terms-and-conditions' => NEXUS_DIR . '/page-terms-and-conditions.php',
+		'refund-cancellation-policy' => NEXUS_DIR . '/page-refund-cancellation-policy.php',
+		'disclaimer' => NEXUS_DIR . '/page-disclaimer.php',
+		'eula' => NEXUS_DIR . '/page-eula.php',
 	);
 
 	foreach ( $template_map as $slug => $mapped_template ) {
@@ -519,6 +524,68 @@ function ulnec_prepend_logged_in_menu( $content ) {
 	return $menu . $content;
 }
 add_filter( 'the_content', 'ulnec_prepend_logged_in_menu', 5 );
+
+/**
+ * Get latest UL/NEC secure download URL.
+ *
+ * @return string
+ */
+function ulnec_get_latest_download_url() {
+	return add_query_arg(
+		array(
+			'ulnec_download' => '1',
+			'version'        => 'latest',
+			'token'          => wp_create_nonce( 'ulnec_download' ),
+		),
+		home_url( '/' )
+	);
+}
+
+/**
+ * Rewrite legacy direct Supabase MSI links to the secure download route.
+ *
+ * @param string $content Post content.
+ * @return string
+ */
+function ulnec_rewrite_legacy_download_links( $content ) {
+	if ( is_admin() || ! is_string( $content ) || '' === $content ) {
+		return $content;
+	}
+
+	if ( false === stripos( $content, 'ulnec-downloads' ) || false === stripos( $content, '.msi' ) ) {
+		return $content;
+	}
+
+	$latest_download_url = esc_url( ulnec_get_latest_download_url() );
+	$pattern = '#https?://[^"\'\s<]+/storage/v1/object/public/ulnec-downloads/[^"\'\s<]+\.msi#i';
+
+	$updated_content = preg_replace( $pattern, $latest_download_url, $content );
+
+	return is_string( $updated_content ) ? $updated_content : $content;
+}
+add_filter( 'the_content', 'ulnec_rewrite_legacy_download_links', 20 );
+
+/**
+ * Force UL/NEC download shortcode to use latest secure route.
+ */
+function ulnec_force_latest_download_shortcode() {
+	if ( shortcode_exists( 'ulnec_download' ) ) {
+		remove_shortcode( 'ulnec_download' );
+	}
+
+	add_shortcode(
+		'ulnec_download',
+		function () {
+			if ( ! is_user_logged_in() ) {
+				return '<p>Please <a href="' . esc_url( wp_login_url() ) . '">login</a> to download.</p>';
+			}
+
+			$download_url = ulnec_get_latest_download_url();
+			return '<a href="' . esc_url( $download_url ) . '" class="button">Download Plugin</a>';
+		}
+	);
+}
+add_action( 'init', 'ulnec_force_latest_download_shortcode', 9999 );
 
 /**
  * Styles for logged-in UL/NEC quick menu.

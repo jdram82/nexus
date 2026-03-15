@@ -91,7 +91,7 @@ class ULNEC_Download {
      */
     private function get_file_path($version) {
         // Current release filename in Supabase Storage bucket 'ulnec-downloads'
-        return 'UL_NEC_RuleEngine_v0.1.0_20260221_160007.msi';
+        return 'UL_NEC_RuleEngine_v0.1.0_20260301.msi';
     }
     
     /**

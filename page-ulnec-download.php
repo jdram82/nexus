@@ -96,6 +96,15 @@ get_header();
 
         <div class="ulnec-download-content">
             <?php
+            $latest_download_url = add_query_arg(
+                [
+                    'ulnec_download' => '1',
+                    'version'        => 'latest',
+                    'token'          => wp_create_nonce( 'ulnec_download' ),
+                ],
+                home_url()
+            );
+
             $page_content = trim( get_post_field( 'post_content', get_the_ID() ) );
 
             if ( '' !== $page_content && has_shortcode( $page_content, 'ulnec_download' ) ) {
@@ -109,6 +118,16 @@ get_header();
             }
             ?>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var latestUrl = <?php echo wp_json_encode( esc_url( $latest_download_url ) ); ?>;
+                var selector = 'a[href*="/storage/v1/object/public/ulnec-downloads/"][href$=".msi"]';
+                document.querySelectorAll(selector).forEach(function (link) {
+                    link.setAttribute('href', latestUrl);
+                });
+            });
+        </script>
 
         <div class="ulnec-download-actions">
             <a class="ulnec-btn ulnec-btn-secondary" href="<?php echo esc_url( home_url( '/dashboard' ) ); ?>">Go to Dashboard</a>
